@@ -1,0 +1,10 @@
+              <li><a href="list-projetoLei.asp"><i class="fa fa-file-text"></i> Projetos de Lei</a></li> <!-- Ícone representando um documento -->
+              <li><a href="list-resolucoes.asp"><i class="fa fa-check-square"></i> Resoluções</a></li> <!-- Ícone representando uma resolução -->
+              <li><a href="list-decretos.asp"><i class="fa fa-file"></i> Decretos</a></li> <!-- Ícone representando um arquivo -->
+              <li><a href="list-portarias.asp"><i class="fa fa-tag"></i> Portarias</a></li> <!-- Ícone representando uma tag -->
+              <li><a href="list-oficios.asp"><i class="fa fa-envelope"></i> Oficios</a></li> <!-- Ícone representando um envelope -->
+              <li><a href="list-leisMunicipais.asp"><i class="fa fa-gavel"></i> Leis Municipais</a></li> <!-- Ícone representando um martelo -->
+              <li><a href="list-leiOrganica.asp"><i class="fa fa-book"></i> Lei Organica</a></li> <!-- Ícone representando um livro -->
+              <li><a href="list-requerimentos.asp"><i class="fa fa-file-text"></i> Requerimentos</a></li> <!-- Ícone representando um documento -->
+              <li><a href="list-ataSessoes.asp"><i class="fa fa-calendar"></i> Atas de Sessões</a></li> <!-- Ícone representando um calendário -->
+              <li><a href="list-pautaSessoes.asp"><i class="fa fa-list-alt"></i> Pauta das Sessões</a></li> <!-- Ícone representando uma lista -->

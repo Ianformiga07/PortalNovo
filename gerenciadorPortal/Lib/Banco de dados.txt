@@ -1,0 +1,147 @@
+-- Tabela de Cargos
+CREATE TABLE Cargos (
+    CargoID INT PRIMARY KEY IDENTITY(1,1),
+    NomeCargo VARCHAR(100) NOT NULL,
+    DescricaoCargo TEXT
+);
+
+-- Tabela de Departamentos
+CREATE TABLE Departamentos (
+    DepartamentoID INT PRIMARY KEY IDENTITY(1,1),
+    NomeDepartamento VARCHAR(100) NOT NULL,
+    DescricaoDepartamento TEXT
+);
+
+-- Tabela de Endereços
+CREATE TABLE Enderecos (
+    EnderecoID INT PRIMARY KEY IDENTITY(1,1),
+    Logradouro VARCHAR(255) NOT NULL,
+    Numero VARCHAR(10) NOT NULL,
+    Complemento VARCHAR(100),
+    Bairro VARCHAR(100) NOT NULL,
+    Cidade VARCHAR(100) NOT NULL,
+    Estado VARCHAR(2) NOT NULL,
+    CEP VARCHAR(10) NOT NULL
+);
+
+-- Tabela de Bancos
+CREATE TABLE Bancos (
+    BancoID INT PRIMARY KEY IDENTITY(1,1),
+    NomeBanco VARCHAR(100) NOT NULL,
+    Agencia VARCHAR(20) NOT NULL,
+    ContaCorrente VARCHAR(20) NOT NULL,
+    TipoConta VARCHAR(20) NOT NULL
+);
+
+-- Tabela de Usuários (Funcionários)
+CREATE TABLE Usuarios (
+    UsuarioID INT PRIMARY KEY IDENTITY(1,1),
+    NomeCompleto VARCHAR(255) NOT NULL,
+    CPF CHAR(11) UNIQUE NOT NULL,
+    RG VARCHAR(20) UNIQUE NOT NULL,
+    DataNascimento DATE NOT NULL,
+    Sexo CHAR(1) CHECK (Sexo IN ('M', 'F')),
+    EstadoCivil VARCHAR(20),
+    Telefone VARCHAR(20),
+    Email VARCHAR(100),
+    EnderecoID INT FOREIGN KEY REFERENCES Enderecos(EnderecoID),
+    CargoID INT FOREIGN KEY REFERENCES Cargos(CargoID),
+    DepartamentoID INT FOREIGN KEY REFERENCES Departamentos(DepartamentoID),
+    BancoID INT FOREIGN KEY REFERENCES Bancos(BancoID),
+    DataAdmissao DATE NOT NULL,
+    Salario DECIMAL(18, 2) NOT NULL,
+    Login VARCHAR(50) UNIQUE NOT NULL,
+    Senha HASHED BYTES, -- Para armazenar senhas com hash
+    DataCadastro DATETIME DEFAULT GETDATE(),
+    Status CHAR(1) CHECK (Status IN ('A', 'I')) -- A: Ativo, I: Inativo
+);
+
+-- Tabela de Vereadores
+CREATE TABLE Vereadores (
+    VereadorID INT PRIMARY KEY IDENTITY(1,1),
+    UsuarioID INT FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    InicioMandato DATE NOT NULL,
+    FimMandato DATE NOT NULL,
+    Partido VARCHAR(50),
+    Biografia TEXT
+);
+
+-- Tabela de Histórico Salarial
+CREATE TABLE HistoricoSalarial (
+    HistoricoID INT PRIMARY KEY IDENTITY(1,1),
+    UsuarioID INT FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    DataAlteracao DATE NOT NULL,
+    SalarioAntigo DECIMAL(18, 2) NOT NULL,
+    SalarioNovo DECIMAL(18, 2) NOT NULL,
+    MotivoAlteracao TEXT
+);
+
+-- Tabela de Contratos
+CREATE TABLE Contratos (
+    ContratoID INT PRIMARY KEY IDENTITY(1,1),
+    UsuarioID INT FOREIGN KEY REFERENCES Usuarios(UsuarioID),
+    TipoContrato VARCHAR(50) NOT NULL, -- CLT, Estágio, etc.
+    DataInicio DATE NOT NULL,
+    DataFim DATE,
+    DescricaoContrato TEXT
+);
+
+-- Tabela de Licitações
+CREATE TABLE Licitacoes (
+    LicitacaoID INT PRIMARY KEY IDENTITY(1,1),
+    NumeroLicitacao VARCHAR(50) NOT NULL,
+    Descricao TEXT NOT NULL,
+    DataAbertura DATE NOT NULL,
+    DataFechamento DATE,
+    ValorEstimado DECIMAL(18, 2),
+    Status VARCHAR(50) CHECK (Status IN ('Aberta', 'Fechada', 'Cancelada'))
+);
+
+-- Tabela de Comissões
+CREATE TABLE Comissoes (
+    ComissaoID INT PRIMARY KEY IDENTITY(1,1),
+    NomeComissao VARCHAR(100) NOT NULL,
+    Descricao TEXT,
+    DataCriacao DATE NOT NULL
+);
+
+-- Tabela de Legislação
+CREATE TABLE Legislacao (
+    LegislacaoID INT PRIMARY KEY IDENTITY(1,1),
+    TipoLegislacao VARCHAR(50) NOT NULL, -- Lei, Decreto, Portaria, etc.
+    NumeroLegislacao VARCHAR(50) NOT NULL,
+    Descricao TEXT NOT NULL,
+    DataPublicacao DATE NOT NULL,
+    Status VARCHAR(50) CHECK (Status IN ('Ativa', 'Revogada'))
+);
+
+-- Tabela de Compras e Registro de Preço
+CREATE TABLE Compras (
+    CompraID INT PRIMARY KEY IDENTITY(1,1),
+    NumeroCompra VARCHAR(50) NOT NULL,
+    Descricao TEXT NOT NULL,
+    DataCompra DATE NOT NULL,
+    Valor DECIMAL(18, 2) NOT NULL,
+    Fornecedor VARCHAR(100),
+    Status VARCHAR(50) CHECK (Status IN ('Aberta', 'Fechada', 'Cancelada'))
+);
+
+-- Tabela de Execução Orçamentária
+CREATE TABLE ExecucaoOrcamentaria (
+    ExecucaoID INT PRIMARY KEY IDENTITY(1,1),
+    AnoFiscal INT NOT NULL,
+    TipoExecucao VARCHAR(50) NOT NULL, -- Despesas, Receitas, etc.
+    Descricao TEXT NOT NULL,
+    ValorEstimado DECIMAL(18, 2) NOT NULL,
+    ValorExecutado DECIMAL(18, 2),
+    DataExecucao DATE
+);
+
+-- Tabela de Recursos Humanos
+CREATE TABLE RecursosHumanos (
+    RHID INT PRIMARY KEY IDENTITY(1,1),
+    TipoRH VARCHAR(50) NOT NULL, -- Concurso, Admissão, Frequência, etc.
+    Descricao TEXT NOT NULL,
+    DataRegistro DATE NOT NULL,
+    UsuarioID INT FOREIGN KEY REFERENCES Usuarios(UsuarioID)
+);
