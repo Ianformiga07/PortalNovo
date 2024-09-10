@@ -1,0 +1,9 @@
+Passo a Passo GitHub
+cd C:\PortalCamara
+dir 
+
+
+git init
+git add .
+git commit -m "first commit"
+git push -u origin master
