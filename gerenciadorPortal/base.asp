@@ -137,16 +137,29 @@
           </li>
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-shopping-cart"></i> <!-- Ícone representando uma compra -->
-              <span>Compras e Licitações</span>
+              <i class="fa fa-legal"></i> <!-- Ícone representando uma compra -->
+              <span>Licitações</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="list-licitacao.asp"><i class="fa fa-legal"></i> Licitações</a></li> <!-- Ícone representando um documento legal -->
+              <li><a href="list-licitacao.asp"><i class="fa fa-legal"></i> <span>Licitação</span></a></li>
+              <li><a href="cad-licitantes.asp"><i class="fa fa-users"></i> <span>Licitantes</span></a></li>
+              <li><a href="cad-fiscais.asp"><i class="fa fa-shield"></i> <span>Fiscais/Responsáveis</span></a></li>
+              <li><a href="list-contratos.asp"><i class="fa fa-file-text-o"></i> <span>Contratos</span></a></li>
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-shopping-cart"></i> <!-- Ícone representando uma compra -->
+              <span>Compras e Suprimentos</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
               <li><a href="pages/UI/icons.html"><i class="fa fa-file-text"></i> Atas de Registro de preço</a></li> <!-- Ícone representando um documento -->
-              <li><a href="pages/UI/icons.html"><i class="fa fa-file-text-o"></i> Contratos</a></li> <!-- Ícone representando um documento -->
               <li><a href="pages/UI/icons.html"><i class="fa fa-handshake-o"></i> Convenios e Inst. Congêneres</a></li> <!-- Ícone representando um aperto de mãos -->
               <li><a href="pages/UI/icons.html"><i class="fa fa-building"></i> PCA</a></li> <!-- Ícone representando um edifício -->
               <li><a href="pages/UI/icons.html"><i class="fa fa-wrench"></i> Obras</a></li> <!-- Ícone representando uma ferramenta -->
@@ -194,10 +207,12 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="pages/calendar.html"><i class="fa fa-calendar"></i> Frequência de Servidores</a></li> <!-- Ícone representando um calendário -->
-              <li><a href="pages/UI/sliders.html"><i class="fa fa-id-badge"></i> Contratos e Admissões</a></li> <!-- Ícone representando um crachá -->
+              <li><a href="pages/calendar.html"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
+              <li><a href="pages/UI/sliders.html"><i class="fa fa-id-badge"></i> Contra-Cheques</a></li> <!-- Ícone representando um crachá -->
               <li><a href="pages/UI/sliders.html"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
             </ul>
           </li>
           <li class="treeview">

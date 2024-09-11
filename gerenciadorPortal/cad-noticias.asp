@@ -4,11 +4,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <i class="fa fa-fw fa-check-square-o text-blue"></i> História
+        <i class="fa fa-fw fa-check-square-o text-blue"></i> Cadastro de Notícia
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">História</li>
+        <li class="active">Cadastro de Notícia</li>
       </ol>
     </section>
 

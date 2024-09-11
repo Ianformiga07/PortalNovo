@@ -18,34 +18,22 @@
     <div class="row">
       <div class="col-xs-12">
         <div class="box box-primary">
-          <!-- /.box-header -->
-          <!-- form start -->
+          <div class="box-header with-border font-s-1-2"><b class="font-s-0-875">Licitação</b> » PREGÃO ELETRÔNICO Nº 001/2024</div>
           <form role="form" action="cadastrar_diario_oficial.asp" method="post" enctype="multipart/form-data">
             <div class="box-body">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-6">
-                            <label for="titulo">Título</label>
+                            <label for="for_posts_annex_title">
+                                Título
+                                <span class="text-red">*</span>
+                                <span class="limit-char limit_posts_annex_title"></span>
+                            </label>
                             <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="dataPublicacao">Data da Publicação</label>
-                            <input type="date" class="form-control" id="dataPublicacao" name="dataPublicacao" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
                             <label for="arquivo">Arquivo PDF</label>
                             <input type="file" class="form-control" id="arquivo" name="arquivo" accept=".pdf" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status" name="status" required>
-                                <option value="Ativo">Ativo</option>
-                                <option value="Inativo">Inativo</option>
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -55,6 +43,30 @@
             <div class="box-footer">
               <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
               <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Cadastrar</button>
+            </div>
+            <div class="box-body">
+              <table id="example2" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Titulo</th>
+                  <th>Arquivo</th>
+                  <th>Data</th>
+                  <th>Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Trident</td>
+                  <td>Internet
+                    Explorer 4.0
+                  </td>
+                  <td>Win 95+</td>
+                  <td>
+                    <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </form>
         </div>

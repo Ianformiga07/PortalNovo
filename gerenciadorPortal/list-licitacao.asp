@@ -31,6 +31,7 @@
                   <th>Tipo</th>
                   <th>Objeto</th>
                   <th>Data Abertura</th>
+                  <th>Acessórios</th>
                   <th>Status</th>
                   <th>Ações</th>
                 </tr>
@@ -43,6 +44,7 @@
                   <td>Menor Preco</td>
                   <td>Contratação de empresa para prestação de serviços de hospedagem rom page do site da Câmara Municipal de Carolina e portal da transparência.</td>
                   <td>17/01/2024</td>
+                  <td><a href="cad-liciAnexo.asp" class="btn btn-default btn-xs"><i class="fa fa-paperclip"></i></a></td>
                   <td>Finalizado</td>
                   <td>
                   <a href="dashboard.php?control=users/create&amp;id=183" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
