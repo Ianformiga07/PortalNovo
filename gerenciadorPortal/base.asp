@@ -159,11 +159,11 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="pages/UI/icons.html"><i class="fa fa-file-text"></i> Atas de Registro de preço</a></li> <!-- Ícone representando um documento -->
-              <li><a href="pages/UI/icons.html"><i class="fa fa-handshake-o"></i> Convenios e Inst. Congêneres</a></li> <!-- Ícone representando um aperto de mãos -->
-              <li><a href="pages/UI/icons.html"><i class="fa fa-building"></i> PCA</a></li> <!-- Ícone representando um edifício -->
-              <li><a href="pages/UI/icons.html"><i class="fa fa-wrench"></i> Obras</a></li> <!-- Ícone representando uma ferramenta -->
-              <li><a href="pages/UI/icons.html"><i class="fa fa-cubes"></i> Patrimonios</a></li> <!-- Ícone representando cubos -->
+              <li><a href="list-ataPreco.asp"><i class="fa fa-file-text"></i> Atas de Registro de preço</a></li> <!-- Ícone representando um documento -->
+              <li><a href="list-convenioCongeneres.asp"><i class="fa fa-handshake-o"></i> Convenios e Inst. Congêneres</a></li> <!-- Ícone representando um aperto de mãos -->
+              <li><a href="list-pca.asp"><i class="fa fa-building"></i> PCA</a></li> <!-- Ícone representando um edifício -->
+              <li><a href="list-obras.asp"><i class="fa fa-wrench"></i> Obras</a></li> <!-- Ícone representando uma ferramenta -->
+              <li><a href="list-patrimonios.asp"><i class="fa fa-cubes"></i> Patrimonios</a></li> <!-- Ícone representando cubos -->
             </ul>
           </li>
           <li class="treeview">
@@ -191,9 +191,9 @@
               <li><a href="pages/tables/simple.html"><i class="fa fa-money"></i> Despesas e Empenho</a></li> <!-- Ícone representando dinheiro -->
               <li><a href="pages/tables/data.html"><i class="fa fa-credit-card"></i> Pagamentos</a></li> <!-- Ícone representando um cartão de crédito -->
               <li><a href="pages/tables/data.html"><i class="fa fa-line-chart"></i> Receitas</a></li> <!-- Ícone representando um gráfico de linha -->
-              <li><a href="pages/tables/data.html"><i class="fa fa-pie-chart"></i> PPA</a></li> <!-- Ícone representando um gráfico de pizza -->
-              <li><a href="pages/tables/data.html"><i class="fa fa-book"></i> LDO</a></li> <!-- Ícone representando um livro -->
-              <li><a href="pages/tables/data.html"><i class="fa fa-bar-chart"></i> LOA</a></li> <!-- Ícone representando um gráfico de barras -->
+              <li><a href="list-execOrcamentaria.asp"><i class="fa fa-pie-chart"></i> PPA</a></li> <!-- Ícone representando um gráfico de pizza -->
+              <li><a href="list-execOrcamentaria.asp"><i class="fa fa-book"></i> LDO</a></li> <!-- Ícone representando um livro -->
+              <li><a href="list-execOrcamentaria.asp"><i class="fa fa-bar-chart"></i> LOA</a></li> <!-- Ícone representando um gráfico de barras -->
               <li><a href="pages/tables/data.html"><i class="fa fa-calculator"></i> Despesas Fixadas</a></li> <!-- Ícone representando uma calculadora -->
               <li><a href="pages/tables/data.html"><i class="fa fa-list-alt"></i> Receitas Previstas</a></li> <!-- Ícone representando uma lista -->
             </ul>
@@ -207,7 +207,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="pages/calendar.html"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
+              <li><a href="list-servidores.asp"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
               <li><a href="pages/UI/sliders.html"><i class="fa fa-id-badge"></i> Contra-Cheques</a></li> <!-- Ícone representando um crachá -->
               <li><a href="pages/UI/sliders.html"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
@@ -234,14 +234,14 @@
           <li class="header">Administrador</li>
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-table"></i> <span>Usuários</span>
+              <i class="fa fa-table"></i> <span>Administradores</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-search"></i> <span>Consultar</span></a></li> <!-- Ícone de pesquisa -->
-              <li><a href="#"><i class="fa fa-user-plus"></i> <span>Cadastrar</span></a></li> <!-- Ícone de adicionar usuário -->
+              <li><a href="#"><i class="fa fa-search"></i> <span>Todos</span></a></li> <!-- Ícone de pesquisa -->
+              <li><a href="#"><i class="fa fa-user-plus"></i> <span>Novo</span></a></li> <!-- Ícone de adicionar usuário -->
             </ul>
           </li>
       </ul>

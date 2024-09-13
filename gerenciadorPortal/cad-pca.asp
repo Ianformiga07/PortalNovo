@@ -4,12 +4,12 @@
   <!--- Content Header--->
   <section class="content-header bg-white p-bottom-5">
       <h1 class="font-w-300">
-          <i class="fa fa-fw fa-check-square-o text-blue"></i> Cadastrar Legislação
+          <i class="fa fa-fw fa-check-square-o text-blue"></i> Cadastrar PCA - Plano de Contratação Anual
       </h1>
       <ol class="breadcrumb font-s-1">
           <li><a href="index.asp"><i class="fa fa-dashboard"></i> Painel</a></li> / 
-          <li><a href="diario-oficial.asp">Legislação</a></li> /
-          <span class="font-w-600">Cadastrar</span>
+          <li><a href="diario-oficial.asp">PCA - Plano de Contratação Anual</a></li> /
+          <span class="font-w-600">Cadastrar </span>
       </ol>
   </section>
 
@@ -28,16 +28,7 @@
                             <label for="status">Categoria</label>
                             <select class="form-control" id="status" name="status" required>
                                 <option value="">-- Selecionar --</option>
-                                <option value="">Projetos de Lei</option>
-                                <option value="">Resoluções</option>
-                                <option value="">Decretos</option>
-                                <option value="">Portarias</option>
-                                <option value="">Ofícios</option>
-                                <option value="">Leis Municipais</option>
-                                <option value="">Lei Orgânica</option>
-                                <option value="">Requerimentos</option>
-                                <option value="">Atas de Sessões</option>
-                                <option value="">Pauta das Sessões</option>
+                                <option value="1">PCA - Plano de Contratação Anual</option>
                             </select>
                         </div>
                         <div class="col-md-6">
