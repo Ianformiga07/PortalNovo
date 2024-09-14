@@ -208,26 +208,10 @@
             </a>
             <ul class="treeview-menu">
               <li><a href="list-servidores.asp"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
-              <li><a href="pages/UI/sliders.html"><i class="fa fa-id-badge"></i> Contra-Cheques</a></li> <!-- Ícone representando um crachá -->
               <li><a href="pages/UI/sliders.html"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
               <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
               <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
-            </ul>
-          </li>
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-file"></i> <!-- Ícone representando um arquivo -->
-              <span>Transparência</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li><a href="pages/examples/invoice.html"><i class="fa fa-money"></i> Execução Orçamentária</a></li> <!-- Ícone representando dinheiro -->
-              <li><a href="pages/examples/profile.html"><i class="fa fa-credit-card"></i> Pagamentos</a></li> <!-- Ícone representando um cartão de crédito -->
-              <li><a href="pages/examples/login.html"><i class="fa fa-handshake-o"></i> Transferências</a></li> <!-- Ícone representando um aperto de mãos -->
-              <li><a href="pages/examples/register.html"><i class="fa fa-gavel"></i> Licitações</a></li> <!-- Ícone representando um martelo -->
             </ul>
           </li>
           <!-- Seção do Administrador -->

@@ -1,3 +1,6 @@
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/2.1.5/css/dataTables.bootstrap4.css" rel="stylesheet">
 <!--#include file="base.asp"-->
 
 <main class="main">
@@ -110,7 +113,7 @@
 
         <!-- Responsáveis/Fiscais -->
         <div class="tab-pane fade" id="responsaveis" role="tabpanel" aria-labelledby="responsaveis-tab">
-          <table class="table table-custom">
+          <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
               <tr>
                 <th>Responsabilidade</th>
@@ -149,7 +152,7 @@
         <!-- Licitantes -->
         <div class="tab-pane fade" id="licitantes" role="tabpanel" aria-labelledby="licitantes-tab">
          
-          <table class="table table-custom">
+          <table id="example" class="table table-striped table-bordered" style="width:100%">
             <thead>
               <tr>
                 <th>Fornecedor</th>
@@ -171,7 +174,7 @@
 
         <!-- Contratos Vinculados -->
         <div class="tab-pane fade" id="contratos" role="tabpanel" aria-labelledby="contratos-tab">
-        <table class="table table-custom">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
               <th>N° Instrumento</th>
@@ -202,7 +205,25 @@
         </table>
         </div><!-- /Tab Pane -->
       </div><!-- /Tab Content -->
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.bootstrap4.js"></script>
 
+  <script>
+  $(document).ready(function(){
+      $('#example').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+            }
+        });
+  });
+  </script>
     </div>
   </section><!-- /Document Details Section -->
 

@@ -105,8 +105,6 @@
                 <th>Chegada</th>
                 <th>Destino</th>
                 <th>Valor Diária</th>
-                <th>Código Liquidação</th>
-                <th>Número Liquidação</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -118,8 +116,6 @@
                   <td><P class="diario-content">24/08/2024</p></td>
                   <td><P class="diario-content">PALMAS/TO</p></td>
                   <td><P class="diario-content">R$ 750,00</p></td>
-                  <td><P class="diario-content">3116</p></td>
-                  <td><P class="diario-content">20243116</p></td>
                   <td>
                     <a href="detalhe-doc.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#servidores">
                       <i class="fas fa-eye fa-1x "></i>
@@ -133,8 +129,6 @@
                   <td><P class="diario-content">24/08/2024</p></td>
                   <td><P class="diario-content">PALMAS/TO</p></td>
                   <td><P class="diario-content">R$ 750,00</p></td>
-                  <td><P class="diario-content">3116</p></td>
-                  <td><P class="diario-content">20243116</p></td>
                   <td>
                     <a href="detalhe-doc.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#servidores">
                       <i class="fas fa-eye fa-1x "></i>

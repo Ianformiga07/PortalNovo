@@ -1276,8 +1276,8 @@
 
 /* Estilo para o cabeçalho da tabela */
 .table thead th {
-  background-color: #004c20; /* Verde escuro para o fundo */
-  color: #ffffff; /* Cor do texto em branco */
+  /* background-color: #004c20; Verde escuro para o fundo */
+  color: #000000; /* Cor do texto em branco */
   font-weight: 500; /* Texto em negrito */
   font-size: 15px;
   padding: 10px; /* Espaçamento interno */

@@ -22,14 +22,16 @@
             <!-- general form elements -->
             <div class="box box-primary">
             <br>
-                <div class="box-header text-blue">
-                <h3 class="box-title" style="width: 100%; float: left; border-bottom: 2px solid #0073b7"><i class="fa fa-caret-right"></i> Comissão de Constituição Justiça e Redação</h3>
-                </div>
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form role="form">
                 <div class="box-body">
                     <div class="form-group">
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Comissão de Constituição Justiça e Redação
+                    </div>
+                </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="apelido">Presidente</label>
@@ -63,8 +65,49 @@
                     <br>
                     <br>
                     <br>
-                <div class="box-header text-blue">
-                <h3 class="box-title" style="width: 100%; float: left; border-bottom: 2px solid #0073b7"><i class="fa fa-caret-right"></i> Comissão de Administração, Trabalho, Transporte, Agricultura, Desenvolvimento Urbano e Serviço Público</h3>
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Comissão de Administração, Trabalho, Transporte, Agricultura, Desenvolvimento Urbano e Serviço Público
+                    </div>
+                </div>                  
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="apelido">Presidente</label>
+                                <select class="form-control">
+                                    <option> -- Selecionar --</option>
+                                    <option>Solteiro</option>
+                                    <option>Casado</option>
+                                    <option>Divorciado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="apelido">Vice Presidente</label>
+                                <select class="form-control">
+                                    <option> -- Selecionar --</option>
+                                    <option>Solteiro</option>
+                                    <option>Casado</option>
+                                    <option>Divorciado</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="apelido">Membro</label>
+                                <select class="form-control">
+                                    <option> -- Selecionar --</option>
+                                    <option>Solteiro</option>
+                                    <option>Casado</option>
+                                    <option>Divorciado</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Comissão de Finanças, Orçamento, Tributação, fiscalização e Controle
+                    </div>
                 </div>                    
                     <div class="form-group">
                         <div class="row">
@@ -100,46 +143,11 @@
                     <br>
                     <br>
                     <br>
-                <div class="box-header text-blue">
-                <h3 class="box-title" style="width: 100%; float: left; border-bottom: 2px solid #0073b7"><i class="fa fa-caret-right"></i> Comissão de Finanças, Orçamento, Tributação, fiscalização e Controle</h3>
-                </div>                    
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="apelido">Presidente</label>
-                                <select class="form-control">
-                                    <option> -- Selecionar --</option>
-                                    <option>Solteiro</option>
-                                    <option>Casado</option>
-                                    <option>Divorciado</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="apelido">Vice Presidente</label>
-                                <select class="form-control">
-                                    <option> -- Selecionar --</option>
-                                    <option>Solteiro</option>
-                                    <option>Casado</option>
-                                    <option>Divorciado</option>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="apelido">Membro</label>
-                                <select class="form-control">
-                                    <option> -- Selecionar --</option>
-                                    <option>Solteiro</option>
-                                    <option>Casado</option>
-                                    <option>Divorciado</option>
-                                </select>
-                            </div>
-                        </div>
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Comissão de Educação, Cultura e Desporto, Saúde e Meio Ambiente
                     </div>
-                    <br>
-                    <br>
-                    <br>
-                <div class="box-header text-blue">
-                <h3 class="box-title" style="width: 100%; float: left; border-bottom: 2px solid #0073b7"><i class="fa fa-caret-right"></i> Comissão de Educação, Cultura e Desporto, Saúde e Meio Ambiente</h3>
-                </div>                    
+                </div>                       
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">

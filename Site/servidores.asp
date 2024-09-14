@@ -212,18 +212,14 @@
                 <p><strong class="title-black">Departamento:</strong> CAMARA MUNICIPAL - SERVIDORES</p>
                 <p><strong class="title-black">Situação:</strong> Ativo</p>
                 <p><strong class="title-black">Órgão:</strong> Câmara Municipal de Ananás</p>
-                <p><strong class="title-black">Decreto:</strong> 005/2024</p>
               </div>
               <!-- Column 2 -->
               <div class="pregao-coluna">
                 <p><strong class="title-black">Tipo de Admissão:</strong> Comissionado</p>
-                <p><strong class="title-black">Data Decreto:</strong> 01/02/2024</p>
-                <p><strong class="title-black">Nível:</strong> I</p>
                 <p><strong class="title-black">Carga Horária/Mês:</strong> 150</p>
                 <p><strong class="title-black">Data de Admissão:</strong> 01/02/2024</p>
                 <p><strong class="title-black">Cargo:</strong> ASSESSOR DE GABINETE</p>
                 <p><strong class="title-black">Cargo Recebimento:</strong> ASSESSOR DE GABINETE</p>
-                <p><strong class="title-black">Categorias de Trabalhadores:</strong> Servidor Público Ocupante de Cargo exclusivo em comissão</p>
               </div>
             </div>
 

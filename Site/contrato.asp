@@ -1,4 +1,6 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/2.1.5/css/dataTables.bootstrap4.css" rel="stylesheet">
 <!--#include file="base.asp"-->
 
 <main class="main">
@@ -55,7 +57,7 @@
 
       <!-- Team Section -->
       <div class="team">
-        <table class="table table-striped">
+        <table id="example" class="table table-striped table-bordered" style="width:100%">
           <thead>
             <tr>
               <th>N° Instrumento</th>
@@ -69,44 +71,12 @@
           </thead>
           <tbody>
             <tr>
-              <td>004/2024</td>
-              <td>017/2024</td>
-              <td class="description">Contratação de empresa para prestação de serviços de hospedagem da rom page do site da Câmara Municipal de Carolina e portal da transparência, em conformidade com Termo de Referência</td>
-              <td>APPMAKE SOLUÇÕES TECNOLÓGICAS LTDA-ME</td>
-              <td>18669921000107</td>
-              <td>06/12/1997</td>
-              <td>
-                <a href="detalhe-contrato.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#contrato">
-                  <i class="fas fa-eye fa-1x"></i>
-                </a>
-                <a href="#" class="btn-visualizar" title="Baixar Documento">
-                  <i class="fas fa-download fa-1x"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>004/2024</td>
-              <td>017/2024</td>
-              <td class="description">Contratação de empresa para prestação de serviços de hospedagem da rom page do site da Câmara Municipal de Carolina e portal da transparência, em conformidade com Termo de Referência</td>
-              <td>APPMAKE SOLUÇÕES TECNOLÓGICAS LTDA-ME</td>
-              <td>18669921000107</td>
-              <td>06/12/1997</td>
-              <td>
-                <a href="detalhe-contrato.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#contrato">
-                  <i class="fas fa-eye fa-1x"></i>
-                </a>
-                <a href="#" class="btn-visualizar" title="Baixar Documento">
-                  <i class="fas fa-download fa-1x"></i>
-                </a>
-              </td>
-            </tr>
-            <tr>
-              <td>004/2024</td>
-              <td>017/2024</td>
-              <td class="description">Contratação de empresa para prestação de serviços de hospedagem da rom page do site da Câmara Municipal de Carolina e portal da transparência, em conformidade com Termo de Referência</td>
-              <td>APPMAKE SOLUÇÕES TECNOLÓGICAS LTDA-ME</td>
-              <td>18669921000107</td>
-              <td>06/12/1997</td>
+              <td><P class="diario-content">004/2024</p></td>
+              <td><P class="diario-content">017/2024</p></td>
+              <td><P class="diario-content">Contratação de empresa para prestação de serviços de hospedagem da rom page do site da Câmara Municipal de Carolina e portal da transparência, em conformidade com Termo de Referência</p></td>
+              <td><P class="diario-content">APPMAKE SOLUÇÕES TECNOLÓGICAS LTDA-ME</p></td>
+              <td><P class="diario-content">18669921000107</p></td>
+              <td><P class="diario-content">06/12/1997</p></td>
               <td>
                 <a href="detalhe-contrato.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#contrato">
                   <i class="fas fa-eye fa-1x"></i>
@@ -118,16 +88,6 @@
             </tr>
           </tbody>
         </table>
-        <!-- Paginação -->
-        <nav aria-label="Page navigation">
-          <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="#">Anterior</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
-            <li class="page-item"><a class="page-link" href="#">Próximo</a></li>
-          </ul>
-        </nav>
       </div><!-- /Team Section -->
 
     </div>
@@ -196,6 +156,25 @@
     </div>
   </div>
 </div>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.bootstrap4.js"></script>
+
+  <script>
+  $(document).ready(function(){
+      $('#example').DataTable({
+        	"language": {
+                "lengthMenu": "Mostrando _MENU_ registros por página",
+                "zeroRecords": "Nada encontrado",
+                "info": "Mostrando página _PAGE_ de _PAGES_",
+                "infoEmpty": "Nenhum registro disponível",
+                "infoFiltered": "(filtrado de _MAX_ registros no total)"
+            }
+        });
+  });
+  </script>
 </main>
 
 <!--#include file="footer.asp"-->
