@@ -188,9 +188,9 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="pages/tables/simple.html"><i class="fa fa-money"></i> Despesas e Empenho</a></li> <!-- Ícone representando dinheiro -->
-              <li><a href="pages/tables/data.html"><i class="fa fa-credit-card"></i> Pagamentos</a></li> <!-- Ícone representando um cartão de crédito -->
-              <li><a href="pages/tables/data.html"><i class="fa fa-line-chart"></i> Receitas</a></li> <!-- Ícone representando um gráfico de linha -->
+              <li><a href="list-despesaEmpenho.asp"><i class="fa fa-money"></i> Despesas e Empenho</a></li> <!-- Ícone representando dinheiro -->
+              <li><a href="list-pagamentos.asp"><i class="fa fa-credit-card"></i> Pagamentos</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="list-receitas.asp"><i class="fa fa-line-chart"></i> Receitas</a></li> <!-- Ícone representando um gráfico de linha -->
               <li><a href="list-execOrcamentaria.asp"><i class="fa fa-pie-chart"></i> PPA</a></li> <!-- Ícone representando um gráfico de pizza -->
               <li><a href="list-execOrcamentaria.asp"><i class="fa fa-book"></i> LDO</a></li> <!-- Ícone representando um livro -->
               <li><a href="list-execOrcamentaria.asp"><i class="fa fa-bar-chart"></i> LOA</a></li> <!-- Ícone representando um gráfico de barras -->
@@ -208,10 +208,10 @@
             </a>
             <ul class="treeview-menu">
               <li><a href="list-servidores.asp"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
-              <li><a href="pages/UI/sliders.html"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
-              <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
-              <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
-              <li><a href="pages/UI/timeline.html"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="list-concursos.asp"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
+              <li><a href="list-folhaPagamento.asp"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="list-diarias.asp"><i class="fa fa-credit-card"></i> Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li><a href="list-tabelaDiarias.asp"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
             </ul>
           </li>
           <!-- Seção do Administrador -->
