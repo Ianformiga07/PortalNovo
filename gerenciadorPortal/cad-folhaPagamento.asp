@@ -20,62 +20,115 @@
           <!-- Form start -->
           <form role="form" action="cadastrar_folha_pagamento.asp" method="post" enctype="multipart/form-data">
             <div class="box-body">
-              <!-- Server List -->
-              <div class="table-responsive">
-                <table class="table table-bordered">
-                  <thead>
-                    <tr>
-                      <th>Servidor</th>
-                      <th>Salário Base (R$)</th>
-                      <th>INSS (R$)</th>
-                      <th>Outras Remunerações (R$)</th>
-                      <th>Proventos (R$)</th>
-                      <th>Descontos (R$)</th>
-                      <th>Valor Líquido (R$)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Loop through the list of servidores -->
-                    <% 
-                      ' Exemplo de loop para gerar a lista de servidores
-                      Dim servidores
-                      servidores = Array("Servidor 1", "Servidor 2", "Servidor 3") ' Lista de servidores
-                      For Each servidor in servidores
-                    %>
-                    <tr>
-                      <td><%= servidor %></td>
-                      <td><input type="number" class="form-control" name="salarioBase[]" step="0.01" required></td>
-                      <td><input type="number" class="form-control" name="inss[]" step="0.01"></td>
-                      <td><input type="number" class="form-control" name="outrasRemuneracoes[]" step="0.01"></td>
-                      <td><input type="number" class="form-control" name="proventos[]" step="0.01" readonly></td>
-                      <td><input type="number" class="form-control" name="descontos[]" step="0.01"></td>
-                      <td><input type="number" class="form-control" name="liquido[]" step="0.01" readonly></td>
-                    </tr>
-                    <% Next %>
-                  </tbody>
-                </table>
+
+                <div class="row">
+                  <div class="col-md-3">
+                      <div class="form-group">
+                      <label class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">CPF:</label>
+                      <span id="cpfLabel" class="box-title text-black" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">000.000.000-00</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                      <label class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Nome:</label>
+                      <span id="nomeLabel" class="box-title text-black" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Nome do Servidor</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                      <label class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Cargo:</label>
+                      <span id="cargoLabel" class="box-title text-black" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Cargo do Servidor</span>
+                      </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="form-group">
+                      <label class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Setor:</label>
+                      <span id="setorLabel" class="box-title text-black" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">Setor do Servidor</span>
+                      </div>
+                  </div>
+                </div>
+
+              <!-- Mês de Referência e Salário Base (Lado a lado) -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="mes_referencia">Mês de Referência</label>
+                    <input type="month" id="mes_referencia" name="mes_referencia" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="salario_base">Salário Base (R$)</label>
+                    <input type="number" step="0.01" id="salario_base" name="salario_base" class="form-control" required>
+                  </div>
+                </div>
               </div>
+
+            <!-- Proventos (lado a lado) -->
+              <div class="box-header text-blue" style="border: none; padding: 0;">
+                  <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                  <i class="fa fa-caret-right"></i> Proventos
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="auxilio_transporte">Auxílio Transporte (R$)</label>
+                    <input type="number" step="0.01" id="auxilio_transporte" name="auxilio_transporte" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="auxilio_alimentacao">Auxílio Alimentação (R$)</label>
+                    <input type="number" step="0.01" id="auxilio_alimentacao" name="auxilio_alimentacao" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="adicional_incentivo">Adicional de Incentivo Funcional (20%) (R$)</label>
+                    <input type="number" step="0.01" id="adicional_incentivo" name="adicional_incentivo" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Descontos (lado a lado) -->
+              <div class="box-header text-blue" style="border: none; padding: 0;">
+                  <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                  <i class="fa fa-caret-right"></i> Descontos
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="inss">INSS (R$)</label>
+                    <input type="number" step="0.01" id="inss" name="inss" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="irrf">IRRF (R$)</label>
+                    <input type="number" step="0.01" id="irrf" name="irrf" class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="outros_descontos">Outros Descontos (R$)</label>
+                    <input type="number" step="0.01" id="outros_descontos" name="outros_descontos" class="form-control">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Total Líquido -->
+              <div class="form-group">
+                <label for="total_liquido">Total Líquido (R$)</label>
+                <input type="number" step="0.01" id="total_liquido" name="total_liquido" class="form-control" readonly>
+              </div>
+
             </div>
-<script>
-document.querySelectorAll('input').forEach(input => {
-  input.addEventListener('input', function() {
-    const row = this.closest('tr');
-    const salarioBase = parseFloat(row.querySelector('input[name="salarioBase[]"]').value) || 0;
-    const inss = parseFloat(row.querySelector('input[name="inss[]"]').value) || 0;
-    const outrasRemuneracoes = parseFloat(row.querySelector('input[name="outrasRemuneracoes[]"]').value) || 0;
-    const descontos = parseFloat(row.querySelector('input[name="descontos[]"]').value) || 0;
-
-    const proventos = salarioBase + outrasRemuneracoes;
-    const liquido = proventos - inss - descontos;
-
-    row.querySelector('input[name="proventos[]"]').value = proventos.toFixed(2);
-    row.querySelector('input[name="liquido[]"]').value = liquido.toFixed(2);
-  });
-});
-</script>
             <!-- Submit Button -->
             <div class="box-footer">
-              <button type="submit" class="btn btn-primary">Salvar Folha de Pagamento</button>
+              <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+              <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Cadastrar</button>
             </div>
           </form>
         </div>

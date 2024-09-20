@@ -1,4 +1,4 @@
-  <!--#include file="base.asp"-->
+<!--#include file="base.asp"-->
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <!--- Content Header--->
@@ -25,21 +25,23 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th></th>
+                  <th>Matrícula</th>
+                  <th>CPF</th>
                   <th>Nome</th>
-                  <th>Fone</th>
-                  <th>Data Nascimento</th>
+                  <th>Cargo</th>
+                  <th>Departamento</th>
                   <th>Status</th>
                   <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                  <td><div class="img-thumbnail"><img src="images/avatar.jpg" alt="" style="height: 35px; width: 40px;"></div></td>
-                  <td>CARLITO DE SOUSA AMORIM</td>
-                  <td>(63) 99286-3557</td>
-                  <td>01/01/1980</td>
-                  <td>Ativo</td>
+                  <td>10</td>
+                  <td>04426330173</td>
+                  <td>ALFREDO NETO</td>
+                  <td>VEREADOR</td>
+                  <td>CAMARA MUL.</td>
+                  <td><span class="label center bg-green">Ativo</span></td>
                   <td>
                   <a href="dashboard.php?control=users/create&amp;id=183" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                   <a href="#" data-skin="skin-blue" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>

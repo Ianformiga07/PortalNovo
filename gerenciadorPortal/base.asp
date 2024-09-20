@@ -21,6 +21,8 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="plugins/iCheck/all.css">
   <!-- Morris chart -->
   <link rel="stylesheet" href="bower_components/morris.js/morris.css">
   <!-- jvectormap -->
@@ -32,6 +34,12 @@
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
+  <!-- Bootstrap Color Picker -->
+  <link rel="stylesheet" href="bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
+  <!-- Bootstrap time Picker -->
+  <link rel="stylesheet" href="plugins/timepicker/bootstrap-timepicker.min.css">
+  <!-- Select2 -->
+  <link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css">
 
 <!-- Data Tables -->
   <!-- DataTables -->
@@ -210,7 +218,19 @@
               <li><a href="list-servidores.asp"><i class="fa fa-calendar"></i>Servidores</a></li> <!-- Ícone representando um calendário -->
               <li><a href="list-concursos.asp"><i class="fa fa-users"></i> Concursos Públicos</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="list-folhaPagamento.asp"><i class="fa fa-credit-card"></i> Folha de Pagamento</a></li> <!-- Ícone representando um cartão de crédito -->
-              <li><a href="list-diarias.asp"><i class="fa fa-credit-card"></i> Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
+              <li class="treeview">
+                <a href="#">
+                  <i class="fa fa-credit-card"></i> <span>Diárias Novas</span>
+                  <span class="pull-right-container">
+                    <i class="fa fa-angle-left pull-right"></i>
+                  </span>
+                </a>
+                <ul class="treeview-menu">
+                  <li><a href="gerenciador-diarias.asp"><i class="fa fa-cogs"></i> Gerenciador</a></li> <!-- Ícone de engrenagem, representa gerenciamento. -->
+                  <li><a href="list-diarias.asp"><i class="fa fa-list"></i> Todas as Diárias</a></li> <!-- Ícone de lista, representando uma listagem. -->
+                  <li><a href="sel-diarias.asp"><i class="fa fa-plus-circle"></i> Nova Diária</a></li> <!-- Ícone de mais, representando a adição de uma nova diária. -->
+                </ul>
+              </li>
               <li><a href="list-tabelaDiarias.asp"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
             </ul>
           </li>
@@ -224,8 +244,8 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li><a href="#"><i class="fa fa-search"></i> <span>Todos</span></a></li> <!-- Ícone de pesquisa -->
-              <li><a href="#"><i class="fa fa-user-plus"></i> <span>Novo</span></a></li> <!-- Ícone de adicionar usuário -->
+              <li><a href="list-administrador.asp"><i class="fa fa-search"></i> <span>Todos</span></a></li> <!-- Ícone de pesquisa -->
+              <li><a href="cad-administrador.asp"><i class="fa fa-user-plus"></i> <span>Novo</span></a></li> <!-- Ícone de adicionar usuário -->
             </ul>
           </li>
       </ul>

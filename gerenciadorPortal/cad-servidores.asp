@@ -4,11 +4,11 @@
     <!-- Content Header (Page header) -->
     <section class="content-header bg-white p-bottom-5">
       <h1>
-        <i class="fa fa-fw fa-check-square-o text-blue"></i> Novo Vereador
+        <i class="fa fa-fw fa-check-square-o text-blue"></i> Novo Servidor
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Novo Vereador</li>
+        <li class="active">Novo Servidor</li>
       </ol>
     </section>
 
@@ -69,8 +69,8 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="nomeCompleto">Data Nascimento</label>
-                                <input type="date" class="form-control" id="nomeCompleto" placeholder="Digite o nome completo">
+                                <label for="dataNasc">Data Nascimento</label>
+                                <input type="text" class="form-control" id="dataNasc" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                             </div>
                             <div class="col-md-4">
                                 <label for="apelido">Sexo</label>
@@ -250,8 +250,6 @@
                                     <option value="Assessor Jurídico">Assessor Jurídico</option>
                                     <option value="Motorista">Motorista</option>
                                     <option value="Vereador">Vereador</option>
-                                    <option value="Presidente da Câmara">Vereador Presidente</option>
-                                    <option value="Vice-Presidente da Câmara">Vereador Vice-Presidente</option>
                                     <option value="Tesoureiro">Tesoureiro</option>
                                 </select>
                             </div>
@@ -274,8 +272,6 @@
                                     <option value="Assessor Jurídico">Assessor Jurídico</option>
                                     <option value="Motorista">Motorista</option>
                                     <option value="Vereador">Vereador</option>
-                                    <option value="Presidente da Câmara">Vereador Presidente</option>
-                                    <option value="Vice-Presidente da Câmara">Vereador Vice-Presidente</option>
                                     <option value="Tesoureiro">Tesoureiro</option>
                                 </select>
                             </div>
@@ -342,68 +338,6 @@
                         </div>
                     </div>
 
-                    <!-- Campos adicionais -->
-                    <div id="camposAdicionais" style="display: none;">
-                    <br>    
-                    <div class="box-header text-blue" style="border: none; padding: 0;">
-                        <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                        <i class="fa fa-caret-right"></i> Legislativo
-                        </div>
-                    </div>
-                        <div class="form-group">
-                            <label for="mesaDiretora">Faz Parte da Mesa Diretora?</label>
-                            <select class="form-control" id="mesaDiretora" onchange="toggleFuncoes(this.value)">
-                                <option> -- Selecionar --</option>
-                                <option value="sim">Sim</option>
-                                <option value="nao">Não</option>
-                            </select>
-                        </div>
-
-                        <!-- Campos para função na mesa diretora, inicialmente ocultos -->
-                        <div id="MostraMesa" style="display: none;">
-                            <div class="form-group">
-                                <label for="funcaoMesa">Função</label>
-                                <select class="form-control" id="funcaoMesa">
-                                    <option> -- Selecionar --</option>
-                                    <option>Presidente</option>
-                                    <option>Vice-Presidente</option>
-                                    <option>1° Secretário</option>
-                                    <option>2° Secretário</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Adicione o campo para verificar se é o primeiro mandato -->
-                        <div class="form-group">
-                            <label for="primeiroMandato">É o primeiro mandato?</label>
-                            <select class="form-control" id="primeiroMandato" onchange="toggleMandatos(this.value)">
-                                <option> -- Selecionar --</option>
-                                <option value="sim">Sim</option>
-                                <option value="nao">Não</option>
-                            </select>
-                        </div>
-
-                        <!-- Campos para mandatos anteriores, inicialmente ocultos -->
-                        <div id="mandatosAnteriores" style="display: none;">
-                            <div id="mandatosContainer">
-                                <div class="form-group mandato-item">
-                                    <label for="anoInicio">Período do Mandato</label>
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <input type="text" class="form-control ano" placeholder="Ano Início" />
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <span> até </span>
-                                        </div>
-                                        <div class="col-md-5">
-                                            <input type="text" class="form-control ano" placeholder="Ano Fim" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="button" class="btn btn-success" onclick="addMandato()">Adicionar Mandato</button>
-                        </div>
-                    </div>
 
                 <div class="box-footer">
                     <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
@@ -424,63 +358,75 @@
     <!-- /.content -->
 
   </div>
+
+
+<!-- MASCARA DATA E TELEFONE -->
 <script>
-function mostrarCamposAdicionais(cargo) {
-    const camposAdicionais = document.getElementById('camposAdicionais');
-    const cargosEspecificos = ['Vereador', 'Presidente da Câmara', 'Vice-Presidente da Câmara'];
-    
-    if (cargosEspecificos.includes(cargo)) {
-        camposAdicionais.style.display = 'block';
-    } else {
-        camposAdicionais.style.display = 'none';
-        // Oculta também os campos internos
-        document.getElementById('MostraMesa').style.display = 'none';
-        document.getElementById('mandatosAnteriores').style.display = 'none';
-    }
-}
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
 
-function toggleFuncoes(valor) {
-    const mostraMesa = document.getElementById('MostraMesa');
-    if (valor === 'sim') {
-        mostraMesa.style.display = 'block';
-    } else {
-        mostraMesa.style.display = 'none';
-    }
-}
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
 
-function toggleMandatos(valor) {
-    const mandatosAnteriores = document.getElementById('mandatosAnteriores');
-    if (valor === 'nao') {
-        mandatosAnteriores.style.display = 'block';
-    } else {
-        mandatosAnteriores.style.display = 'none';
-    }
-}
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, locale: { format: 'MM/DD/YYYY hh:mm A' }})
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
 
-function addMandato() {
-    const container = document.getElementById('mandatosContainer');
-    const novoMandato = document.createElement('div');
-    novoMandato.className = 'form-group mandato-item';
-    novoMandato.innerHTML = `
-        <label for="anoInicio">Período do Mandato</label>
-        <div class="row">
-            <div class="col-md-5">
-                <input type="text" class="form-control ano" placeholder="Ano Início" />
-            </div>
-            <div class="col-md-2 text-center">
-                <span> até </span>
-            </div>
-            <div class="col-md-5">
-                <input type="text" class="form-control ano" placeholder="Ano Fim" />
-            </div>
-        </div>
-    `;
-    container.appendChild(novoMandato);
-}
+    //Date picker
+    $('#datepicker').datepicker({
+      autoclose: true
+    })
 
-// Adiciona a função para ser chamada no evento 'onchange' do campo de cargo
-document.getElementById('cargo').addEventListener('change', function() {
-    mostrarCamposAdicionais(this.value);
-});
+    //iCheck for checkbox and radio inputs
+    $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
+      checkboxClass: 'icheckbox_minimal-blue',
+      radioClass   : 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
+    $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
+      checkboxClass: 'icheckbox_minimal-red',
+      radioClass   : 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
+    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
+      checkboxClass: 'icheckbox_flat-green',
+      radioClass   : 'iradio_flat-green'
+    })
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    //Timepicker
+    $('.timepicker').timepicker({
+      showInputs: false
+    })
+  })
 </script>
+
 <!--#include file="footer.asp"-->
