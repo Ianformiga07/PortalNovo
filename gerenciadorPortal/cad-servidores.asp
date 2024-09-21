@@ -52,17 +52,13 @@
                 </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <label for="CPF">CPF</label>
                                 <input type="text" class="form-control" id="CPF" placeholder="Digite o CPF">
                             </div>
-                            <div class="col-md-5">
+                            <div class="col-md-8">
                                 <label for="nomeCompleto">Nome Completo</label>
                                 <input type="text" class="form-control" id="nomeCompleto" placeholder="Digite o nome completo">
-                            </div>
-                            <div class="col-md-4">
-                                <label for="apelido">Apelido</label>
-                                <input type="text" class="form-control" id="apelido" placeholder="Digite o apelido">
                             </div>
                         </div>
                     </div>
@@ -193,7 +189,7 @@
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-phone"></i>
                                     </span>
-                                    <input type="text" class="form-control" id="for_users_celular" name="users_celular" value="" />
+                                    <input type="text" class="form-control" id="for_users_celular" name="users_celular" data-inputmask='"mask": "(99) 99999-9999"' data-mask/>
                                 </div>
                             </div>
                             <div class="col-md-7">

@@ -41,8 +41,8 @@
                   <td>01/01/1980</td>
                   <td>Ativo</td>
                   <td>
-                  <a href="cad-vereador.asp" class="btn btn-primary btn-xs"><i class="fa fa-pencil fa"></i></a>
-                  <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
+                  <a href="cad-vereador.asp" class="btn btn-primary btn-xs"><i class="fa fa-plus fa-2x"></i></a>
+                  <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash fa-2x"></i></button>
                   </td>
                 </tr>
                 </tbody>

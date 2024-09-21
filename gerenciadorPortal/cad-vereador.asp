@@ -1,23 +1,17 @@
 <!--#include file="base.asp"-->
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header bg-white p-bottom-5">
-      <h1>
-        <i class="fa fa-fw fa-check-square-o text-blue"></i> Novo Vereador
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Novo Vereador</li>
-      </ol>
-    </section>
+<!-- Novo Vereador - Formulário Melhorado -->
+<div class="content-wrapper">
+  <section class="content-header bg-white p-bottom-5">
+    <h1><i class="fa fa-fw fa-check-square-o text-blue"></i> Novo Vereador</h1>
+    <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Novo Vereador</li>
+    </ol>
+  </section>
 
-<!-- Main content -->
-    <section class="content">
-
-      <div class="row">
-        <div class="col-md-3">
-
+  <section class="content">
+    <div class="row">
+      <div class="col-md-3">
           <!-- Profile Image -->
           <div class="box box-primary">
             <div class="box-header with-border text-black-light">
@@ -25,7 +19,7 @@
                     Foto de Perfil
                 </div>
             </div>
-            <div class="box-body">
+            <div class="box-body" >
                 <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 200px; width: 200px;">
             </div>
             <div class="box-footer">
@@ -33,179 +27,170 @@
                 <input type="file" class="users-image" name="users_imagem" style="display: none"/>
             </div>
           </div>
-          <!-- /.box -->
-        </div>
-        <!-- /.col -->
-        <div class="col-md-9">
-          <div class="nav-tabs-custom">
-            <!-- general form elements -->
-            <div class="box box-primary">
-                <!-- /.box-header -->
-                <!-- form start -->
-                <form role="form">
-                <div class="box-body">
-                    <div class="box-header text-blue" style="border: none; padding: 0;">
-                        <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                        <i class="fa fa-caret-right"></i> Dados Pessoais
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="nomeCompleto">Nome Completo</label>
-                                <input type="text" class="form-control" id="nomeCompleto" disabled>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="apelido">Apelido</label>
-                                <input type="text" class="form-control" id="apelido" disabled>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="arquivo">Logo Partido</label>
-                                <input type="file" class="form-control" id="arquivo" name="arquivo" accept=".pdf" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="ocupacao">Ocupação</label>
-                                <input type="text" class="form-control" id="ocupacao" >
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Outros campos de dados pessoais -->
-                    
-                    <br>
-                    <!-- Legislativo Section -->
-                    <div class="box-header text-blue" style="border: none; padding: 0;">
-                        <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                        <i class="fa fa-caret-right"></i> Legislativo
-                        </div>
-                    </div>
-                    
-                    <!-- Mesa Diretora -->
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="mesaDiretora">Faz Parte da Mesa Diretora?</label>
-                                <select class="form-control" id="mesaDiretora" onchange="toggleMesaDiretora(this.value)">
-                                    <option> -- Selecionar --</option>
-                                    <option value="sim">Sim</option>
-                                    <option value="nao">Não</option>
-                                </select>
-                            </div>
-                            <div id="mostraMesaDiretora" style="display: none;">
-                                <div class="col-md-6">
-                                    <label for="funcaoMesa">Função</label>
-                                    <select class="form-control" id="funcaoMesa">
-                                        <option> -- Selecionar --</option>
-                                        <option>Presidente</option>
-                                        <option>Vice-Presidente</option>
-                                        <option>1° Secretário</option>
-                                        <option>2° Secretário</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Comissões -->
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="comissoes">Faz Parte de Comissões?</label>
-                                <select class="form-control" id="comissoes" onchange="toggleComissoes(this.value)">
-                                    <option> -- Selecionar --</option>
-                                    <option value="sim">Sim</option>
-                                    <option value="nao">Não</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div id="mostraComissoes" style="display: none;">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="nomeComissao">Comissões</label>
-                                    <select class="form-control" id="nomeComissao" onchange="mostrarCamposComissao(this.value)">
-                                        <option> -- Selecionar --</option>
-                                        <option value="Comissao1">Comissão de Constituição Justiça e Redação</option>
-                                        <option value="Comissao2">Comissão de Administração, Trabalho, Transporte, Agricultura, Desenvolvimento Urbano e Serviço Público</option>
-                                        <option value="Comissao3">Comissão de Finanças, Orçamento, Tributação, fiscalização e Controle</option>
-                                        <option value="Comissao4">Comissão de Educação, Cultura e Desporto, Saúde e Meio Ambiente</option>
-                                    </select>
-                                </div>
-                            <div id="camposComissao" style="display: none;">
-                                    <div class="col-md-4">
-                                        <label for="funcaoComissao">Função</label>
-                                        <select class="form-control" id="funcaoComissao">
-                                            <option> -- Selecionar Função --</option>
-                                            <option value="Presidente">Presidente</option>
-                                            <option value="Vice-Presidente">Vice-Presidente</option>
-                                            <option value="Membro">Membro</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <label>&nbsp;</label>
-                                        <button type="button" class="btn btn-success form-control" onclick="adicionarComissao()">Adicionar Comissão</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Lista de comissões selecionadas -->
-                    <div class="form-group">
-                        <h4>Comissões Selecionadas</h4>
-                        <ul id="listaComissoes"></ul>
-                    </div>
-
-                    <!-- Mandatos Anteriores -->
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="mandatosAnteriores">Já Teve Mandatos Anteriores?</label>
-                                <select class="form-control" id="mandatosAnteriores" onchange="toggleMandatosAnteriores(this.value)">
-                                    <option> -- Selecionar --</option>
-                                    <option value="sim">Sim</option>
-                                    <option value="nao">Não</option>
-                                </select>
-                            </div>
-                        
-                        <div id="mostraMandatosAnteriores" style="display: none;">
-                                <div class="col-md-6">
-                                    <label for="detalhesMandato">Detalhes do Mandato Anterior</label>
-                                    <input type="text" class="form-control" id="detalhesMandato" placeholder="Ex.: 2016-2020">
-                                </div>
-                                <div class="col-md-2">
-                                    <label>&nbsp;</label>
-                                    <button type="button" class="btn btn-success form-control" onclick="adicionarMandato()">Adicionar Mandato</button>
-                                </div>
-                        </div>
-                        </div>
-                        <!-- Lista de mandatos anteriores -->
-                        <div class="form-group">
-                            <h4>Mandatos Anteriores</h4>
-                            <ul id="listaMandatos"></ul>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- /.box-body -->
-
-                <div class="box-footer">
-                    <button type="submit" class="btn btn-primary">Salvar</button>
-                </div>
-            </form>
-          </div>
-          <!-- /.nav-tabs-custom -->
-        </div>
-        <!-- /.col -->
       </div>
-      <!-- /.row -->
 
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
+      <div class="col-md-9">
+        <form role="form">
+          <!-- Dados Pessoais -->
+          <div class="box box-primary">
+            <div class="box-body">
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Dados Pessoais
+                    </div>
+                </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <label for="nomeCompleto">Nome Completo</label>
+                  <input type="text" class="form-control" id="nomeCompleto" disabled>
+                </div>
+                <div class="col-md-6">
+                  <label for="apelido">Apelido</label>
+                  <input type="text" class="form-control" id="apelido" disabled>
+                </div>
+              </div>
+              <div class="row" style="margin-top: 10px;">
+                <div class="col-md-6">
+                  <label for="arquivo">Logo Partido</label>
+                  <input type="file" class="form-control" id="arquivo" accept=".pdf">
+                </div>
+                <div class="col-md-6">
+                  <label for="ocupacao">Ocupação</label>
+                  <input type="text" class="form-control" id="ocupacao">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Legislativo -->
+          <div class="box box-primary">
+            <div class="box-body">
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Legislativo
+                    </div>
+                </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <label for="mesaDiretora">Faz Parte da Mesa Diretora?</label>
+                  <select class="form-control" id="mesaDiretora" onchange="toggleMesaDiretora(this.value)">
+                    <option> -- Selecionar --</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </div>
+            <div id="mostraMesaDiretora" style="display: none;">
+                <div class="col-md-3">
+                  <label for="ocupacao">Ano Inicio</label>
+                  <input type="text" class="form-control" id="ocupacao">
+                </div>
+                <div class="col-md-3">
+                  <label for="ocupacao">Ano Fim</label>
+                  <input type="text" class="form-control" id="ocupacao">
+                </div>
+                <div class="col-md-3">
+                  <label for="funcaoMesa">Função</label>
+                  <select class="form-control" id="funcaoMesa">
+                    <option> -- Selecionar --</option>
+                    <option>Presidente</option>
+                    <option>Vice-Presidente</option>
+                    <option>1° Secretário</option>
+                    <option>2° Secretário</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+              <!-- Comissões -->
+              <div class="row" style="margin-top: 15px;">
+                <div class="col-md-12">
+                  <label for="comissoes">Faz Parte de Comissões?</label>
+                  <select class="form-control" id="comissoes" onchange="toggleComissoes(this.value)">
+                    <option> -- Selecionar --</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row" id="mostraComissoes" style="display: none; margin-top: 10px;">
+                <div class="col-md-6">
+                  <label for="nomeComissao">Comissão</label>
+                  <select class="form-control" id="nomeComissao" onchange="mostrarCamposComissao(this.value)">
+                    <option> -- Selecionar --</option>
+                    <option value="Comissao1">Constituição, Justiça e Redação</option>
+                    <!-- Outras opções -->
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label for="funcaoComissao">Função</label>
+                  <select class="form-control" id="funcaoComissao">
+                    <option> -- Selecionar --</option>
+                    <option value="Presidente">Presidente</option>
+                    <option value="Vice-Presidente">Vice-Presidente</option>
+                    <option value="Membro">Membro</option>
+                  </select>
+                </div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-success" style="margin-top: 25px;" onclick="adicionarComissao()">Adicionar</button>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top: 10px;">
+                <h4>Comissões Selecionadas</h4>
+                <ul id="listaComissoes"></ul>
+              </div>
+            </div>
+          </div>
+
+            <!-- Mandatos Anteriores -->
+            <div class="box box-primary">
+            <div class="box-body">
+                <div class="box-header text-blue" style="border: none; padding: 0;">
+                <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                    <i class="fa fa-caret-right"></i> Mandatos Anteriores
+                </div>
+                </div>            
+
+                <div class="row">
+                <!-- Select Já Teve Mandatos Anteriores -->
+                <div class="col-md-4">
+                    <label for="mandatosAnteriores">Já Teve Mandatos Anteriores?</label>
+                    <select class="form-control" id="mandatosAnteriores" onchange="toggleMandatosAnteriores(this.value)">
+                    <option> -- Selecionar --</option>
+                    <option value="sim">Sim</option>
+                    <option value="nao">Não</option>
+                    </select>
+                </div>
+
+                <!-- Input e botão na mesma linha, com espaço entre eles -->
+                <div class="col-md-6" id="mostraMandatosAnteriores" style="display: none;">
+                    <label for="detalhesMandato">Detalhes do Mandato Anterior</label>
+                    <div class="input-group">
+                    <input type="text" class="form-control" id="detalhesMandato" placeholder="Ex.: 2016-2020">
+                    <span class="input-group-btn" style="margin-left: 5px;">
+                        <button type="button" class="btn btn-success" onclick="adicionarMandato()">Adicionar</button>
+                    </span>
+                    </div>
+                </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 10px;">
+                <h4>Mandatos Anteriores</h4>
+                <ul id="listaMandatos"></ul>
+                </div>
+            </div>
+            </div>
+          <!-- Botão Salvar -->
+        <div class="box-footer">
+            <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+            <button type="submit" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> Cadastrar</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</div>
 
 <script>
 // Funções JavaScript para alternar exibição de seções e adicionar itens

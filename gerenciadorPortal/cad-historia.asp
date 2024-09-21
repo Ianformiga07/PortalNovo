@@ -59,7 +59,7 @@
                         </label>
                         <div class="box-body pad">
                             <textarea id="editor1" name="editor1" rows="10" cols="90">
-                                This is my textarea to be replaced with CKEditor.
+                                
                             </textarea>
                         </div>
                     </div>
@@ -88,11 +88,11 @@
                 </div>
             </div>
             <div class="box-body">
-                <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 150px; width: 150px;">
+                <img class="profile-user-img img-responsive preview-image-cidade" src="images/avatar.jpg" style="height: 150px; width: 150px;">
             </div>
             <div class="box-footer">
-                <button type="button" class="btn-file btn btn-success pull-right" id="users-image"><span class="fa fa-camera"></span> Foto</button>
-                <input type="file" class="users-image" name="users_imagem" style="display: none"/>
+                <button type="button" class="btn-file btn btn-success pull-right" id="image-cidade"><span class="fa fa-camera"></span> Foto</button>
+                <input type="file" class="image-cidade" name="users_imagem" style="display: none"/>
             </div>
           </div>
           <!-- /.box -->
@@ -107,11 +107,11 @@
                 </div>
             </div>
             <div class="box-body">
-                <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 150px; width: 150px;">
+                <img class="profile-user-img img-responsive preview-image-brasao" src="images/avatar.jpg" style="height: 150px; width: 150px;">
             </div>
             <div class="box-footer">
-                <button type="button" class="btn-file btn btn-success pull-right" id="users-image"><span class="fa fa-camera"></span> Foto</button>
-                <input type="file" class="users-image" name="users_imagem" style="display: none"/>
+                <button type="button" class="btn-file btn btn-success pull-right" id="image-brasao"><span class="fa fa-camera"></span> Foto</button>
+                <input type="file" class="image-brasao" name="users_imagem" style="display: none"/>
             </div>
           </div>
           <!-- /.box -->
