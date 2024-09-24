@@ -10,17 +10,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/icheck/1.0.2/icheck.min.js"></script>
 
     <script>
-$(document).ready(function() {
-    // Inicializar todos os checkboxes de classe 'flat-red'
-    $('input.flat-red').each(function() {
-        $(this).iCheck({
+    $(document).ready(function() {
+        // Inicializar todos os checkboxes de classe 'flat-red'
+        $('input.flat-red').iCheck({
             checkboxClass: 'icheckbox_square-green', // Definir o estilo do checkbox como verde
             increaseArea: '20%' // Aumentar a área clicável
         });
     });
-});
     </script>
 </head>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -130,6 +129,51 @@ $(document).ready(function() {
                                         </div>
                                     </div>
                                 </div>
+                            
+                            
+                                <br>
+                                <br>
+                                <div class="box-header text-blue" style="border: none; padding: 0;">
+                                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
+                                        <i class="fa fa-caret-right"></i> Dados de Acesso
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <label for="email">Email</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-envelope-o"></i>
+                                                </span>
+                                                <input type="email" class="form-control" id="email" name="email" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="senha">Senha</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-lock"></i>
+                                                </span>
+                                                <input type="password" class="form-control" id="senha" name="senha" />
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="confirmarSenha">Confirmar Senha</label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon">
+                                                    <i class="fa fa-lock"></i>
+                                                </span>
+                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <br>
                                 <div class="box-header text-blue" style="border: none; padding: 0;">
                                     <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
@@ -206,60 +250,15 @@ $(document).ready(function() {
                                             <dl>
                                                 <dt class="font-w-100">
                                                     <!-- Checkbox com iCheck -->
-                                                    <input type="checkbox" class="flat-red" name="permissao_RH" value="9"> Recursos Humanos
+                                                    <input type="checkbox" class="flat-red" name="permissao_documentos" value="9"> Documentos
                                                 </dt>
                                             </dl>
                                         </label>
                                     </div>
                                 </div>
-
-                              <br>
-                              <br>
-                              <div class="box-header text-blue" style="border: none; padding: 0;">
-                                  <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                                      <i class="fa fa-caret-right"></i> Dados de Acesso
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <div class="row">
-                                      <div class="col-md-12">
-                                          <label for="email">Email</label>
-                                          <div class="input-group">
-                                              <span class="input-group-addon">
-                                                  <i class="fa fa-envelope-o"></i>
-                                              </span>
-                                              <input type="email" class="form-control" id="email" name="email" />
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                              <div class="form-group">
-                                  <div class="row">
-                                      <div class="col-md-6">
-                                          <label for="senha">Senha</label>
-                                          <div class="input-group">
-                                              <span class="input-group-addon">
-                                                  <i class="fa fa-lock"></i>
-                                              </span>
-                                              <input type="password" class="form-control" id="senha" name="senha" />
-                                          </div>
-                                      </div>
-                                      <div class="col-md-6">
-                                          <label for="confirmarSenha">Confirmar Senha</label>
-                                          <div class="input-group">
-                                              <span class="input-group-addon">
-                                                  <i class="fa fa-lock"></i>
-                                              </span>
-                                              <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" />
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
                             </div>
-                            <!-- /.box-body -->
                             <div class="box-footer">
-                                  <a href="#" class="btn btn-primary"><i class="fa fa-reply"></i> Voltar</a>
-                                  <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Cadastrar</button>
+                                <button type="submit" class="btn btn-primary pull-right">Salvar</button>
                             </div>
                         </form>
                     </div>
@@ -268,6 +267,6 @@ $(document).ready(function() {
             </div>
         </div>
     </section>
+    <!-- /.content -->
 </div>
-<!-- /.content-wrapper -->
 <!--#include file="footer.asp"-->

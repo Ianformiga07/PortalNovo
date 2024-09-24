@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-md-6">
                   <label for="apelido">Apelido</label>
-                  <input type="text" class="form-control" id="apelido" disabled>
+                  <input type="text" class="form-control" id="apelido">
                 </div>
               </div>
               <div class="row" style="margin-top: 10px;">
@@ -71,7 +71,7 @@
                     </div>
                 </div>
               <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                   <label for="mesaDiretora">Faz Parte da Mesa Diretora?</label>
                   <select class="form-control" id="mesaDiretora" onchange="toggleMesaDiretora(this.value)">
                     <option> -- Selecionar --</option>
@@ -80,15 +80,15 @@
                   </select>
                 </div>
             <div id="mostraMesaDiretora" style="display: none;">
-                <div class="col-md-3">
-                  <label for="ocupacao">Ano Inicio</label>
-                  <input type="text" class="form-control" id="ocupacao">
+                <div class="col-md-4">
+                  <label for="funcaoMesa">Ano Legislativo</label>
+                  <select class="form-control" id="funcaoMesa">
+                    <option> -- Selecionar --</option>
+                    <option>2025/2026</option>
+                    <option>2027/2028</option>
+                  </select>
                 </div>
-                <div class="col-md-3">
-                  <label for="ocupacao">Ano Fim</label>
-                  <input type="text" class="form-control" id="ocupacao">
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
                   <label for="funcaoMesa">Função</label>
                   <select class="form-control" id="funcaoMesa">
                     <option> -- Selecionar --</option>
@@ -154,7 +154,7 @@
 
                 <div class="row">
                 <!-- Select Já Teve Mandatos Anteriores -->
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <label for="mandatosAnteriores">Já Teve Mandatos Anteriores?</label>
                     <select class="form-control" id="mandatosAnteriores" onchange="toggleMandatosAnteriores(this.value)">
                     <option> -- Selecionar --</option>
@@ -165,12 +165,17 @@
 
                 <!-- Input e botão na mesma linha, com espaço entre eles -->
                 <div class="col-md-6" id="mostraMandatosAnteriores" style="display: none;">
-                    <label for="detalhesMandato">Detalhes do Mandato Anterior</label>
-                    <div class="input-group">
-                    <input type="text" class="form-control" id="detalhesMandato" placeholder="Ex.: 2016-2020">
-                    <span class="input-group-btn" style="margin-left: 5px;">
-                        <button type="button" class="btn btn-success" onclick="adicionarMandato()">Adicionar</button>
-                    </span>
+                    <div class="col-md-5">
+                      <label for="AnoInicioMandato">Ano Início</label>
+                      <input type="text" class="form-control" id="AnoInicioMandato">
+                    </div>
+                    <div class="col-md-5">
+                      <label for="AnoFimMandato">Ano Fim</label>
+                      <input type="text" class="form-control" id="AnoFimMandato">
+                    </div>
+                    <div class="col-md-2">
+                      <button type="button" class="btn btn-success" style="margin-top: 25px;" onclick="adicionarMandato()">Adicionar</button>
+                    </div>
                     </div>
                 </div>
                 </div>
@@ -244,16 +249,20 @@ function toggleMandatosAnteriores(value) {
 }
 
 function adicionarMandato() {
-    const detalhesMandato = document.getElementById("detalhesMandato").value;
+    const anoInicioMandato = document.getElementById("AnoInicioMandato").value;
+    const anoFimMandato = document.getElementById("AnoFimMandato").value;
 
-    if (detalhesMandato) {
+    if (anoInicioMandato && anoFimMandato) {
         const listaMandatos = document.getElementById("listaMandatos");
         const li = document.createElement("li");
-        li.textContent = detalhesMandato;
+        li.textContent = `Mandato: ${anoInicioMandato} - ${anoFimMandato}`;
         listaMandatos.appendChild(li);
 
-        // Limpar campo após adicionar
-        document.getElementById("detalhesMandato").value = '';
+        // Limpar campos após adicionar
+        document.getElementById("AnoInicioMandato").value = '';
+        document.getElementById("AnoFimMandato").value = '';
+    } else {
+        alert("Por favor, preencha ambos os campos de Ano Início e Ano Fim.");
     }
 }
 </script>
