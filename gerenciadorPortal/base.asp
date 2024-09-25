@@ -55,9 +55,9 @@
     <!-- Logo -->
     <a href="index.asp" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <img src="../Site/assets/img/logoicon.png" alt="" class="logo-mini" width="45" height="45">
+      <img src="images/logoicon.png" alt="" class="logo-mini" width="45" height="45">
       <!-- logo for regular state and mobile devices -->
-      <img src="../Site/assets/img/logonova.png" alt="" class="logo-lg" width="150" height="50">
+      <img src="images/logonova.png" alt="" class="logo-lg" width="150" height="50">
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -70,7 +70,7 @@
         <ul class="nav navbar-nav">
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a href="login.asp" class="dropdown-toggle" data-toggle="dropdown">
               <span class="hidden-xs"><i class="fa fa-fw fa-sign-in"></i> Sair</span>
             </a>
           </li>
@@ -114,7 +114,6 @@
               <li><a href="cad-historia.asp"><i class="fa fa-book"></i> História</a></li> <!-- Ícone representando um livro -->
               <li><a href="list-vereadores.asp"><i class="fa fa-users"></i> Vereadores</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="regimento.asp"><i class="fa fa-gavel"></i> Regimento Interno</a></li> <!-- Ícone representando um martelo -->
-              <li><a href="cad-comissoes.asp"><i class="fa fa-sitemap"></i> Comissões</a></li> <!-- Ícone representando um organograma -->
             </ul>
           </li>
           <li class="treeview">

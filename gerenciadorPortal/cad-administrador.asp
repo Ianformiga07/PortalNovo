@@ -46,10 +46,6 @@
                         <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 200px; width: 200px;">
                     </div>
                     <div class="box-footer">
-                        <button type="button" class="btn-file btn btn-success pull-right" id="users-image">
-                            <span class="fa fa-camera"></span> Foto
-                        </button>
-                        <input type="file" class="users-image" name="users_imagem" style="display: none"/>
                     </div>
                 </div>
                 <!-- /.box -->
@@ -95,42 +91,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <br> 
-                                <div class="box-header text-blue" style="border: none; padding: 0;">
-                                    <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                                        <i class="fa fa-caret-right"></i> Endereço
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label for="cep">CEP</label>
-                                            <input type="text" class="form-control" id="cep">
-                                        </div>
-                                        <div class="col-md-8">
-                                            <label for="endereco">Endereço</label>
-                                            <input type="text" class="form-control" id="endereco">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-5">
-                                            <label for="cidade">Cidade</label>
-                                            <input type="text" class="form-control" id="cidade">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="uf">UF</label>
-                                            <input type="text" class="form-control" id="uf">
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="celular">Celular</label>
-                                            <input type="text" class="form-control" id="celular" data-inputmask='"mask": "(99) 99999-9999"' data-mask>
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                            
                                 <br>
                                 <br>
                                 <div class="box-header text-blue" style="border: none; padding: 0;">
@@ -140,7 +100,20 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <!-- Nível de Acesso -->
+                                        <div class="col-md-4">
+                                            <label for="sexo">Nível de Acesso</label>
+                                            <select class="form-control" id="sexo">
+                                                <option> -- Selecionar --</option>
+                                                <option>Administrador Geral</option>
+                                                <option>Administrador I</option>
+                                                <option>Administrador II</option>
+                                                <option>Editor</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Email -->
+                                        <div class="col-md-8">
                                             <label for="email">Email</label>
                                             <div class="input-group">
                                                 <span class="input-group-addon">
@@ -250,7 +223,7 @@
                                             <dl>
                                                 <dt class="font-w-100">
                                                     <!-- Checkbox com iCheck -->
-                                                    <input type="checkbox" class="flat-red" name="permissao_documentos" value="9"> Documentos
+                                                    <input type="checkbox" class="flat-red" name="permissao_RH" value="9"> Recursos Humanos
                                                 </dt>
                                             </dl>
                                         </label>

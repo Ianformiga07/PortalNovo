@@ -15,11 +15,24 @@
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
+  <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
+
+  <!-- Custom CSS -->
+  <style>
+    /* Deixar o fundo da página mais branco */
+    body {
+      background-color: #f7f7f7 !important;
+    }
+
+    /* Sombreamento no bloco de login */
+    .login-box-body {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+  </style>
 
   <!-- Google Font -->
   <link rel="stylesheet"
@@ -29,20 +42,19 @@
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
-      <!-- <a href="../../index2.html"><b>Admin</b>LTE</a> -->
-      <img src="../assets/img/logonova.png" alt="" class="logo-img" width="200" height="60">
+      <img src="images/logonova.png" alt="" class="logo-img" width="200" height="60">
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
       <p class="login-box-msg">Faça login para iniciar a sua sessão!</p>
 
-      <form action="index.asp" method="post">
+      <form action="index.asp" method="post" onsubmit="return validarCPF()">
         <div class="form-group has-feedback">
-          <input type="email" class="form-control" placeholder="Email">
-          <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+          <input type="text" class="form-control" id="cpf" placeholder="CPF" required>
+          <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Senha">
+          <input type="password" class="form-control" placeholder="Senha" required>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -71,18 +83,60 @@
 
   <!-- jQuery 3 -->
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- jQuery Mask Plugin -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <!-- Bootstrap 3.3.7 -->
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <!-- iCheck -->
   <script src="plugins/iCheck/icheck.min.js"></script>
+
   <script>
     $(function () {
+      // Aplica a máscara ao campo de CPF
+      $('#cpf').mask('000.000.000-00');
+
       $('input').iCheck({
         checkboxClass: 'icheckbox_square-blue',
         radioClass: 'iradio_square-blue',
         increaseArea: '20%' /* optional */
       });
     });
+
+    // Função para validar CPF
+    function validarCPF() {
+      var cpf = document.getElementById("cpf").value.replace(/[^\d]+/g, '');
+      
+      if (cpf.length != 11 ||
+        cpf == "00000000000" || cpf == "11111111111" ||
+        cpf == "22222222222" || cpf == "33333333333" ||
+        cpf == "44444444444" || cpf == "55555555555" ||
+        cpf == "66666666666" || cpf == "77777777777" ||
+        cpf == "88888888888" || cpf == "99999999999") {
+        alert("CPF inválido");
+        return false;
+      }
+      
+      var soma = 0;
+      var resto;
+      for (var i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if ((resto == 10) || (resto == 11)) resto = 0;
+      if (resto != parseInt(cpf.substring(9, 10))) {
+        alert("CPF inválido");
+        return false;
+      }
+
+      soma = 0;
+      for (var i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+      resto = (soma * 10) % 11;
+      if ((resto == 10) || (resto == 11)) resto = 0;
+      if (resto != parseInt(cpf.substring(10, 11))) {
+        alert("CPF inválido");
+        return false;
+      }
+
+      return true;
+    }
   </script>
 </body>
 

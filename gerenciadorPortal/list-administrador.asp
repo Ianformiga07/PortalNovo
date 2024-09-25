@@ -18,7 +18,7 @@
         <div class="col-xs-12">
           <div class="box box-primary">
               <div class="box-footer">
-                <a href="cad-administrador.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Novo Cadastro</a>
+                <a href="sel-admin.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Novo Cadastro</a>
               </div>
             <!-- /.box-header -->
             <div class="box-body">

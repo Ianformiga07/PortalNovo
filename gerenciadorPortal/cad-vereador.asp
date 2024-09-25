@@ -101,47 +101,56 @@
               </div>
             </div>
 
-              <!-- Comissões -->
-              <div class="row" style="margin-top: 15px;">
-                <div class="col-md-12">
-                  <label for="comissoes">Faz Parte de Comissões?</label>
-                  <select class="form-control" id="comissoes" onchange="toggleComissoes(this.value)">
-                    <option> -- Selecionar --</option>
-                    <option value="sim">Sim</option>
-                    <option value="nao">Não</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="row" id="mostraComissoes" style="display: none; margin-top: 10px;">
-                <div class="col-md-6">
-                  <label for="nomeComissao">Comissão</label>
-                  <select class="form-control" id="nomeComissao" onchange="mostrarCamposComissao(this.value)">
-                    <option> -- Selecionar --</option>
-                    <option value="Comissao1">Constituição, Justiça e Redação</option>
-                    <!-- Outras opções -->
-                  </select>
-                </div>
-                <div class="col-md-6">
-                  <label for="funcaoComissao">Função</label>
-                  <select class="form-control" id="funcaoComissao">
-                    <option> -- Selecionar --</option>
-                    <option value="Presidente">Presidente</option>
-                    <option value="Vice-Presidente">Vice-Presidente</option>
-                    <option value="Membro">Membro</option>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <button type="button" class="btn btn-success" style="margin-top: 25px;" onclick="adicionarComissao()">Adicionar</button>
-                </div>
-              </div>
-
-              <div class="form-group" style="margin-top: 10px;">
-                <h4>Comissões Selecionadas</h4>
-                <ul id="listaComissoes"></ul>
-              </div>
+                    <!-- Comissões -->
+            <div class="row" style="margin-top: 15px;">
+            <div class="col-md-6">
+                <label for="comissoes">Faz Parte de Comissões?</label>
+                <select class="form-control" id="comissoes" onchange="toggleComissoes(this.value)">
+                <option value=""> -- Selecionar --</option>
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+                </select>
             </div>
-          </div>
+
+            <div class="col-md-6" id="anoLegDiv" style="display: none;">
+                <label for="AnoLegComissao">Ano Legislativo</label>
+                <select class="form-control" id="AnoLegComissao">
+                <option value=""> -- Selecionar --</option>
+                <option value="2025/2026">2025/2026</option>
+                <option value="2027/2028">2027/2028</option>
+                </select>
+            </div>
+            </div>
+
+            <div class="row" id="mostraComissoes" style="display: none; margin-top: 10px;">
+            <div class="col-md-6">
+                <label for="nomeComissao">Comissão</label>
+                <select class="form-control" id="nomeComissao" onchange="mostrarCamposComissao(this.value)">
+                <option value=""> -- Selecionar --</option>
+                <option value="Comissao1">Constituição, Justiça e Redação</option>
+                <!-- Outras opções -->
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label for="funcaoComissao">Função</label>
+                <select class="form-control" id="funcaoComissao">
+                <option value=""> -- Selecionar --</option>
+                <option value="Presidente">Presidente</option>
+                <option value="Vice-Presidente">Vice-Presidente</option>
+                <option value="Membro">Membro</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <button type="button" class="btn btn-success" style="margin-top: 25px;" onclick="adicionarComissao()">Adicionar</button>
+            </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+            <h4>Comissões Selecionadas</h4>
+            <ul id="listaComissoes"></ul>
+            </div>
 
             <!-- Mandatos Anteriores -->
             <div class="box box-primary">
@@ -208,37 +217,37 @@ function toggleMesaDiretora(value) {
     }
 }
 
-function toggleComissoes(value) {
+  function toggleComissoes(value) {
+    const anoLegDiv = document.getElementById("anoLegDiv");
+    const mostraComissoes = document.getElementById("mostraComissoes");
+
     if (value === "sim") {
-        document.getElementById("mostraComissoes").style.display = "block";
+      anoLegDiv.style.display = "block"; // Exibe o campo Ano Legislativo
+      mostraComissoes.style.display = "block"; // Exibe os outros campos
     } else {
-        document.getElementById("mostraComissoes").style.display = "none";
-        document.getElementById("camposComissao").style.display = "none";
+      anoLegDiv.style.display = "none"; // Oculta o campo Ano Legislativo
+      mostraComissoes.style.display = "none"; // Oculta os outros campos
+      resetCampos(); // Reseta os valores dos campos
     }
-}
+  }
 
-function mostrarCamposComissao(value) {
-    if (value) {
-        document.getElementById("camposComissao").style.display = "block";
-    }
-}
+  function resetCampos() {
+    document.getElementById("AnoLegComissao").selectedIndex = 0;
+    document.getElementById("nomeComissao").selectedIndex = 0;
+    document.getElementById("funcaoComissao").selectedIndex = 0;
+  }
 
-function adicionarComissao() {
+  function adicionarComissao() {
     const nomeComissao = document.getElementById("nomeComissao").value;
     const funcaoComissao = document.getElementById("funcaoComissao").value;
 
     if (nomeComissao && funcaoComissao) {
-        const listaComissoes = document.getElementById("listaComissoes");
-        const li = document.createElement("li");
-        li.textContent = `${nomeComissao} - ${funcaoComissao}`;
-        listaComissoes.appendChild(li);
-
-        // Limpar seleção após adicionar
-        document.getElementById("nomeComissao").value = '';
-        document.getElementById("funcaoComissao").value = '';
-        document.getElementById("camposComissao").style.display = "none";
+      const listaComissoes = document.getElementById("listaComissoes");
+      const li = document.createElement("li");
+      li.textContent = `${nomeComissao} - ${funcaoComissao}`;
+      listaComissoes.appendChild(li);
     }
-}
+  }
 
 function toggleMandatosAnteriores(value) {
     if (value === "sim") {
