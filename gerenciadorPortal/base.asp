@@ -1,3 +1,29 @@
+<!--#include file ="lib/Conexao.asp"-->
+<%
+response.write Session("IdUsu")
+response.end
+
+if session("idUsu") = "04426330173" then
+response.Write("<script>")
+response.Write("Swal.fire({")
+response.Write("icon: 'warning',")
+response.Write("title: 'Usuário não está logado!',")
+response.Write("text: 'Você será redirecionado para a página de login.',")
+response.Write("confirmButtonText: 'OK',")
+response.Write("}).then((result) => {")
+response.Write("if (result.isConfirmed) {")
+response.Write("window.location.assign('logout.asp');")
+response.Write("}")
+response.Write("});")
+response.Write("</script>")
+end if
+%>
+
+<%
+call abreConexao
+sql = ""
+call fechaConexao
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,6 +59,9 @@
   <link rel="stylesheet" href="bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <!-- bootstrap wysihtml5 - text editor -->
   <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+  <!-- SweetAlert2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
 
   <!-- Bootstrap Color Picker -->
   <link rel="stylesheet" href="bower_components/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css">
@@ -93,7 +122,7 @@
         </div>
         <div class="pull-left info">
           <p>Ian Formiga</p>
-          <a href="#"><i class="fa fa-pencil text-gray"></i> Minha Conta</a>
+          <a href="cad_administrador.asp"><i class="fa fa-pencil text-gray"></i> Minha Conta</a>
         </div>
       </div>
       <!-- sidebar menu: : style can be found in sidebar.less -->
@@ -252,3 +281,5 @@
     <!-- /.sidebar -->
   </aside>
   <!-- /.content-wrapper -->
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

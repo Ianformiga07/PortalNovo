@@ -1,10 +1,37 @@
+
+<!--#include file ="lib/Conexao.asp"-->
+<!--#include file="dist/md5.asp"-->
+<%
+   if request.form("cpf") <> "" and request.form("senha") <> "" then
+    call abreConexao
+      cpfLimpo = Replace(Replace(request.form("cpf"), ".", ""), "-", "")
+      sql = "SELECT id_servidor, CPF, NomeCompleto, senha, statusServidor FROM cam_servidores WHERE CPF = '" & cpfLimpo & "' AND (statusServidor = 1)"
+          response.write sql
+          response.end
+      set rs_senha = conn.execute(sql)
+      tiporetorno = 0
+      if not rs_senha.eof then
+          if rtrim(MD5(request.form("senha"))) <> rtrim(rs_senha("senha")) then
+              tiporetorno = 2
+          else
+              Session("IdUsu") = rs_senha("CPF")
+              response.Redirect("index.asp")>0:(*+)
+          end if
+      else
+          tiporetorno = 3
+      end if
+    call fechaConexao
+   end if 
+%>
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Dashboard</title>
+  <title>CAMARA MUL. DE ANANÁS</title>
+
+  <!-- Favicons -->
+  <link href="images/logoicon.png" rel="icon">
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->
@@ -19,7 +46,8 @@
   <link rel="stylesheet" href="dist/css/skins/_all-skins.min.css">
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
-
+  <!-- SweetAlert2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <!-- Custom CSS -->
   <style>
     /* Deixar o fundo da página mais branco */
@@ -48,13 +76,13 @@
     <div class="login-box-body">
       <p class="login-box-msg">Faça login para iniciar a sua sessão!</p>
 
-      <form action="index.asp" method="post" onsubmit="return validarCPF()">
+      <form action="login.asp" method="post" onsubmit="return validarCPF()">
         <div class="form-group has-feedback">
-          <input type="text" class="form-control" id="cpf" placeholder="CPF" required>
+          <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Senha" required>
+          <input type="password" class="form-control" id="senha" name="senha" placeholder="Senha" required>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -87,6 +115,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
   <!-- Bootstrap 3.3.7 -->
   <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- iCheck -->
   <script src="plugins/iCheck/icheck.min.js"></script>
 
