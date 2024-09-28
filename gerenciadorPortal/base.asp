@@ -1,27 +1,22 @@
 <!--#include file ="lib/Conexao.asp"-->
 <%
-response.write Session("IdUsu")
-response.end
-
-if session("idUsu") = "04426330173" then
+' Verifica se o usuário está logado
+if session("idUsu") = "" then
 response.Write("<script>")
-response.Write("Swal.fire({")
-response.Write("icon: 'warning',")
-response.Write("title: 'Usuário não está logado!',")
-response.Write("text: 'Você será redirecionado para a página de login.',")
-response.Write("confirmButtonText: 'OK',")
-response.Write("}).then((result) => {")
-response.Write("if (result.isConfirmed) {")
-response.Write("window.location.assign('logout.asp');")
-response.Write("}")
-response.Write("});")
+response.Write("alert('O Usu\u00e1rio n\u00e3o est\u00e1 logado!');")
+response.Write("window.location.assign('logout.asp')")
 response.Write("</script>")
 end if
 %>
 
 <%
 call abreConexao
-sql = ""
+sql = "SELECT id_servidor, CPF, LEFT(NomeCompleto, CHARINDEX(' ', NomeCompleto + ' ') - 1) AS PrimeiroNome, RIGHT(NomeCompleto, CHARINDEX(' ', REVERSE(NomeCompleto) + ' ') - 1) AS UltimoNome, statusServidor FROM  cam_servidores where CPF = '"&session("idUsu")&"'"
+set rs_Serv = conn.execute(sql)
+if not rs_Serv.eof then
+PrimeiroNome = rs_Serv("PrimeiroNome")
+UltimoNome = rs_Serv("UltimoNome")
+end if
 call fechaConexao
 %>
 <!DOCTYPE html>
@@ -95,21 +90,41 @@ call fechaConexao
         <span class="sr-only">Toggle navigation</span>
       </a>
 
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="login.asp" class="dropdown-toggle" data-toggle="dropdown">
-              <span class="hidden-xs"><i class="fa fa-fw fa-sign-in"></i> Sair</span>
-            </a>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+<div class="navbar-custom-menu">
+  <ul class="nav navbar-nav">
+    <!-- User Account: style can be found in dropdown.less -->
+    <li class="user user-menu">
+      <a href="logout.asp" id="logoutButton">
+        <span class="hidden-xs"><i class="fa fa-fw fa-sign-out"></i> Sair</span>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  // Captura o evento de clique no botão de logout
+  document.getElementById('logoutButton').addEventListener('click', function(event) {
+    event.preventDefault(); // Previne o comportamento padrão do link
+
+    // Exibe o SweetAlert2 para confirmar o logout
+    Swal.fire({
+      title: 'Sair do Sistema?',
+      text: "Você estará encerrando a sessão atual.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, sair',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Se o usuário confirmar, redireciona para a página de logout
+        window.location.href = 'logout.asp';
+      }
+    });
+  });
+</script>
   </header>
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
@@ -121,7 +136,7 @@ call fechaConexao
           <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Ian Formiga</p>
+          <p><%=PrimeiroNome%>&nbsp<%=UltimoNome%></p>
           <a href="cad_administrador.asp"><i class="fa fa-pencil text-gray"></i> Minha Conta</a>
         </div>
       </div>
@@ -273,7 +288,7 @@ call fechaConexao
             </a>
             <ul class="treeview-menu">
               <li><a href="list-administrador.asp"><i class="fa fa-search"></i> <span>Todos</span></a></li> <!-- Ícone de pesquisa -->
-              <li><a href="cad-administrador.asp"><i class="fa fa-user-plus"></i> <span>Novo</span></a></li> <!-- Ícone de adicionar usuário -->
+              <li><a href="sel-admin.asp"><i class="fa fa-user-plus"></i> <span>Novo</span></a></li> <!-- Ícone de adicionar usuário -->
             </ul>
           </li>
       </ul>

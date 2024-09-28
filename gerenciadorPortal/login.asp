@@ -5,21 +5,38 @@
    if request.form("cpf") <> "" and request.form("senha") <> "" then
     call abreConexao
       cpfLimpo = Replace(Replace(request.form("cpf"), ".", ""), "-", "")
+      
+      ' Consulta para buscar os dados do servidor
       sql = "SELECT id_servidor, CPF, NomeCompleto, senha, statusServidor FROM cam_servidores WHERE CPF = '" & cpfLimpo & "' AND (statusServidor = 1)"
-          response.write sql
-          response.end
       set rs_senha = conn.execute(sql)
       tiporetorno = 0
+      
       if not rs_senha.eof then
-          if rtrim(MD5(request.form("senha"))) <> rtrim(rs_senha("senha")) then
-              tiporetorno = 2
+          ' Verifica se o servidor está ativo (statusServidor = 1)
+          if rs_senha("statusServidor") = 0 then
+              tiporetorno = 1
+              response.write "O servidor está inativo"
+              response.end
           else
-              Session("IdUsu") = rs_senha("CPF")
-              response.Redirect("index.asp")>0:(*+)
+              ' Verifica a senha (usando MD5)
+              senhaDigitadaMD5 = LCase(MD5(request.form("senha")))
+              senhaArmazenada = LCase(Trim(rs_senha("senha")))
+
+              ' Comparação de senhas
+              if senhaDigitadaMD5 <> senhaArmazenada then
+                  tiporetorno = 2
+                  response.write "Senha incorreta"
+                  response.end
+              else
+                  ' Se a senha estiver correta, cria a sessão e redireciona
+                  Session("IdUsu") = rs_senha("CPF")
+                  response.Redirect("index.asp")
+              end if
           end if
       else
-          tiporetorno = 3
-      end if
+          response.write "Usuário não encontrado ou inativo."
+      end if  
+
     call fechaConexao
    end if 
 %>

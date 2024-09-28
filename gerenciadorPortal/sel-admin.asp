@@ -1,4 +1,20 @@
 <!--#include file="base.asp"-->
+<%
+call abreConexao
+%>
+
+<script>
+function admin(idServidor)
+{
+
+    var form = document.forms["frm_BuscaServ"];
+    form.idServidor.value = idServidor;
+    form.action = "cad-administrador.asp";
+    form.submit();
+    
+}
+</script>
+
 <div class="content-wrapper">
   <section class="content-header bg-white p-bottom-5">
     <h1 class="font-w-300">
@@ -16,7 +32,8 @@
       <div class="col-xs-12">
         <div class="box box-primary">
           <!-- Form para buscar servidor -->
-          <form id="searchForm" role="form" action="buscar_servidor.asp" method="post">
+          <form action="sel-admin.asp" method="post" name="frm_BuscaServ">
+            <input type="hidden" name="idServidor" id="idServidor">
             <div class="box-body">
               <div class="row">
                 <div class="col-md-6">
@@ -32,13 +49,30 @@
                   </div>
                 </div>
               </div>
-              <button type="button" class="btn btn-primary" onclick="buscarServidor()">Buscar</button>
+              <button type="submit" class="btn btn-primary">Buscar</button>
             </div>
           </form>
         </div>
 
-        <!-- Resultado da busca -->
-        <div class="box box-primary" id="resultBox" style="display:none;">
+        <!-- Lógica para exibir resultados se houver busca -->
+        <%
+        if request.form("searchCPF") <> "" or request.form("searchNome") <> "" then
+            ' Construir a query SQL dinamicamente
+            sql = "SELECT CPF, NomeCompleto, statusServidor FROM cam_servidores WHERE statusServidor = 1"
+
+            if request.form("searchCPF") <> "" then
+                sql = sql & " AND CPF = '" & request.form("searchCPF") & "'"
+            end if
+
+            if request.form("searchNome") <> "" then
+                sql = sql & " AND NomeCompleto LIKE '%" & request.form("searchNome") & "%'"
+            end if
+
+            set rs_admin = conn.execute(sql)
+
+            ' Exibir a tabela de resultados
+        %>
+        <div class="box box-primary">
           <div class="box-header">
             <h3 class="box-title">Resultados da Busca</h3>
           </div>
@@ -48,60 +82,42 @@
                 <tr>
                   <th>CPF</th>
                   <th>Nome</th>
-                  <th>Cargo</th>
+                  <th>Status</th>
                   <th>Ações</th>
                 </tr>
               </thead>
-              <tbody id="resultTable">
-                <!-- Conteúdo será preenchido via JavaScript -->
+              <tbody>
+                <% if rs_admin.eof then %>
+                    <tr style="background-color: #ffcccc;"> <!-- Fundo vermelho claro -->
+                        <td colspan="4" class="text-center">Nenhum servidor encontrado.</td>
+                    </tr>
+                <% else %>
+                  <% do while not rs_admin.eof %>
+                    <tr>
+                      <td><%= rs_admin("CPF") %></td>
+                      <td><%= rs_admin("NomeCompleto") %></td>
+                      <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
+                      <td>
+                        <a href="#" onClick="admin('<%=rs_admin("CPF")%>');" class="btn btn-primary btn-X2"><i class="fa fa-pencil"></i></a>
+                        <button data-toggle="modal" data-target=".modal-delete" mdl-name="patrimonios" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-X2" id="delete_row_<%= rs_admin("CPF") %>"><i class="fa fa-trash"></i></button>
+                      </td>
+                    </tr>
+                    <% rs_admin.movenext %>
+                  <% loop %>
+                <% end if %>
               </tbody>
             </table>
           </div>
         </div>
+        <% end if %>
+
       </div>
     </div>
   </section>
 </div>
 
+<%
+call fechaConexao
+%>
+
 <!--#include file="footer.asp"-->
-
-<script>
-  function buscarServidor() {
-    // Simulação de busca (trocar pela lógica real de busca em ASP ou Ajax)
-    const cpf = document.getElementById('searchCPF').value;
-    const nome = document.getElementById('searchNome').value;
-
-    // Simulação de resultado da busca
-    const resultado = [
-      { cpf: '12345678901', nome: 'João da Silva', cargo: 'Analista' },
-      { cpf: '98765432101', nome: 'Maria Oliveira', cargo: 'Técnico' }
-    ];
-
-    // Limpar a tabela de resultados anterior
-    const resultTable = document.getElementById('resultTable');
-    resultTable.innerHTML = '';
-
-    // Verificar se há resultados (essa simulação assume que sempre terá, mas pode ajustar com a lógica real)
-    if (resultado.length > 0) {
-      document.getElementById('resultBox').style.display = 'block';
-      resultado.forEach(function(servidor) {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${servidor.cpf}</td>
-          <td>${servidor.nome}</td>
-          <td>${servidor.cargo}</td>
-          <td>
-            <a href="cad-administrador.asp" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-            <button data-toggle="modal" data-target=".modal-delete" mdl-name="patrimonios" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_2024001"><i class="fa fa-trash"></i></button>
-          </td>
-        `;
-        resultTable.appendChild(row);
-      });
-    }
-  }
-
-  function solicitarDiaria(cpf) {
-    // Redirecionar para a página de solicitação de diária passando o CPF do servidor selecionado
-    window.location.href = `solicitar_diaria.asp?cpf=${cpf}`;
-  }
-</script>

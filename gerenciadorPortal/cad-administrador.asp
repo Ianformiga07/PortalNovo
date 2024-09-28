@@ -1,4 +1,30 @@
 <!--#include file="base.asp"-->
+<%
+idServidor = Request("idServidor")
+if idServidor <> "" then
+    call abreConexao
+    sql = "SELECT * FROM cam_servidores WHERE CPF = '" & idServidor & "' AND statusServidor = 1"
+    set rs_admin = conn.execute(sql)
+    if not rs_admin.eof then
+        ' Armazenando dados do servidor em variáveis
+        cpf = rs_admin("CPF")
+        nomeCompleto = rs_admin("NomeCompleto")
+        dataNasc = rs_admin("DataNascimento") ' Exemplo de campo, ajuste conforme necessário
+        sexo = rs_admin("Sexo") ' Exemplo de campo, ajuste conforme necessário
+        email = rs_admin("Email") ' Exemplo de campo, ajuste conforme necessário
+        nivelAcesso = rs_admin("NivelAcesso") ' Exemplo de campo, ajuste conforme necessário
+    end if
+    rs_admin.close
+else
+    ' Se não houver idServidor, inicialize as variáveis como vazias
+    cpf = ""
+    nomeCompleto = ""
+    dataNasc = ""
+    sexo = ""
+    email = ""
+    nivelAcesso = ""
+end if
+%>
 <head>
     <!-- iCheck CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/icheck/1.0.2/skins/all.css">
@@ -67,11 +93,11 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <label for="CPF">CPF</label>
-                                            <input type="text" class="form-control" id="CPF">
+                                            <input type="text" class="form-control" id="CPF" value="<%= cpf %>">
                                         </div>
                                         <div class="col-md-8">
                                             <label for="nomeCompleto">Nome Completo</label>
-                                            <input type="text" class="form-control" id="nomeCompleto">
+                                            <input type="text" class="form-control" id="nomeCompleto" value="<%= nomeCompleto %>">
                                         </div>
                                     </div>
                                 </div>
@@ -79,14 +105,14 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="dataNasc">Data Nascimento</label>
-                                            <input type="text" class="form-control" id="dataNasc" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
+                                            <input type="text" class="form-control" id="dataNasc" value="<%= dataNasc %>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="sexo">Sexo</label>
                                             <select class="form-control" id="sexo">
                                                 <option> -- Selecionar --</option>
-                                                <option>Masculino</option>
-                                                <option>Feminino</option>
+                                                <option value="1" <% IF sexo = 1 THEN %> selected <% END IF %>>Masculino</option>
+                                                <option value="0" <% IF sexo = 0 THEN %> selected <% END IF %>>Feminino</option>
                                             </select>
                                         </div>
                                     </div>
@@ -102,13 +128,12 @@
                                     <div class="row">
                                         <!-- Nível de Acesso -->
                                         <div class="col-md-4">
-                                            <label for="sexo">Nível de Acesso</label>
-                                            <select class="form-control" id="sexo">
+                                            <label for="nivelAcesso">Nível de Acesso</label>
+                                            <select class="form-control" id="nivelAcesso">
                                                 <option> -- Selecionar --</option>
-                                                <option>Administrador Geral</option>
-                                                <option>Administrador I</option>
-                                                <option>Administrador II</option>
-                                                <option>Editor</option>
+                                                <option value="1" <%IF nivelAcesso = 1 THEN%> selected <%END IF%>>Administrador Geral</option>
+                                                <option value="2" <%IF nivelAcesso = 2 THEN%> selected <%END IF%>>Administrador I</option>
+                                                <option value="3" <%IF nivelAcesso = 3 THEN%> selected <%END IF%>>Editor</option>
                                             </select>
                                         </div>
                                         
@@ -119,7 +144,7 @@
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-envelope-o"></i>
                                                 </span>
-                                                <input type="email" class="form-control" id="email" name="email" />
+                                                <input type="email" class="form-control" id="email" name="email" value="<%= email %>"/>
                                             </div>
                                         </div>
                                     </div>

@@ -1,4 +1,10 @@
 <!--#include file="base.asp"-->
+<%
+call abreConexao
+  sql = "SELECT * FROM cam_servidores WHERE (nivelAcesso = 2)"
+  set rs_admin = conn.execute(sql)
+
+%>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <!--- Content Header--->
@@ -23,6 +29,13 @@
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
+            <%if rs_admin.eof then%>
+              <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Nenhum Registro Encontrado!</h4>
+                Não há administradores cadastrados na base de dados.
+              </div>
+            <%Else%>
                 <thead>
                 <tr>
                   <th>Matrícula</th>
@@ -35,11 +48,12 @@
                 </tr>
                 </thead>
                 <tbody>
+            <%do while not rs_admin.eof %>
                 <tr>
-                  <td>10</td>
-                  <td>04426330173</td>
-                  <td>ALFREDO NETO</td>
-                  <td>VEREADOR</td>
+                  <td><%=rs_admin("Matricula")%></td>
+                  <td><%=rs_admin("CPF")%></td>
+                  <td><%=rs_admin("NomeCompleto")%></td>
+                  <td><%=rs_admin("CPF")%></td>
                   <td>CAMARA MUL.</td>
                   <td><span class="label center bg-green">Ativo</span></td>
                   <td>
