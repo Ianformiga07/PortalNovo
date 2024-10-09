@@ -1,141 +1,169 @@
+<%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
 <!--#include file="base.asp"-->
+<%
+call abreConexao
+  sql = "SELECT * FROM cam_servidores inner join cam_cargos on cam_cargos.id_cargo = cam_servidores.id_Cargo inner join cam_departamento on cam_departamento.id_Departamento = cam_servidores.id_Departamento where statusServidor = 1"
+  set rs_admin = conn.execute(sql)
+%>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header -->
-    <section class="content-header bg-white p-bottom-5">
-        <h1 class="font-w-300">
-            <i class="fa fa-fw fa-user text-blue"></i> Cadastrar Servidor
-        </h1>
-        <ol class="breadcrumb font-s-1">
-            <li><a href="index.asp"><i class="fa fa-dashboard"></i> Painel</a></li> / 
-            <li><a href="servidores.asp">Servidores</a></li> /
-            <span class="font-w-600">Cadastrar</span>
-        </ol>
-    </section>
-  
-    <!-- Main content -->
-    <section class="content">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="box box-primary">
-            <!-- form start -->
-            <form role="form" action="cadastrar_servidor.asp" method="post" enctype="multipart/form-data">
-              <div class="box-body">
-                <!-- Dados Pessoais -->
-                <h4>Dados Pessoais</h4>
-                <div class="form-group">
-                  <label for="nome">Nome Completo</label>
-                  <input type="text" class="form-control" id="nome" name="nome" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="cpf">CPF</label>
-                  <input type="text" class="form-control" id="cpf" name="cpf" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="data_nascimento">Data de Nascimento</label>
-                  <input type="date" class="form-control" id="data_nascimento" name="data_nascimento" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="endereco">Endereço</label>
-                  <input type="text" class="form-control" id="endereco" name="endereco" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="telefone">Telefone</label>
-                  <input type="text" class="form-control" id="telefone" name="telefone">
-                </div>
-  
-                <div class="form-group">
-                  <label for="email">E-mail</label>
-                  <input type="email" class="form-control" id="email" name="email">
-                </div>
-  
-                <!-- Dados Profissionais -->
-                <h4>Dados Profissionais</h4>
-                <div class="form-group">
-                  <label for="cargo">Cargo</label>
-                  <select class="form-control" id="cargo" name="cargo" required>
-                    <option value="">Selecione</option>
-                    <option value="Assistente">Assistente</option>
-                    <option value="Analista">Analista</option>
-                    <option value="Gerente">Gerente</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <!-- Adicione mais opções conforme necessário -->
-                  </select>
-                </div>
-  
-                <div class="form-group">
-                  <label for="departamento">Departamento</label>
-                  <select class="form-control" id="departamento" name="departamento" required>
-                    <option value="">Selecione</option>
-                    <option value="Recursos Humanos">Recursos Humanos</option>
-                    <option value="Financeiro">Financeiro</option>
-                    <option value="Jurídico">Jurídico</option>
-                    <option value="Tecnologia">Tecnologia</option>
-                    <!-- Adicione mais opções conforme necessário -->
-                  </select>
-                </div>
-  
-                <div class="form-group">
-                  <label for="data_admissao">Data de Admissão</label>
-                  <input type="date" class="form-control" id="data_admissao" name="data_admissao" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="status">Status</label>
-                  <select class="form-control" id="status" name="status" required>
-                    <option value="">Selecione</option>
-                    <option value="Ativo">Ativo</option>
-                    <option value="Inativo">Inativo</option>
-                    <option value="Licença">Licença</option>
-                  </select>
-                </div>
-  
-                <!-- Dados Bancários -->
-                <h4>Dados Bancários</h4>
-                <div class="form-group">
-                  <label for="banco">Banco</label>
-                  <input type="text" class="form-control" id="banco" name="banco" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="agencia">Agência</label>
-                  <input type="text" class="form-control" id="agencia" name="agencia" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="conta">Conta</label>
-                  <input type="text" class="form-control" id="conta" name="conta" required>
-                </div>
-  
-                <div class="form-group">
-                  <label for="tipo_conta">Tipo de Conta</label>
-                  <select class="form-control" id="tipo_conta" name="tipo_conta" required>
-                    <option value="">Selecione</option>
-                    <option value="Corrente">Corrente</option>
-                    <option value="Poupança">Poupança</option>
-                    <!-- Adicione mais opções conforme necessário -->
-                  </select>
-                </div>
-  
-                <div class="form-group">
-                  <label for="observacoes">Observações</label>
-                  <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
-                </div>
-              </div>
-              
-              <!-- Submit Button -->
-              <div class="box-footer">
-                  <button type="submit" class="btn btn-primary">Cadastrar Servidor</button>
-              </div>
-            </form>
+  <!--- Content Header--->
+  <section class="content-header bg-white p-bottom-5">
+    <h1 class="font-w-300">
+      <i class="fa fa-edit text-blue"></i> Servidores
+    </h1>
+    <ol class="breadcrumb font-s-1">
+      <li><a href="index.asp"><i class="fa fa-dashboard"></i> Painel</a></li> / 
+      <span class="font-w-600">Servidores</span>
+    </ol>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box box-primary">
+          <div class="box-footer">
+            <a href="cad-servidores.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Novo Cadastro</a>
           </div>
+          <!-- /.box-header -->
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <%if rs_admin.eof then%>
+              <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Nenhum Registro Encontrado!</h4>
+                Não há servidores cadastrados na base de dados.
+              </div>
+              <%Else%>
+              <thead>
+                <tr>
+                  <th>Matrícula</th>
+                  <th>CPF</th>
+                  <th>Nome</th>
+                  <th>Cargo</th>
+                  <th>Departamento</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+              <%do while not rs_admin.eof %>
+                <tr>
+                  <td><%=rs_admin("Matricula")%></td>
+                  <td><%=rs_admin("CPF")%></td>
+                  <td><%=rs_admin("NomeCompleto")%></td>
+                  <td><%=rs_admin("desc_Cargo")%></td>
+                  <td><%=rs_admin("desc_Departamento")%></td>
+                  <td>
+                    <label class="switch">
+                      <input type="checkbox" 
+                             <% If rs_admin("statusServidor") = true Then Response.Write("checked") End If %> 
+                             onchange="confirmToggleStatus('<%= rs_admin("Matricula") %>', this.checked)">
+                      <span class="slider round"></span>
+                    </label>
+                  </td>
+                  <td>
+                    <a href="#" data-skin="skin-blue" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
+                    <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
+                  </td>
+                </tr>
+              <% rs_admin.movenext 
+                loop 
+              %>  
+              </tbody>
+              <%end if%>
+              <%call fechaConexao%>
+            </table>
+          </div>
+          <!-- /.box-body -->
         </div>
+        <!-- /.box -->
       </div>
-    </section>
-  </div>
-  
-  <!--#include file="footer.asp"-->
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </section>
+</div>
+
+<!-- SweetAlert para confirmação -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+  function confirmToggleStatus(matricula, newStatus) {
+    var statusText = newStatus ? "Ativar" : "Desativar";
+
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: "Você quer " + statusText + " este servidor?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, ' + statusText
+    }).then((result) => {
+      if (result.isConfirmed) {
+        toggleStatus(matricula, newStatus);
+      } else {
+        // Reverter o estado do switch se o usuário cancelar
+        document.querySelector('input[type="checkbox"][onchange="confirmToggleStatus(\'' + matricula + '\', this.checked)"]').checked = !newStatus;
+      }
+    });
+  }
+
+  function toggleStatus(matricula, status) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "atualizarStatus.asp", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        Swal.fire('Status alterado!', '', 'success');
+      }
+    };
+    xhr.send("matricula=" + matricula + "&status=" + (status ? 1 : 0));
+  }
+</script>
+
+<!-- CSS do Switch -->
+<style>
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  input:checked + .slider {
+    background-color: #4CAF50;
+  }
+  input:checked + .slider:before {
+    transform: translateX(26px);
+  }
+</style>
+<!--#include file="footer.asp"-->

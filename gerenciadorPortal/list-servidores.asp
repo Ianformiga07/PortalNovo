@@ -1,7 +1,8 @@
+<%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
 <!--#include file="base.asp"-->
 <%
 call abreConexao
-  sql = "SELECT * FROM cam_servidores WHERE (nivelAcesso = 2)"
+  sql = "SELECT * FROM cam_servidores inner join cam_cargos on cam_cargos.id_cargo = cam_servidores.id_Cargo inner join cam_departamento on cam_departamento.id_Departamento = cam_servidores.id_Departamento where statusServidor = 1"
   set rs_admin = conn.execute(sql)
 
 %>
@@ -13,7 +14,7 @@ call abreConexao
           <i class="fa fa-edit text-blue"></i> Servidores
       </h1>
       <ol class="breadcrumb font-s-1">
-          <li><a href="dashboard.php?control=home/all"><i class="fa fa-dashboard"></i> Painel</a></li> / 
+          <li><a href="index.asp"><i class="fa fa-dashboard"></i> Painel</a></li> / 
           <span class="font-w-600">Servidores</span>
       </ol>
   </section>
@@ -53,16 +54,20 @@ call abreConexao
                   <td><%=rs_admin("Matricula")%></td>
                   <td><%=rs_admin("CPF")%></td>
                   <td><%=rs_admin("NomeCompleto")%></td>
-                  <td><%=rs_admin("CPF")%></td>
-                  <td>CAMARA MUL.</td>
-                  <td><span class="label center bg-green">Ativo</span></td>
+                  <td><%=rs_admin("desc_Cargo")%></td>
+                  <td><%=rs_admin("desc_Departamento")%></td>
+                  <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                   <td>
-                  <a href="dashboard.php?control=users/create&amp;id=183" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                   <a href="#" data-skin="skin-blue" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a>
                   <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
                   </td>
                 </tr>
+            <% rs_admin.movenext 
+              loop 
+              %>  
                 </tbody>
+            <%end if%>
+            <%call fechaConexao%>
               </table>
             </div>
             <!-- /.box-body -->
