@@ -1,12 +1,14 @@
-  <!--#include file="base.asp"-->
+ <!--#include file="base.asp"-->
   <%
   call abreConexao
   Existe = 0
+  CPF = replace(replace(replace(Request("CPF"),".",""),".",""),"-","") ' Armazena o CPF informado
+
   if request("Operacao") = 1 then 'Visualizar'
-      sql = "SELECT * from cam_servidores where CPF = '"&replace(replace(replace(Request("CPF"),".",""),".",""),"-","")&"'"
+      sql = "SELECT * from cam_servidores where CPF = '"&CPF&"'"
       set rsVisu = conn.execute(sql)
       if not rsVisu.eof then
-        cpf = rsVisu("CPF")
+        CPF = rsVisu("CPF")
         nomeCompleto = rsVisu("NomeCompleto")
         dataNasc = rsVisu("DataNascimento")
         sexo = rsVisu("Sexo")
@@ -38,44 +40,6 @@
         operacao = rsVisu("operacao")
         Existe = 1
       end if
-  elseif request("Operacao") = 2 then 'CADASTRAR'
-    call abreConexao
-    sql = "INSERT INTO cam_servidores (CPF, NomeCompleto, DataNascimento, Sexo, EstadoCivil, " & _
-        "Matricula, RG, OrgaoExpedidor, id_Escolaridade, CEP, Endereco, Numero, Bairro, " & _
-        "Complemento, Cidade, UF, Celular, Email, TipoAdmissao, Cargo, Departamento, " & _
-        "Decreto, DataDecreto, CargaHoraria, DataAdmissao, Banco, Agencia, Conta, " & _
-        "TipoConta, Operacao) VALUES (" & _
-        "'" & Request.Form("cpf") & "', '" & _
-        Request.Form("nomeCompleto") & "', '" & _
-        Request.Form("dataNasc") & "', '" & _
-        Request.Form("sexo") & "', '" & _
-        Request.Form("estadoCivil") & "', '" & _
-        Request.Form("matricula") & "', '" & _
-        Request.Form("rg") & "', '" & _
-        Request.Form("orgaoExpedidor") & "', " & _
-        Request.Form("escolaridade") & ", '" & _
-        Request.Form("cep") & "', '" & _
-        Request.Form("endereco") & "', '" & _
-        Request.Form("numero") & "', '" & _
-        Request.Form("bairro") & "', '" & _
-        Request.Form("complemento") & "', '" & _
-        Request.Form("cidade") & "', '" & _
-        Request.Form("uf") & "', '" & _
-        Request.Form("celular") & "', '" & _
-        Request.Form("email") & "', '" & _
-        Request.Form("tipoAdmissao") & "', '" & _
-        Request.Form("cargo") & "', '" & _
-        Request.Form("departamento") & "', '" & _
-        Request.Form("decreto") & "', '" & _
-        Request.Form("dataDecreto") & "', '" & _
-        Request.Form("cargaHoraria") & "', '" & _
-        Request.Form("dataAdmissao") & "', '" & _
-        Request.Form("banco") & "', '" & _
-        Request.Form("agencia") & "', '" & _
-        Request.Form("conta") & "', '" & _
-        Request.Form("tipoConta") & "', '" & _
-        Request.Form("operacao") & "')"
-    call fechaConexao
   END IF
 
 
@@ -84,27 +48,15 @@ call fechaConexao
   %>
 
 <script>
-    function mascaraCPF(CPF) {
-        // Remove tudo que não é dígito
-        cpf = cpf.replace(/[^\d]+/g, '');
-        
-        // Aplica a máscara
-        if (cpf.length <= 3) {
-            cpf = cpf.replace(/(\d{3})(\d)/, '$1.$2');
-        } 
-        else if (cpf.length <= 6) {
-            cpf = cpf.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
-        } 
-        else if (cpf.length <= 9) {
-            cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d)/, '$1.$2.$3-$4');
-        } 
-        else {
-            cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1})(\d)/, '$1.$2.$3-$4$5');
-        }
-        
-        // Atualiza o campo de entrada
-        document.getElementById('CPF').value = cpf;
+    function cadastrar(){
+
+        //alert("oii");
+        var form = document.forms["frmServidor"];
+        form.Operacao.value = 2;
+        form.action = "crud-servidores.asp";
+        form.submit();
     }
+
 
     function validarCPF() {
       var cpf = document.getElementById("CPF").value.replace(/[^\d]+/g, '');
@@ -143,7 +95,6 @@ call fechaConexao
 
 function verificar_cadastro()
 {   
-
     document.frmServidor.Operacao.value = 1;
 	document.frmServidor.action = "cad-servidores.asp";
 	document.frmServidor.submit();
@@ -192,7 +143,7 @@ function verificar_cadastro()
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="CPF">CPF</label>
-                                <input type="text" class="form-control" id="CPF" name="CPF" placeholder="Digite o CPF" oninput="mascaraCPF(this.value)" onblur="return verificar_cadastro()" value="<%=cpf%>">
+                                <input type="text" class="form-control" id="CPF" name="CPF" placeholder="Digite o CPF" onblur="return verificar_cadastro()" value="<%=CPF%>">
                             </div>
                             <div class="col-md-8">
                                 <label for="nomeCompleto">Nome Completo</label>
@@ -210,8 +161,8 @@ function verificar_cadastro()
                                 <label for="sexo">Sexo</label>
                                 <select class="form-control" name="sexo" id="sexo">
                                     <option> -- Selecionar --</option>
-                                    <option value="1" <% IF sexo = 1 THEN %> selected <% END IF %>>Masculino</option>
-                                    <option value="0" <% IF sexo = 0 THEN %> selected <% END IF %>>Feminino</option>
+                                    <option value="1" <% IF sexo = true THEN %> selected <% END IF %>>Masculino</option>
+                                    <option value="0" <% IF sexo = false THEN %> selected <% END IF %>>Feminino</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
@@ -313,7 +264,7 @@ function verificar_cadastro()
                                     <span class="input-group-addon">
                                         <i class="glyphicon glyphicon-map-marker"></i>
                                     </span>
-                                    <input type="email" class="form-control" id="uf" name="uf" value="<%=uf%>" value="" />
+                                    <input type="text" class="form-control" id="uf" name="uf" value="<%=uf%>" value="" />
                                 </div>
                             </div>
                         </div>
@@ -459,17 +410,13 @@ function verificar_cadastro()
                                     <option value="3" <%IF tipoConta  = 3 THEN%> selected <%END IF%>>Salário</option>
                                 </select>
                             </div>
-                            <div class="col-md-4">
-                                <label for="operacao">Operação (se aplicável)</label>
-                                <input type="text" class="form-control" id="operacao" name="operacao" value="<%=operacao%>">
-                            </div>
                         </div>
                     </div>
 
 
                 <div class="box-footer">
-                    <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                    <button type="submit" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                    <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+                    <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%''=idPalestra%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
                 </div>
                 </form>
             </div>
