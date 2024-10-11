@@ -1,4 +1,5 @@
 <!--#include file ="lib/Conexao.asp"-->
+<% Response.CodePage = 65001 %>
 <%
 ' Verifica se o usuário está logado
 if session("idUsu") = "" then

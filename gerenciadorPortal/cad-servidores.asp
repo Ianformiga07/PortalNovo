@@ -1,8 +1,11 @@
  <!--#include file="base.asp"-->
+ <% Response.CodePage = 65001 %>
+
   <%
   call abreConexao
   Existe = 0
   CPF = replace(replace(replace(Request("CPF"),".",""),".",""),"-","") ' Armazena o CPF informado
+  crud = request("Crud")
 
   if request("Operacao") = 1 then 'Visualizar'
       sql = "SELECT * from cam_servidores where CPF = '"&CPF&"'"
@@ -46,52 +49,30 @@
 
 call fechaConexao
   %>
-
+<script src="js/validacaoServidor.js"></script>
+<script src="js/mascara.js"></script>
 <script>
-    function cadastrar(){
-
-        //alert("oii");
-        var form = document.forms["frmServidor"];
-        form.Operacao.value = 2;
-        form.action = "crud-servidores.asp";
-        form.submit();
+function cadastrar(){
+    if (validacao() == false) {
+        return false;
     }
+    //alert("oii");
+    var form = document.forms["frmServidor"];
+    form.Operacao.value = 2;
+    form.action = "crud-servidores.asp";
+    form.submit();
+}
 
-
-    function validarCPF() {
-      var cpf = document.getElementById("CPF").value.replace(/[^\d]+/g, '');
-      
-      if (cpf.length != 11 ||
-        cpf == "00000000000" || cpf == "11111111111" ||
-        cpf == "22222222222" || cpf == "33333333333" ||
-        cpf == "44444444444" || cpf == "55555555555" ||
-        cpf == "66666666666" || cpf == "77777777777" ||
-        cpf == "88888888888" || cpf == "99999999999") {
-        alert("CPF inválido");
-        return false;
-      }
-      
-      var soma = 0;
-      var resto;
-      for (var i = 1; i <= 9; i++) soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-      resto = (soma * 10) % 11;
-      if ((resto == 10) || (resto == 11)) resto = 0;
-      if (resto != parseInt(cpf.substring(9, 10))) {
-        alert("CPF inválido");
-        return false;
-      }
-
-      soma = 0;
-      for (var i = 1; i <= 10; i++) soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-      resto = (soma * 10) % 11;
-      if ((resto == 10) || (resto == 11)) resto = 0;
-      if (resto != parseInt(cpf.substring(10, 11))) {
-        alert("CPF inválido");
-        return false;
-      }
-
-      return true;
-    }
+function alterar(CPF)
+{
+    //alert(CPF)
+    var form = document.forms["frmServidor"];
+    form.CPFVisu.value = CPF;
+    form.Operacao.value = 3;
+    form.action = "crud-servidores.asp?cpf="+CPF+"&Operacao="+3;
+    form.submit();
+    
+}
 
 function verificar_cadastro()
 {   
@@ -99,6 +80,36 @@ function verificar_cadastro()
 	document.frmServidor.action = "cad-servidores.asp";
 	document.frmServidor.submit();
 }
+
+function verificarCPF() {
+    var cpf = document.getElementById("CPF").value;
+    
+    // Valida o CPF formatado
+    if (!validarCPF(cpf)) {
+        Swal.fire({
+            title: 'CPF inválido!',
+            text: 'Por favor, insira um CPF válido.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("CPF").value = '';  // Limpar o campo CPF
+            }
+        });
+
+        return false; // CPF inválido
+    }
+    
+    return true; // CPF válido
+}
+
+// Função que executa a validação do CPF e só chama a função verificar_cadastro se o CPF for válido
+function validarEEnviar() {
+    if (verificarCPF()) {
+        verificar_cadastro(); // Chama a função de cadastro apenas se o CPF for válido
+    }
+}
+
 </script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -117,8 +128,7 @@ function verificar_cadastro()
     <section class="content">
         <form role="form" name="frmServidor" method="post">
             <input type="hidden" name="Operacao" id="Operacao">
-
-
+                    <input type="hidden" name="CPFVisu" id="CPFVisu">        
         <div class="row">
             <div class="col-md-3">
           <!-- Profile Image -->
@@ -142,11 +152,11 @@ function verificar_cadastro()
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="CPF">CPF</label>
-                                <input type="text" class="form-control" id="CPF" name="CPF" placeholder="Digite o CPF" onblur="return verificar_cadastro()" value="<%=CPF%>">
+                                <label for="CPF">CPF <span style="color: red;">*</span></label>
+                                <input type="text" class="form-control" id="CPF" name="CPF" placeholder="Digite o CPF" onblur="validarEEnviar();" value="<% If Len(CPF) = 11 Then Response.Write(Left(CPF, 3) & "." & Mid(CPF, 4, 3) & "." & Mid(CPF, 7, 3) & "-" & Right(CPF, 2)) Else Response.Write(CPF) End If %>" oninput="mascaraCPF(this)">
                             </div>
                             <div class="col-md-8">
-                                <label for="nomeCompleto">Nome Completo</label>
+                                <label for="nomeCompleto">Nome Completo <span style="color: red;">*</span></label>
                                 <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" value="<%=nomeCompleto%>" placeholder="Digite o nome completo">
                             </div>
                         </div>
@@ -160,15 +170,15 @@ function verificar_cadastro()
                             <div class="col-md-4">
                                 <label for="sexo">Sexo</label>
                                 <select class="form-control" name="sexo" id="sexo">
-                                    <option> -- Selecionar --</option>
-                                    <option value="1" <% IF sexo = true THEN %> selected <% END IF %>>Masculino</option>
-                                    <option value="0" <% IF sexo = false THEN %> selected <% END IF %>>Feminino</option>
+                                    <option value=""> -- Selecionar --</option>
+                                    <option value="M" <% IF sexo = "M" THEN %> selected <% END IF %>>Masculino</option>
+                                    <option value="F" <% IF sexo = "F" THEN %> selected <% END IF %>>Feminino</option>
                                 </select>
                             </div>
                             <div class="col-md-4">
                                 <label for="estadoCivil">Estado Civil</label>
                                 <select class="form-control" id="estadoCivil" name="estadoCivil">
-                                    <option> -- Selecionar --</option>
+                                    <option value=""> -- Selecionar --</option>
                                     <option value="1" <%IF estadoCivil = 1 THEN%> selected <%END IF%>>Solteiro</option>
                                     <option value="2" <%IF estadoCivil = 2 THEN%> selected <%END IF%>>Casado</option>
                                     <option value="3" <%IF estadoCivil = 3 THEN%> selected <%END IF%>>Divorciado</option>
@@ -212,68 +222,102 @@ function verificar_cadastro()
                 <br> 
                 <div class="box-header text-blue" style="border: none; padding: 0;">
                     <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
-                    <i class="fa fa-caret-right"></i> Endereço
+                        <i class="fa fa-caret-right"></i> Endereço
                     </div>
                 </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="cep">CEP</label>
-                                <input type="text" class="form-control" id="cep" name="cep" value="<%=cep%>" placeholder="00.000-000">
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="cep">CEP</label>
+                            <input type="text" class="form-control" id="cep" name="cep" value="<%=cep%>" placeholder="00.000-000" onblur="buscaCep()" oninput="mascaraCEP(this)">
+                        </div>
+                        <div class="col-md-8">
+                            <label for="endereco">Endereço</label>
+                            <input type="text" class="form-control" id="endereco" name="endereco" value="<%=endereco%>" placeholder="Digite o Endereço">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label for="numero">Nº.</label>
+                            <input type="text" class="form-control" id="numero" name="numero" value="<%=numero%>" placeholder="00">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="bairro">Bairro</label>
+                            <input type="text" class="form-control" id="bairro" name="bairro" value="<%=bairro%>" placeholder="Digite o Bairro">
+                        </div>
+                        <div class="col-md-5">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" class="form-control" id="complemento" name="complemento" value="<%=complemento%>" placeholder="Digite o Complemento">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label for="cidade">Cidade <span style="color: red;">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-home"></i>
+                                </span>
+                                <input type="text" class="form-control" id="cidade" name="cidade" value="<%=cidade%>">
                             </div>
-                            <div class="col-md-8">
-                                <label for="endereco">Endereço</label>
-                                <input type="text" class="form-control" id="endereco" name="endereco" value="<%=endereco%>" placeholder="Digite o Endereço">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="uf">UF <span style="color: red;">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-map-marker"></i>
+                                </span>
+                                <input type="text" class="form-control" id="uf" name="uf" value="<%=uf%>">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label for="numero">Nº.</label>
-                                <input type="text" class="form-control" id="numero" name="numero" value="<%=numero%>" placeholder="00">
-                            </div>
-                            <div class="col-md-5">
-                                <label for="bairro">Bairro</label>
-                                <input type="text" class="form-control" id="bairro" name="bairro" value="<%=bairro%>" placeholder="Digite o Bairro">
-                            </div>
-                            <div class="col-md-5">
-                                <label for="complemento">Complemento</label>
-                                <input type="text" class="form-control" id="complemento" name="complemento" value="<%=complemento%>" placeholder="Digite o Complemento">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="cidade">
-                                    Cidade
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="glyphicon glyphicon-home"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="cidade" name="cidade" value="<%=cidade%>" value="" />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="uf">
-                                    UF
-                                </label>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="glyphicon glyphicon-map-marker"></i>
-                                    </span>
-                                    <input type="text" class="form-control" id="uf" name="uf" value="<%=uf%>" value="" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+
+                <script>
+                // Função que busca o CEP e preenche os campos automaticamente
+                function buscaCep() {
+                    var cep = document.getElementById("cep").value.replace(/\D/g, '');
+
+                    if (cep != "") {
+                        var validacep = /^[0-9]{8}$/;
+
+                        if(validacep.test(cep)) {
+                            var script = document.createElement('script');
+                            script.src = 'https://viacep.com.br/ws/' + cep + '/json/?callback=preencheCampos';
+                            document.body.appendChild(script);
+                        } else {
+                            alert("Formato de CEP inválido.");
+                        }
+                    }
+                }
+
+                // Função callback que preenche os campos com os dados da API
+                function preencheCampos(conteudo) {
+                    if (!("erro" in conteudo)) {
+                        document.getElementById('endereco').value = conteudo.logradouro;
+                        document.getElementById('bairro').value = conteudo.bairro;
+                        document.getElementById('cidade').value = conteudo.localidade;
+                        document.getElementById('uf').value = conteudo.uf;
+                    } else {
+                        Swal.fire({
+                            position: 'top-end',
+                            icon: 'error',
+                            title: 'O CEP Informado não foi Encontrado',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+                }
+                </script>
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-5">
                                 <label for="celular">
-                                    Celular
+                                    Celular <span style="color: red;">*</span>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -284,7 +328,7 @@ function verificar_cadastro()
                             </div>
                             <div class="col-md-7">
                                 <label for="email">
-                                    Email
+                                    Email <span style="color: red;">*</span>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -309,9 +353,9 @@ function verificar_cadastro()
                             set rs3 = conn.execute(sql) 
                             %> 
                             <div class="col-md-4">
-                                <label for="admissao">Tipo de Admissão</label>
+                                <label for="admissao">Tipo de Admissão <span style="color: red;">*</span></label>
                                 <select class="form-control" id="admissao" name="admissao">
-                                    <option> -- Selecionar --</option>
+                                    <option value=""> -- Selecionar --</option>
                             <%do while not rs3.eof%>
                                     <option <%if  rtrim(tipoAdmissao) = rtrim(rs3("id_tipoAdmissao")) then response.write("selected") end if%> value="<%=rs3("id_tipoAdmissao")%>"><%=rs3("desc_admissao")%></option>
                             <% rs3.movenext 
@@ -326,9 +370,9 @@ function verificar_cadastro()
                             set rs4 = conn.execute(sql) 
                             %> 
                             <div class="col-md-4">
-                                <label for="cargo">Cargo</label>
+                                <label for="cargo">Cargo <span style="color: red;">*</span></label>
                                 <select class="form-control" id="cargo" name="cargo" onchange="mostrarCamposAdicionais(this.value)">
-                                    <option> -- Selecionar --</option>
+                                    <option value=""> -- Selecionar --</option>
                             <%do while not rs4.eof%>
                                     <option <%if  rtrim(cargo) = rtrim(rs4("id_cargo")) then response.write("selected") end if%> value="<%=rs4("id_cargo")%>"><%=rs4("desc_cargo")%></option>
                             <% rs4.movenext 
@@ -345,7 +389,7 @@ function verificar_cadastro()
                             <div class="col-md-4">
                                 <label for="departamento">Departamento</label>
                                 <select class="form-control" id="departamento" name="departamento">
-                                    <option> -- Selecionar --</option>
+                                    <option value=""> -- Selecionar --</option>
                             <%do while not rs5.eof%>
                                     <option <%if  rtrim(departamento) = rtrim(rs5("id_departamento")) then response.write("selected") end if%> value="<%=rs5("id_departamento")%>"><%=rs5("desc_departamento")%></option>
                             <% rs5.movenext 
@@ -404,7 +448,7 @@ function verificar_cadastro()
                             <div class="col-md-4">
                                 <label for="tipoConta">Tipo de Conta</label>
                                 <select class="form-control" id="tipoConta" name="tipoConta" required>
-                                    <option>-- Selecionar --</option>
+                                    <option value="">-- Selecionar --</option>
                                     <option value="1" <%IF tipoConta  = 1 THEN%> selected <%END IF%>>Corrente</option>
                                     <option value="2" <%IF tipoConta  = 2 THEN%> selected <%END IF%>>Poupança</option>
                                     <option value="3" <%IF tipoConta  = 3 THEN%> selected <%END IF%>>Salário</option>
@@ -416,7 +460,7 @@ function verificar_cadastro()
 
                 <div class="box-footer">
                     <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                    <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%''=idPalestra%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                    <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%=CPF%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
                 </div>
                 </form>
             </div>

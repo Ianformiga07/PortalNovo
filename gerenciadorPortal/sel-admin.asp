@@ -3,6 +3,7 @@
 call abreConexao
 %>
 
+<script src="js/mascara.js"></script>
 <script>
 function admin(idServidor)
 {
@@ -39,7 +40,7 @@ function admin(idServidor)
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="searchCPF">Buscar por CPF</label>
-                    <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF" maxlength="11">
+                    <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF" oninput="mascaraCPF(this)">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -59,7 +60,6 @@ function admin(idServidor)
         if request.form("searchCPF") <> "" or request.form("searchNome") <> "" then
             ' Construir a query SQL dinamicamente
             sql = "SELECT CPF, NomeCompleto, statusServidor FROM cam_servidores WHERE statusServidor = 1"
-
             if request.form("searchCPF") <> "" then
                 sql = sql & " AND CPF = '" & request.form("searchCPF") & "'"
             end if
