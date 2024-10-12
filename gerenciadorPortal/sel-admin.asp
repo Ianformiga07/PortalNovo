@@ -31,29 +31,34 @@ function admin(idServidor)
   <section class="content">
     <div class="row">
       <div class="col-xs-12">
-        <div class="box box-primary">
-          <!-- Form para buscar servidor -->
-          <form action="sel-admin.asp" method="post" name="frm_BuscaServ">
-            <input type="hidden" name="idServidor" id="idServidor">
-            <div class="box-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="searchCPF">Buscar por CPF</label>
-                    <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF" oninput="mascaraCPF(this)">
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="searchNome">Buscar por Nome</label>
-                    <input type="text" class="form-control" id="searchNome" name="searchNome" placeholder="Digite o nome do servidor">
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary">Buscar</button>
-            </div>
-          </form>
+<div class="box box-primary">
+  <div class="box-footer">
+      <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+  </div>
+  <!-- Form para buscar servidor -->
+  <form action="sel-admin.asp" method="post" name="frm_BuscaServ">
+    <input type="hidden" name="idServidor" id="idServidor">
+    <div class="box-body">
+      <div class="row align-items-end"> <!-- Adicionado align-items-end para alinhar o botão -->
+        <div class="col-md-4"> <!-- Ajuste a largura conforme necessário -->
+          <div class="form-group">
+            <label for="searchCPF">Buscar por CPF</label>
+            <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF" oninput="mascaraCPF(this)">
+          </div>
         </div>
+        <div class="col-md-6"> <!-- Ajuste a largura conforme necessário -->
+          <div class="form-group">
+            <label for="searchNome">Buscar por Nome</label>
+            <input type="text" class="form-control" id="searchNome" name="searchNome" placeholder="Digite o nome do servidor">
+          </div>
+        </div>
+        <div class="col-md-2"> <!-- Ajuste a largura conforme necessário -->
+          <button type="submit" class="btn btn-primary" style="margin-top: 25px;">Buscar</button> <!-- Adicionado mt-4 para margem superior -->
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 
         <!-- Lógica para exibir resultados se houver busca -->
         <%
@@ -98,8 +103,7 @@ function admin(idServidor)
                       <td><%= rs_admin("NomeCompleto") %></td>
                       <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                       <td>
-                        <a href="#" onClick="admin('<%=rs_admin("CPF")%>');" class="btn btn-primary btn-X2"><i class="fa fa-pencil"></i></a>
-                        <button data-toggle="modal" data-target=".modal-delete" mdl-name="patrimonios" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-X2" id="delete_row_<%= rs_admin("CPF") %>"><i class="fa fa-trash"></i></button>
+                        <a href="#" onClick="admin('<%=rs_admin("CPF")%>');" class="btn btn-success btn-xs"><i class="fa fa-plus"></i></a>
                       </td>
                     </tr>
                     <% rs_admin.movenext %>

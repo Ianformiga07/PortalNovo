@@ -128,7 +128,7 @@ function validarEEnviar() {
     <section class="content">
         <form role="form" name="frmServidor" method="post">
             <input type="hidden" name="Operacao" id="Operacao">
-                    <input type="hidden" name="CPFVisu" id="CPFVisu">        
+            <input type="hidden" name="CPFVisu" id="CPFVisu">        
         <div class="row">
             <div class="col-md-3">
           <!-- Profile Image -->
