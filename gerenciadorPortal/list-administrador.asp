@@ -50,7 +50,7 @@ call abreConexao
                 <tr>
                   <td><%=rs_admin("CPF")%></td>
                   <td><%=rs_admin("NomeCompleto")%></td>
-                  <td><%if rs_admin("nivelAcesso") = 1 then%>Administrador<%else%>Editor<%end if%></td>
+                  <td><%if rs_admin("nivelAcesso") = 1 then%>Administrador Geral<%elseif rs_admin("nivelAcesso") = 2 then%>Administrador<%else%>Editor<%end if%></td>
                   <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                   <td>
                   <a href="cad-administrador.asp" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
