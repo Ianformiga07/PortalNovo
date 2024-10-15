@@ -64,7 +64,7 @@ function admin(idServidor)
         <%
         if request.form("searchCPF") <> "" or request.form("searchNome") <> "" then
             ' Construir a query SQL dinamicamente
-            sql = "SELECT CPF, NomeCompleto, statusServidor FROM cam_servidores WHERE statusServidor = 1"
+            sql = "SELECT id_servidor, CPF, NomeCompleto, statusServidor FROM cam_servidores WHERE statusServidor = 1"
             if request.form("searchCPF") <> "" then
                 sql = sql & " AND CPF = '" & request.form("searchCPF") & "'"
             end if
@@ -103,7 +103,7 @@ function admin(idServidor)
                       <td><%= rs_admin("NomeCompleto") %></td>
                       <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                       <td>
-                        <a href="#" onClick="admin('<%=rs_admin("CPF")%>');" class="btn btn-success btn-xs"><i class="fa fa-plus"></i></a>
+                        <a href="#" onClick="admin('<%=rs_admin("id_servidor")%>');" class="btn btn-success btn-xs"><i class="fa fa-plus"></i></a>
                       </td>
                     </tr>
                     <% rs_admin.movenext %>

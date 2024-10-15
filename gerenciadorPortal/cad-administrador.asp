@@ -3,7 +3,7 @@
 idServidor = Request("idServidor")
 if idServidor <> "" then
     call abreConexao
-    sql = "SELECT * FROM cam_servidores WHERE CPF = '" & idServidor & "' AND statusServidor = 1"
+    sql = "SELECT * FROM cam_servidores WHERE id_servidor = '" & idServidor & "' AND statusServidor = 1"
     set rs_admin = conn.execute(sql)
     if not rs_admin.eof then
         ' Armazenando dados do servidor em variáveis
@@ -15,6 +15,7 @@ if idServidor <> "" then
         email = rs_admin("Email") ' Exemplo de campo, ajuste conforme necessário
         nivelAcesso = rs_admin("NivelAcesso") ' Exemplo de campo, ajuste conforme necessário
         id_permissao = rs_admin("id_permissao")
+        senha = rs_admin("senha")
     end if
     rs_admin.close
 else
@@ -46,7 +47,33 @@ end if
         });
     });
 
+function validarSenha() {
+    var senha = document.getElementById("senha").value;
+    var confirmarSenha = document.getElementById("confirmarSenha").value;
+
+    // Verificar se as senhas são diferentes
+    if (senha !== confirmarSenha) {
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: 'As senhas não coincidem',
+            showConfirmButton: false,
+            timer: 2000
+        });
+        document.getElementById("senha").focus(); // Focar no campo senha para correção
+        return false; // Interromper a submissão se as senhas forem diferentes
+    }
+
+    // Se as senhas forem iguais, permitir a continuação
+    return true;
+}
+
+
 function cadastrar(){
+
+    if (validarSenha() == false) {
+        return false;
+    }
 
     var form = document.forms["frmAdmin"];
     form.Operacao.value = 2;
@@ -72,26 +99,55 @@ function cadastrar(){
     <!-- Main content -->
     <section class="content">
         <div class="row">
-        <form role="form" name="frmAdmin" method="post">
-            <input type="hidden" name="Operacao" id="Operacao">
-            <input type="hidden" name="id_servidor" id="id_servidor" value="<%=id_servidor%>">
 
-            <div class="col-md-3">
-                <!-- Profile Image -->
-                <div class="box box-primary">
-                    <div class="box-header with-border text-black-light">
-                        <div class="box-title">
-                            Foto de Perfil
-                        </div>
+
+        <div class="col-md-3">
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-header with-border text-black-light">
+                    <div class="box-title">
+                        Foto de Perfil
                     </div>
-                    <div class="box-body" >
-                        <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 200px; width: 200px;">
+                </div>
+                <div class="box-body">
+                    <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 200px; width: 200px;">
+                </div>
+                <div class="box-footer">
+                    <button class="btn-file btn btn-success pull-right" id="users-image" data-toggle="modal" data-target="#uploadPhotoModal">
+                        <span class="fa fa-camera"></span> Foto
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="uploadPhotoModal" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadPhotoModalLabel">Carregar Foto de Perfil</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="box-footer">
-                        <a href="uploadFoto.asp" class="btn-file btn btn-success pull-right" id="users-image"><span class="fa fa-camera"></span> Foto</a>
+                    <div class="modal-body">
+                        <form id="uploadPhotoForm" action="uploadFoto.asp" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label for="fileInput">Escolha uma imagem:</label>
+                                <input type="file" class="form-control" id="fileInput" name="fileInput" accept="image/*" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="submit" form="uploadPhotoForm" class="btn btn-primary">Carregar</button>
                     </div>
                 </div>
             </div>
+        </div>
+        <form role="form" name="frmAdmin" method="post">
+            <input type="hidden" name="Operacao" id="Operacao">
+            <input type="hidden" name="id_servidor" id="id_servidor" value="<%=id_servidor%>">
             <!-- /.col -->
             <div class="col-md-9">
                 <div class="nav-tabs-custom">
@@ -171,7 +227,7 @@ function cadastrar(){
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock"></i>
                                                 </span>
-                                                <input type="password" class="form-control" id="senha" name="senha" />
+                                                <input type="password" class="form-control" id="senha" name="senha" value="<%=senha%>"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -180,7 +236,7 @@ function cadastrar(){
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock"></i>
                                                 </span>
-                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" />
+                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" value="<%=senha%>"/>
                                             </div>
                                         </div>
                                     </div>
@@ -220,14 +276,13 @@ function cadastrar(){
                                                 do while not rs.eof
                                                     i = i + 1
 
-                                                    sql2 = "Select count(*) as total from cam_permissaoAcesso WHERE id_permissao = '" & rs("id_permissao") & "' AND id_adminPermissao = '" & id_permissao & "'"
+                                                    sql2 = "Select count(*) as Existe from cam_permissaoAcesso WHERE  id_servidor = '" & id_servidor & "' and id_permissao = '"&rs("id_permissao")&"'"
                                                     set rs1 = conn.execute(sql2)
-                                                    total = rs1("total")
+                                                    
                                             %>
                                                 <label class="checkbox-item"> <!-- Classe para cada item de checkbox -->
                                                     <!-- Checkbox com iCheck -->
-                                                    <input type="checkbox" class="flat-red" name="permissao[]" id="permissao" value="<%=rs("id_permissao")%>" <%if csng(total) > csng(0) then%>checked <%end if%>> 
-                                                    <%=rs("desc_Permissao")%>
+                                                    <input type="checkbox" class="flat-red" name="permissao[]" id="permissao" value="<%=rs("id_permissao")%>" <%if rs1("Existe") > 0 then%>checked <%end if%>> <%=rs("desc_Permissao")%>
                                                 </label>
                                             <%
                                                 rs.movenext

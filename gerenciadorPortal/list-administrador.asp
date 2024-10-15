@@ -1,7 +1,7 @@
 <!--#include file="base.asp"-->
 <%
 call abreConexao
-  sql = "SELECT id_servidor, CPF, NomeCompleto, DataNascimento, Sexo, EstadoCivil, Matricula, RG, OrgaoExpedidor, id_Escolaridade, CEP, Endereco, Numero, Bairro, Complemento, Cidade, UF, Celular, Email, nivelAcesso, senha, id_permissao, statusServidor FROM cam_servidores WHERE (nivelAcesso = 2)"
+  sql = "SELECT id_servidor, CPF, NomeCompleto, DataNascimento, Sexo, EstadoCivil, Matricula, RG, OrgaoExpedidor, id_Escolaridade, CEP, Endereco, Numero, Bairro, Complemento, Cidade, UF, Celular, Email, nivelAcesso, senha, id_permissao, statusServidor FROM cam_servidores"
   set rs_admin = conn.execute(sql)
 
 %>
