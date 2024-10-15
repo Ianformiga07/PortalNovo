@@ -4,7 +4,7 @@
 ' Capturando a operação para determinar se é cadastro ou alteração
 Operacao = Replace(Request("Operacao"), ",", "")
 ' Captura dos campos do formulário
-CPF = Request("CPF")
+CPF = replace(replace(replace(Request("CPF"),".",""),".",""),"-","")
 nomeCompleto = Request("nomeCompleto")
 dataNasc = Request("dataNasc")
 sexo = Request("sexo")
@@ -39,7 +39,7 @@ tipoConta = Request("tipoConta")
 IF Operacao = "2" THEN ' CADASTRO
     call abreConexao
     ' Montando o SQL para o INSERT
-    sql = "INSERT INTO cam_servidores (CPF, NomeCompleto, DataNascimento, Sexo, EstadoCivil, Matricula, RG, OrgaoExpedidor, id_Escolaridade, CEP, Endereco, Numero, Bairro, Complemento, Cidade, UF, Celular, Email, id_TipoAdmissao, id_Cargo, Decreto, DataDecreto, CargaHorariaMensal, DataAdmissao, banco, agencia, conta, tipoConta, id_Departamento, statusServidor, id_UsuCad, dataCad) VALUES ('" & CPF & "', '" & nomeCompleto & "', '" & dataNasc & "', '" & sexo & "', '" & estadoCivil & "', '" & matricula & "', '" & rg & "', '" & orgaoExpedidor & "', '" & escolaridade & "', '" & cep & "', '" & endereco & "', '" & numero & "', '" & bairro & "', N'" & complemento & "', '" & cidade & "', '" & uf & "', '" & celular & "', '" & email & "', '" & tipoAdmissao & "', '" & cargo & "', '" & decreto & "', CONVERT(DateTime, '"&dataDecreto&"', 103), '" & cargaHoraria & "', CONVERT(DateTime, '"&dataAdmissao&"', 103), '" & banco & "', '" & agencia & "', '" & conta & "', " & tipoConta & ", " & departamento & ", 1, " & session("idUsu") & ", GETDATE())"
+    sql = "INSERT INTO cam_servidores (CPF, NomeCompleto, DataNascimento, Sexo, EstadoCivil, Matricula, RG, OrgaoExpedidor, id_Escolaridade, CEP, Endereco, Numero, Bairro, Complemento, Cidade, UF, Celular, Email, id_TipoAdmissao, id_Cargo, Decreto, DataDecreto, CargaHorariaMensal, DataAdmissao, banco, agencia, conta, tipoConta, id_Departamento, statusServidor, id_UsuCad, dataCad) VALUES ('" & CPF & "', '" & nomeCompleto & "', CONVERT(DateTime, '"&dataNasc&"', 103), '" & sexo & "', '" & estadoCivil & "', '" & matricula & "', '" & rg & "', '" & orgaoExpedidor & "', '" & escolaridade & "', '" & cep & "', '" & endereco & "', '" & numero & "', '" & bairro & "', N'" & complemento & "', '" & cidade & "', '" & uf & "', '" & celular & "', '" & email & "', '" & tipoAdmissao & "', '" & cargo & "', '" & decreto & "', CONVERT(DateTime, '"&dataDecreto&"', 103), '" & cargaHoraria & "', CONVERT(DateTime, '"&dataAdmissao&"', 103), '" & banco & "', '" & agencia & "', '" & conta & "', " & tipoConta & ", " & departamento & ", 1, " & session("idUsu") & ", GETDATE())"
     'response.write sql
     'response.end
     Set rs = conn.Execute(sql)

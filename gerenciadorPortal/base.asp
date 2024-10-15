@@ -12,9 +12,10 @@ end if
 
 <%
 call abreConexao
-sql = "SELECT id_servidor, CPF, LEFT(NomeCompleto, CHARINDEX(' ', NomeCompleto + ' ') - 1) AS PrimeiroNome, RIGHT(NomeCompleto, CHARINDEX(' ', REVERSE(NomeCompleto) + ' ') - 1) AS UltimoNome, statusServidor FROM  cam_servidores where CPF = '"&session("idUsu")&"'"
+sql = "SELECT id_servidor, CPF, LEFT(NomeCompleto, CHARINDEX(' ', NomeCompleto + ' ') - 1) AS PrimeiroNome, RIGHT(NomeCompleto, CHARINDEX(' ', REVERSE(NomeCompleto) + ' ') - 1) AS UltimoNome, statusServidor, FotoPerfil FROM  cam_servidores where CPF = '"&session("idUsu")&"'"
 set rs_Serv = conn.execute(sql)
 if not rs_Serv.eof then
+FotoPerfil = rs_Serv("FotoPerfil")
 PrimeiroNome = rs_Serv("PrimeiroNome")
 UltimoNome = rs_Serv("UltimoNome")
 end if
@@ -134,7 +135,7 @@ call fechaConexao
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src=".\<%= FotoPerfil %>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p><%=PrimeiroNome%>&nbsp<%=UltimoNome%></p>
