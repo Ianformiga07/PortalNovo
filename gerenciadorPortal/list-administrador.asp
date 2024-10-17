@@ -5,6 +5,18 @@ call abreConexao
   set rs_admin = conn.execute(sql)
 
 %>
+
+<script>
+function admin(idServidor)
+{
+
+    var form = document.forms["frm_BuscaServ"];
+    form.idServidor.value = idServidor;
+    form.action = "cad-administrador.asp";
+    form.submit();
+    
+}
+</script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <!--- Content Header--->
@@ -26,6 +38,8 @@ call abreConexao
               <div class="box-footer">
                 <a href="sel-admin.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Novo Cadastro</a>
               </div>
+              <form action="sel-admin.asp" method="post" name="frm_BuscaServ">
+                <input type="hidden" name="idServidor" id="idServidor">
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -53,7 +67,7 @@ call abreConexao
                   <td><%if rs_admin("nivelAcesso") = 1 then%>Administrador Geral<%elseif rs_admin("nivelAcesso") = 2 then%>Administrador<%else%>Editor<%end if%></td>
                   <td><%if rs_admin("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                   <td>
-                  <a href="cad-administrador.asp" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+                  <a href="#" onClick="admin('<%=rs_admin("id_servidor")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                   <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
                   </td>
                 </tr>
@@ -65,7 +79,7 @@ call abreConexao
             <%call fechaConexao%>
               </table>
             </div>
-            <!-- /.box-body -->
+            </form>
           </div>
           <!-- /.box -->
         </div>

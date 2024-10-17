@@ -136,7 +136,11 @@ call fechaConexao
       <!-- Sidebar user panel -->
       <div class="user-panel">
         <div class="pull-left image">
+          <%if FotoPerfil <> "" then%>
           <img src=".\<%= FotoPerfil %>" class="img-circle" alt="User Image">
+          <%else%>
+          <img src="images/avatar.jpg" class="img-circle" alt="User Image">
+          <%end if%>
         </div>
         <div class="pull-left info">
           <p><%=PrimeiroNome%>&nbsp<%=UltimoNome%></p>

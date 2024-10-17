@@ -205,8 +205,12 @@ function cadastrar(){
                                             <label for="nivelAcesso">Nível de Acesso</label>
                                             <select class="form-control" id="nivelAcesso" name="nivelAcesso">
                                                 <option> -- Selecionar --</option>
+                                                <%if cpf = "04426330173" then%>
+                                                <option value="1" <%IF nivelAcesso = 1 THEN%> selected <%END IF%>>Administrador Geral</option>
+                                                <%else%>
                                                 <option value="2" <%IF nivelAcesso = 2 THEN%> selected <%END IF%>>Administrador</option>
                                                 <option value="3" <%IF nivelAcesso = 3 THEN%> selected <%END IF%>>Editor</option>
+                                                <%end if%>
                                             </select>
                                         </div>
                                         
@@ -230,7 +234,7 @@ function cadastrar(){
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock"></i>
                                                 </span>
-                                                <input type="password" class="form-control" id="senha" name="senha" value="<%=senha%>"/>
+                                                <input type="password" class="form-control" id="senha" name="senha"/>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -239,7 +243,7 @@ function cadastrar(){
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-lock"></i>
                                                 </span>
-                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha" value="<%=senha%>"/>
+                                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha"/>
                                             </div>
                                         </div>
                                     </div>

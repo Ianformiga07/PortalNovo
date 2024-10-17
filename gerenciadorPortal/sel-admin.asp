@@ -43,7 +43,7 @@ function admin(idServidor)
         <div class="col-md-4"> <!-- Ajuste a largura conforme necessário -->
           <div class="form-group">
             <label for="searchCPF">Buscar por CPF</label>
-            <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF" oninput="mascaraCPF(this)">
+            <input type="text" class="form-control" id="searchCPF" name="searchCPF" placeholder="Digite CPF">
           </div>
         </div>
         <div class="col-md-6"> <!-- Ajuste a largura conforme necessário -->
