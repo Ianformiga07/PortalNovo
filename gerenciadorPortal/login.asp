@@ -84,6 +84,12 @@
     href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
+<!-- Coloque o spinner fora do botão para exibir no centro da tela -->
+<div id="loadingSpinner" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000;">
+  <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+  <span class="sr-only">Carregando...</span>
+</div>
+
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
@@ -93,7 +99,7 @@
     <div class="login-box-body">
       <p class="login-box-msg">Faça login para iniciar a sua sessão!</p>
 
-      <form action="login.asp" method="post" onsubmit="return validarCPF()">
+      <form action="login.asp" method="post" onsubmit="return validarCPF(); exibirLoading()">
         <div class="form-group has-feedback">
           <input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
@@ -147,6 +153,12 @@
         radioClass: 'iradio_square-blue',
         increaseArea: '20%' /* optional */
       });
+
+    // Exibe o spinner ao submeter o formulário
+    $('form').on('submit', function () {
+      $('#loadingSpinner').show();  // Exibe o spinner de carregamento
+      $('#btnLogin').prop('disabled', true); // Desabilita o botão para evitar múltiplos cliques
+    });
     });
 
     // Função para validar CPF
