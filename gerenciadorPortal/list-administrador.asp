@@ -52,7 +52,6 @@ function admin(idServidor)
             <%Else%>
                 <thead>
                 <tr>
-                  <th>#</th>
                   <th>CPF</th>
                   <th>Nome</th>
                   <th>Perfil</th>
@@ -63,15 +62,6 @@ function admin(idServidor)
                 <tbody>
             <%do while not rs_admin.eof %>
                 <tr>
-                  <%if FotoPerfil <> "" then%>
-                  <td>
-                  <img src=".\<%= FotoPerfil %>" alt="User Image" style="height: 40px; width: 40px;">
-                  </td>
-                  <%else%>
-                  <td>
-                  <img src="images/avatar.jpg" alt="User Image" style="height: 40px; width: 40px;">
-                  </td>
-                  <%end if%>
                   <td><%=rs_admin("CPF")%></td>
                   <td><%=rs_admin("NomeCompleto")%></td>
                   <td><%if rs_admin("nivelAcesso") = 1 then%>Administrador Geral<%elseif rs_admin("nivelAcesso") = 2 then%>Administrador<%else%>Editor<%end if%></td>

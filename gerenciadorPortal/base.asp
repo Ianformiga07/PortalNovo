@@ -15,6 +15,7 @@ call abreConexao
 sql = "SELECT id_servidor, CPF, LEFT(NomeCompleto, CHARINDEX(' ', NomeCompleto + ' ') - 1) AS PrimeiroNome, RIGHT(NomeCompleto, CHARINDEX(' ', REVERSE(NomeCompleto) + ' ') - 1) AS UltimoNome, statusServidor, FotoPerfil, nivelAcesso FROM  cam_servidores where CPF = '"&session("idUsu")&"'"
 set rs_Serv = conn.execute(sql)
 if not rs_Serv.eof then
+id_servidor = rs_Serv("id_servidor")
 nivelAcesso = rs_Serv("nivelAcesso")
 FotoPerfil = rs_Serv("FotoPerfil")
 PrimeiroNome = rs_Serv("PrimeiroNome")
@@ -144,7 +145,7 @@ call fechaConexao
         </div>
         <div class="pull-left info">
           <p><%=PrimeiroNome%>&nbsp<%=UltimoNome%></p>
-          <a href="cad_administrador.asp"><i class="fa fa-pencil text-gray"></i> Minha Conta</a>
+          <a href="cad-administrador.asp?idServidor=<%=id_servidor%>&idAlt=1&na=<%=nivelAcesso%>"><i class="fa fa-pencil text-gray"></i> Minha Conta</a>
         </div>
       </div>
       <!-- sidebar menu: : style can be found in sidebar.less -->

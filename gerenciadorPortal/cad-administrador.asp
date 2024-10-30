@@ -1,6 +1,8 @@
 <!--#include file="base.asp"-->
 <%
 idServidor = Request("idServidor")
+idAlt = Request("idAlt")
+nivelAcesso = Request("na")
 if idServidor <> "" then
     call abreConexao
     sql = "SELECT * FROM cam_servidores WHERE id_servidor = '" & idServidor & "' AND statusServidor = 1"
@@ -90,6 +92,7 @@ function cadastrar(){
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
+     <%if idAlt <> 1 then%>
     <section class="content-header bg-white p-bottom-5">
         <h1>
             <i class="fa fa-fw fa-check-square-o text-blue"></i> Novo Administrador
@@ -99,7 +102,17 @@ function cadastrar(){
             <li class="active">Novo Administrador</li>
         </ol>
     </section>
-
+    <%else%>
+    <section class="content-header bg-white p-bottom-5">
+        <h1>
+            <i class="fa fa-fw fa-check-square-o text-blue"></i> Minha Conta
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Minha Conta</li>
+        </ol>
+    </section>
+    <%end if%>
     <!-- Main content -->
     <section class="content">
         <div class="row">
@@ -112,7 +125,11 @@ function cadastrar(){
                         </div>
                     </div>
                     <div class="box-body">
+                        <%if FotoPerfil <> "" then%>
                         <img class="profile-user-img img-responsive preview-users-image" src=".\<%= FotoPerfil %>" style="height: 200px; width: 200px;">
+                        <%else%>
+                        <img class="profile-user-img img-responsive preview-users-image" src="images/avatar.jpg" style="height: 200px; width: 200px;">
+                        <%end if%>
                     </div>
                     <div class="box-footer">
                         <button class="btn-file btn btn-success pull-right" id="users-image" data-toggle="modal" data-target="#uploadPhotoModal">
@@ -133,7 +150,7 @@ function cadastrar(){
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="uploadPhotoForm" action="uploadFoto.asp?id_servidor=<%= id_servidor %>&Operacao=4" method="post" enctype="multipart/form-data" onsubmit="updateProfileImage('images/<%= id_servidor %>.jpg')">
+                            <form id="uploadPhotoForm" action="uploadFoto.asp?idAlt=1&id_servidor=<%= id_servidor %>&Operacao=4" method="post" enctype="multipart/form-data" onsubmit="updateProfileImage('images/<%= id_servidor %>.jpg')">
                                 <div class="form-group">
                                     <label for="fileInput">Escolha uma imagem:</label>
                                     <input type="file" class="form-control" id="UpFoto" name="UpFoto" accept="image/*" required>
@@ -151,6 +168,10 @@ function cadastrar(){
         <form role="form" name="frmAdmin" method="post">
             <input type="hidden" name="Operacao" id="Operacao">
             <input type="hidden" name="id_servidor" id="id_servidor" value="<%=id_servidor%>">
+            <input type="hidden" name="idAlt" id="idAlt" value="<%=idAlt%>">
+            <%if idAlt = 1 then%>
+            <input type="hidden" name="nivelAcesso" id="nivelAcesso" value="<%=nivelAcesso%>">
+            <%end if%>
             <!-- /.col -->
             <div class="col-md-9">
                 <div class="nav-tabs-custom">
@@ -171,7 +192,7 @@ function cadastrar(){
                                         </div>
                                         <div class="col-md-8">
                                             <label for="nomeCompleto">Nome Completo</label>
-                                            <input type="text" class="form-control" id="nomeCompleto" value="<%= nomeCompleto %>" disabled>
+                                            <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" value="<%= nomeCompleto %>">
                                         </div>
                                     </div>
                                 </div>
@@ -179,11 +200,11 @@ function cadastrar(){
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="dataNasc">Data Nascimento</label>
-                                            <input type="text" class="form-control" id="dataNasc" value="<%= dataNasc %>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask disabled>
+                                            <input type="text" class="form-control" id="dataNasc" name="dataNasc" value="<%= dataNasc %>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="sexo">Sexo</label>
-                                            <select class="form-control" id="sexo" disabled>
+                                            <select class="form-control" id="sexo" name="sexo">
                                                 <option> -- Selecionar --</option>
                                                 <option value="M" <% IF sexo = "M" THEN %> selected <% END IF %>>Masculino</option>
                                                 <option value="F" <% IF sexo = "F" THEN %> selected <% END IF %>>Feminino</option>
@@ -200,6 +221,7 @@ function cadastrar(){
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
+                                        <%if idAlt <> 1 then%>
                                         <!-- Nível de Acesso -->
                                         <div class="col-md-4">
                                             <label for="nivelAcesso">Nível de Acesso</label>
@@ -213,7 +235,8 @@ function cadastrar(){
                                                 <%end if%>
                                             </select>
                                         </div>
-                                        
+                                        <%else%>
+                                        <%end if%>
                                         <!-- Email -->
                                         <div class="col-md-8">
                                             <label for="email">Email</label>
@@ -221,7 +244,7 @@ function cadastrar(){
                                                 <span class="input-group-addon">
                                                     <i class="fa fa-envelope-o"></i>
                                                 </span>
-                                                <input type="email" class="form-control" id="email" name="email" value="<%= email %>" disabled/>
+                                                <input type="email" class="form-control" id="email" name="email" value="<%= email %>"/>
                                             </div>
                                         </div>
                                     </div>
@@ -248,7 +271,7 @@ function cadastrar(){
                                         </div>
                                     </div>
                                 </div>
-
+                                <%if idAlt <> 1 then%>
                                 <br>
                                 <div class="box-header text-blue" style="border: none; padding: 0;">
                                     <div class="box-title text-blue" style="font-size: 1.25em; margin-bottom: 10px; margin-left: 0;">
@@ -299,6 +322,8 @@ function cadastrar(){
                                         </div>
                                     </div>
                                 </div>
+                                <%else%>
+                                <%end if%>
                             </div>
                             <div class="box-footer">
                                 <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
@@ -327,6 +352,16 @@ if (resp == "1") {
       Swal.fire({
         icon: 'success',
         title: 'Servidor Cadastrado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }else if (resp == "2"){
+        Swal.fire({
+        icon: 'success',
+        title: 'Dados Alterado com sucesso!',
         showConfirmButton: false,
         timer: 3000,
         position: 'top-end',

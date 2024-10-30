@@ -1,4 +1,16 @@
 <!--#include file="base.asp"-->
+
+    <script>
+      function cadastrar(){
+
+          var form = document.forms["frmRegimento"];
+          form.Operacao.value = "2";
+          form.enctype = "multipart/form-data";
+          form.action = "crud-regimento.asp";
+          form.submit();
+      }
+    </script>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!-- Content Header (Page header) -->
@@ -23,7 +35,8 @@
           <div class="box box-primary">
             <!-- /.box-header -->
             <!-- form start -->
-            <form role="form" method="post" enctype="multipart/form-data" action="upload_regimento.asp">
+            <form role="form" method="post" name="frmRegimento">
+              <input type="hidden" name="Operacao" id="Operacao">
               <div class="box-body">
                 <div class="form-group">
                   <label for="title">Título</label>
@@ -35,17 +48,14 @@
                 </div>
                 <div class="form-group">
                   <label for="upload">Arquivo PDF</label>
-                  <input type="file" id="upload" name="upload" accept=".pdf" required>
+                  <input type="file" class="form-control" id="UpRegimento" name="UpRegimento" accept=".pdf" required>
                   <p class="help-block">Escolha o arquivo PDF do Regimento Interno.</p>
-                </div>
-                <div class="form-group">
-                  <label for="date">Data</label>
-                  <input type="date" class="form-control" id="date" name="date" required>
                 </div>
               </div>
               <!-- /.box-body -->
               <div class="box-footer">
-                <button type="submit" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> Cadastrar</button>
+                  <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+                  <button type="submit" class="btn btn-primary pull-right" onClick="return cadastrar()"><i class="fa fa-check"></i> Cadastrar</button>
               </div>
             </form>
           </div>

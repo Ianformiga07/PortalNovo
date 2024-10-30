@@ -5,6 +5,8 @@
 Dim Operacao, id_servidor, Form, sqlRestante, NomeArquivo1, UpFoto
 Operacao = Request("Operacao")
 id_servidor = Request("id_servidor")
+idAlt = REQUEST("idAlt")
+
 
 Set Form = New ASPForm
 Server.ScriptTimeout = 1440 ' Limite de 24 minutos de execução de código
@@ -65,8 +67,12 @@ If Operacao = 4 Then ' ALTERAÇÃO
     'response.end
     conn.execute(sql)
     
-    ' Redireciona após a operação
-    response.Redirect("Cad-administrador.asp?Resp=2&idServidor=" & id_servidor)
+    if idAlt <> 1 then
+    ' Redireciona para a página de administração após o processo de inserção e exclusão
+    response.Redirect("cad-administrador.asp?Resp=1&idServidor=" & id_servidor)	
+    else
+    response.Redirect("cad-administrador.asp?Resp=2&idAlt=1&idServidor=" & id_servidor) 
+    end if	
 
     Call fechaConexao
 End If
