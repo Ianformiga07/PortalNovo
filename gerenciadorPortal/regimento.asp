@@ -1,15 +1,24 @@
 <!--#include file="base.asp"-->
+<%
+idRegimento = Request("idRegimento")
+call abreConexao
+sql = "SELECT TOP(1) id_regimento, titulo, descricao, anexo_regimento, data_cad, idUsu_Cad, idUsu_Alt, data_Alt FROM cam_regimento"
+set rsReq = conn.Execute(sql)
+if not rsReq.eof then
 
-    <script>
-      function cadastrar(){
+end if
+call fechaConexao
+%>
+<script>
+  function cadastrar(){
 
-          var form = document.forms["frmRegimento"];
-          form.Operacao.value = "2";
-          form.enctype = "multipart/form-data";
-          form.action = "crud-regimento.asp";
-          form.submit();
-      }
-    </script>
+      var form = document.forms["frmRegimento"];
+      form.Operacao.value = "2";
+      form.enctype = "multipart/form-data";
+      form.action = "crud-regimento.asp";
+      form.submit();
+  }
+</script>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -70,6 +79,52 @@
 
   </section>
   <!-- /.content -->
-
 </div>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
+
+<!-- SweetAlert e script para limpar URL -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function() {
+    var resp = document.getElementById('hiddenResp').value;
+
+if (resp == "1") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Regimento Cadastrado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }else if (resp == "2"){
+        Swal.fire({
+        icon: 'success',
+        title: 'Dados Alterado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }
+
+// Limpar a URL removendo o parâmetro 'Resp'
+if (resp) {
+  const url = new URL(window.location);
+  url.searchParams.delete('Resp');
+
+  // Verificar se ainda há parâmetros na URL após a remoção de 'Resp'
+  if (url.searchParams.toString() === '') {
+    // Se não houver mais parâmetros, substitua a URL apenas pelo pathname
+    window.history.replaceState(null, null, url.pathname);
+  } else {
+    // Caso contrário, substitua a URL com os parâmetros restantes
+    window.history.replaceState(null, null, url);
+  }
+}
+  };
+</script>
 <!--#include file="footer.asp"-->

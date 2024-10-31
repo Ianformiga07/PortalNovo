@@ -39,11 +39,21 @@ If IsObject(Form) Then
     If Operacao = 2 Then
         ' Inserção
         Call abreConexao
+        
+        ' Executa a inserção
         sql = "INSERT INTO cam_regimento (titulo, descricao, anexo_regimento, data_cad, idUsu_Cad) " & _
-              "VALUES ('" & title & "', '" & description & "', '" & NomeArquivo1 & "', GETDATE(), " & Session("idUsu") & ")"
-        response.write sql ' Verifica a consulta SQL
-        response.end
-        conn.execute(sql)
+            "VALUES ('" & title & "', '" & description & "', '" & NomeArquivo1 & "', GETDATE(), " & Session("idUsu") & ")"
+        conn.Execute(sql)
+
+        ' Recupera o último ID inserido
+        Set rs = conn.Execute("SELECT SCOPE_IDENTITY() AS newID")
+        Dim newID
+        newID = rs("newID")
+        rs.Close
+        Set rs = Nothing
+        
+        ' Redireciona passando o ID na URL
+        response.Redirect("regimento.asp?Resp=1&idRegimento=" & newID)
         Call fechaConexao
     ElseIf Operacao = 3 And Not IsEmpty(idRegimento) Then
         ' Atualização
