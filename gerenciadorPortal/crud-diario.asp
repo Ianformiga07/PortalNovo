@@ -5,6 +5,9 @@
 ' Certifique-se de inicializar o objeto ASPForm corretamente
 Dim Form, Operacao, title, description, UpRegimento, NomeArquivo1, id_regimento
 
+response.write Request("Operacao")
+response.end
+
 ' Instanciando o objeto ASPForm para captura de dados
 Set Form = New ASPForm
 

@@ -1,5 +1,5 @@
 <!--#include file ="lib/Conexao.asp"-->
- <% Response.CodePage = 65001 %>
+<% Response.CodePage = 65001 %>
 <%
 ' Capturando a operação para determinar se é cadastro ou alteração
 Operacao = Replace(Request("Operacao"), ",", "")
@@ -11,36 +11,45 @@ populacao = Request("populacao")
 area = Request("area")
 editor1 = Request("editor1")
 
-' Verificando se é uma operação de cadastro
-IF Operacao = "2" THEN ' CADASTRO
-    call abreConexao
-    ' Montando o SQL para o INSERT
-    sql = "INSERT INTO cam_servidores (anoFundacao, dataAniversario, populacao, area, conteudo, UpCidade, UpBrasao, diaAniversario, mesAniversario, idUsu_Cad, dataCad) VALUES ('" & anoFundacao & "',  CONVERT(DateTime, '"&dataAniversario&"', 103), '" & populacao & "', '" & area & "', '" & editor1 & "', '" & diaAniversario & "', '" & mesAniversario & "', " & session("idUsu") & ", GETDATE())"
-    response.write sql
-    response.end
-    Set rs = conn.Execute(sql)
-    ' Redirecionando após sucesso
-    response.Redirect("list-servidores.asp?Resp=1")	
-    
-    ' Fechando a conexão
-    call fechaConexao
+' Verificando se a entrada para populacao e area é válida antes de converter
+If IsNumeric(populacao) Then
+    populacao = CDbl(populacao)
+Else
+    populacao = 0 ' valor padrão
 End If
 
-' Verificando se é uma operação de atualização
-IF Operacao = "3" THEN ' UPDATE
-    call abreConexao
+If IsNumeric(area) Then
+    area = CDbl(area)
+Else
+    area = 0 ' valor padrão
+End If
 
-    ' Montando o SQL para o UPDATE em uma linha
-    sql = "UPDATE cam_servidores SET NomeCompleto = '" & nomeCompleto & "', DataNascimento = CONVERT(DateTime, '" & dataNasc & "', 103), Sexo = '" & sexo & "', EstadoCivil = '" & estadoCivil & "', Matricula = '" & matricula & "', RG = '" & rg & "', OrgaoExpedidor = '" & orgaoExpedidor & "', id_Escolaridade = '" & escolaridade & "', CEP = '" & cep & "', Endereco = '" & endereco & "', Numero = '" & numero & "', Bairro = '" & bairro & "', Complemento = N'" & complemento & "', Cidade = '" & cidade & "', UF = '" & uf & "', Celular = '" & celular & "', Email = '" & email & "', id_TipoAdmissao = '" & tipoAdmissao & "', id_Cargo = '" & cargo & "', Decreto = '" & decreto & "', DataDecreto = CONVERT(DateTime, '" & dataDecreto & "', 103), CargaHorariaMensal = '" & cargaHoraria & "', DataAdmissao = CONVERT(DateTime, '" & dataAdmissao & "', 103), Banco = '" & banco & "', Agencia = '" & agencia & "', Conta = '" & conta & "', TipoConta = '" & tipoConta & "', id_Departamento = " & departamento & ", statusServidor = 1, id_UsuCad = " & session("idUsu") & ", dataCad = GETDATE() WHERE CPF = '" & CPF & "'"
+' Abrindo a conexão com o banco de dados
+call abreConexao
+
+' Verificando se já existe um registro na tabela cam_historia
+sql = "SELECT COUNT(*) AS Total FROM cam_historia"
+Set rs = conn.Execute(sql)
+
+' Se não existir registro, faz o INSERT, caso contrário, faz o UPDATE
+If rs("Total") = 0 Then
+    ' Montando o SQL para o INSERT na tabela
+    sql = "INSERT INTO cam_historia (anoFundacao, populacao, area, conteudo, diaAniversario, mesAniversario, idUsu_Cad, dataCad) VALUES (" & anoFundacao & ", " & populacao & ", " & area & ", '" & editor1 & "', " & diaAniversario & ", '" & mesAniversario & "', '" & session("idUsu") & "', GETDATE())"
     'response.write sql
-    'response.end    
-    ' Executando a consulta SQL
+    'response.end
     Set rs = conn.Execute(sql)
-    
     ' Redirecionando após sucesso
-    response.Redirect("list-servidores.asp?Resp=2")
-    
-    ' Fechando a conexão
-    call fechaConexao
+    response.Redirect("cad-historia.asp?Resp=1") 
+Else
+    ' Se já existir, faz o UPDATE
+    sql = "UPDATE cam_historia SET anoFundacao = " & anoFundacao & ", populacao = " & populacao & ", area = " & area & ", conteudo = '" & editor1 & "', diaAniversario = " & diaAniversario & ", mesAniversario = '" & mesAniversario & "', idUsu_Cad = '" & session("idUsu") & "', dataCad = GETDATE()"
+    'response.write sql
+    'response.end
+    Set rs = conn.Execute(sql)
+    ' Redirecionando após sucesso
+    response.Redirect("cad-historia.asp?Resp=2") 
 End If
+
+' Fechando a conexão
+call fechaConexao
 %>

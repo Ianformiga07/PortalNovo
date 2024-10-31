@@ -1,4 +1,18 @@
 <!--#include file="base.asp"-->
+
+    <script>
+      function cadastrar(){  
+
+        alert("oiii");
+      var form = document.forms["frmDiario"];
+      form.Operacao.value = "2";
+      form.enctype = "multipart/form-data";
+      form.action = "crud-diario.asp";
+      form.submit();
+      }
+
+    </script>
+
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
   <!--- Content Header--->
@@ -20,17 +34,15 @@
         <div class="box box-primary">
           <!-- /.box-header -->
           <!-- form start -->
-          <form role="form" action="cadastrar_diario_oficial.asp" method="post" enctype="multipart/form-data">
+          <form role="form" name="frmDiario" method="post">
+            <input type="hidden" name="Operacao" id="Operacao">
+            <input type="hidden" name="id_historia" id="id_historia" value="<%'=id_historia%>">
             <div class="box-body">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label for="titulo">Título</label>
                             <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="dataPublicacao">Data da Publicação</label>
-                            <input type="date" class="form-control" id="dataPublicacao" name="dataPublicacao" required>
                         </div>
                     </div>
                 </div>
@@ -53,8 +65,8 @@
             <!-- /.box-body -->
 
             <div class="box-footer">
-              <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-              <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Cadastrar</button>
+            <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+            <button type="submit" onClick="return cadastrar()" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%'if existeRegistro then%><!--Alterar--><%'else%>Cadastrar<%'end if%></button>
             </div>
           </form>
         </div>
