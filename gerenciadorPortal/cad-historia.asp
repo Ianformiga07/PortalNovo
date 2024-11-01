@@ -1,5 +1,5 @@
-<% Response.CodePage = 65001 %>
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
 <%
     id_historia = Request("id_historia")
 

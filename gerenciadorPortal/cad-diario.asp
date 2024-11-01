@@ -25,8 +25,30 @@ call fechaConexao
 
 %>
   <script>
-    function cadastrar(){  
+function validarCampos() {
+    let titulo = document.getElementById("titulo").value.trim();
 
+
+    if (!titulo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, preencha o campo "Título".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("titulo").focus();
+        });
+        return false;
+    }
+
+    return true;
+}
+
+
+    function cadastrar(){  
+    if (validarCampos() == false) {
+        return false;
+    } 
 
     var form = document.forms["frmDiario"];
     form.Operacao.value = "2";
@@ -36,7 +58,9 @@ call fechaConexao
     }
 
     function alterar(){  
-
+    if (validarCampos() == false) {
+        return false;
+    } 
 
     var form = document.forms["frmDiario"];
     form.Operacao.value = "3";
@@ -96,6 +120,7 @@ call fechaConexao
                             end if 
                             %>
                         </div>
+                        <%if existe = 1 then %>
                         <div class="col-md-6">
                             <label for="status">Status</label>
                             <select class="form-control" id="statusDiario" name="statusDiario" required>
@@ -103,6 +128,7 @@ call fechaConexao
                               <option value="false" <% If status_diario = false Then %> selected <% End If %>>Inativo</option>
                             </select>
                         </div>
+                        <%end if%>
                     </div>
                 </div>
             </div>
