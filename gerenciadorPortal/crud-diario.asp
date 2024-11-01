@@ -4,9 +4,7 @@
 <%
 ' Certifique-se de inicializar o objeto ASPForm corretamente
 Dim Form, Operacao, title, description, UpRegimento, NomeArquivo1, id_regimento
-
-response.write Request("Operacao")
-response.end
+id_diario = Request("id_diario")
 
 ' Instanciando o objeto ASPForm para captura de dados
 Set Form = New ASPForm
@@ -21,19 +19,19 @@ If IsObject(Form) Then
         For Each Key in Form.Texts.Keys
             Select Case Key
                 Case "Operacao": Operacao = Form.Texts.Item(Key)
-                Case "title": title = Form.Texts.Item(Key)
-                Case "description": description = Form.Texts.Item(Key)
-                Case "id_regimento": id_regimento = Form.Texts.Item(Key) ' Captura o ID para alteração
+                Case "titulo": titulo = Form.Texts.Item(Key)
+                Case "statusDiario": statusDiario = Form.Texts.Item(Key)
+                Case "id_diario": id_diario = Form.Texts.Item(Key) ' Captura o ID para alteração
             End Select
         Next
 
         ' Tratamento do arquivo enviado
-        UpRegimento = 0
+        upDiario = 0
         For Each Field in Form.Files.Items
-            If Field.Name = "UpRegimento" Then
+            If Field.Name = "upDiario" Then
                 NomeArquivo1 = Year(Date) & Month(Date) & Day(Date) & Hour(Now) & Minute(Now) & Second(Now) & "." & Split(Field.FileName, ".")(UBound(Split(Field.FileName, ".")))
                 Field.SaveAs Server.MapPath("upAnexos") & "\" & NomeArquivo1
-                UpRegimento = 1
+                upDiario = 1
             End If  
         Next
     End If
@@ -43,28 +41,17 @@ If IsObject(Form) Then
     Dim rs_exist
     
     ' Trate id_regimento para evitar valores vazios ou não numéricos
-    If IsEmpty(id_regimento) Or Not IsNumeric(id_regimento) Then
-        id_regimento = 0 ' Define para 0 se vazio ou inválido
+    If IsEmpty(id_diario) Or Not IsNumeric(id_diario) Then
+        id_diario = 0 ' Define para 0 se vazio ou inválido
     End If
-
-    sql = "SELECT COUNT(*) AS total FROM cam_regimento WHERE id_regimento = " & id_regimento
-    Set rs_exist = conn.Execute(sql)
-    
-    If rs_exist("total") > 0 Then
-        ' Registro já existe, define operação como "alteração"
-        Operacao = 3
-    Else
-        ' Registro não existe, define operação como "inserção"
-        Operacao = 2
-    End If
-    rs_exist.Close
-    Set rs_exist = Nothing
 
     ' Insere ou atualiza o registro no banco de dados
     If Operacao = 2 Then
         ' Inserção
-        sql = "INSERT INTO cam_regimento (titulo, descricao, anexo_regimento, data_cad, idUsu_Cad) " & _
-              "VALUES ('" & title & "', '" & description & "', '" & NomeArquivo1 & "', GETDATE(), " & Session("idUsu") & ")"
+        sql = "INSERT INTO cam_diarioOfi (titulo, anexo_diario, status_diario, dataCad, idUsu_Cad) " & _
+              "VALUES ('" & titulo & "', '" & NomeArquivo1 & "', '" & statusDiario & "',  GETDATE(), " & Session("idUsu") & ")"
+        'response.write sql
+        'response.end
         conn.Execute(sql)
 
         ' Recupera o último ID inserido
@@ -75,22 +62,24 @@ If IsObject(Form) Then
         Set rs = Nothing
         
         ' Redireciona passando o ID na URL
-        response.Redirect("regimento.asp?Resp=1&id_regimento=" & newID)
+        response.Redirect("list-diario.asp?Resp=1")
     ElseIf Operacao = 3 Then
         ' Atualização
-        sql = "UPDATE cam_regimento SET titulo = '" & title & "', descricao = '" & description & "', " & _
-              "data_Alt = GETDATE(), idUsu_Alt = " & Session("idUsu")
+        sql = "UPDATE cam_diarioOfi SET titulo = '" & titulo & "', status_diario = '" & statusDiario & "', " & _
+              "dataAlt = GETDATE(), idUsu_Alt = " & Session("idUsu")
         
         ' Apenas atualiza o arquivo se houver um novo upload
-        If UpRegimento = 1 Then
-            sql = sql & ", anexo_regimento = '" & NomeArquivo1 & "'"
+        If upDiario = 1 Then
+            sql = sql & ", anexo_diario = '" & NomeArquivo1 & "'"
         End If
         
-        sql = sql & " WHERE id_regimento = " & id_regimento
+        sql = sql & " WHERE id_diario = " & id_diario
+        'response.write sql
+        'response.end
         conn.Execute(sql)
         
         ' Redireciona com mensagem de sucesso
-        response.Redirect("regimento.asp?Resp=2&id_regimento=" & id_regimento)
+        response.Redirect("list-diario.asp?Resp=2")
     End If
 
     Call fechaConexao

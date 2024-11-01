@@ -5,6 +5,17 @@
   set rs_diario = conn.execute(sql)
   %>
 
+<script>
+function admin(id_diario)
+{
+    var form = document.forms["frmDiario"];
+    form.id_diario.value = id_diario;
+    form.action = "cad-diario.asp";
+    form.submit();
+    
+}
+</script>
+
   <div class="content-wrapper">
   <!--- Content Header--->
   <section class="content-header bg-white p-bottom-5">
@@ -26,6 +37,8 @@
                 <a href="cad-diario.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Nova Postagem</a>
               </div>
             <!-- /.box-header -->
+            <form method="post" name="frmDiario">
+              <input type="hidden" name="id_diario" id="id_diario">
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
               <%if rs_diario.eof then%>
@@ -50,8 +63,7 @@
                   <td><%=rs_diario("dataCad")%></td>
                   <td><%if rs_diario("status_diario") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                   <td>
-                  <a href="#" data-skin="skin-blue" class="btn btn-primary btn-xs"><i class="fa fa-star"></i></a>
-                  <a href="dashboard.php?control=users/create&amp;id=183" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+                  <a href="#" onClick="admin('<%=rs_diario("id_diario")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                   <button data-toggle="modal" data-target=".modal-delete" mdl-name="users" mdl-page="all" type-action="Delete" class="btn-delete-confirm btn btn-danger btn-xs" id="delete_row_183"><i class="fa fa-trash"></i></button>
                   </td>
                 </tr>
@@ -63,6 +75,7 @@
               </table>
             </div>
             <!-- /.box-body -->
+            </form>
           </div>
           <!-- /.box -->
         </div>
@@ -72,5 +85,51 @@
     </section>
 
   </div>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
 
+<!-- SweetAlert e script para limpar URL -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function() {
+    var resp = document.getElementById('hiddenResp').value;
+
+    if (resp == "1") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Diário Cadastrado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    } else if (resp == "2") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Diário Alterado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }
+
+    // Limpar a URL removendo o parâmetro 'Resp'
+    if (resp) {
+      const url = new URL(window.location);
+      url.searchParams.delete('Resp');
+
+      // Verificar se ainda há parâmetros na URL após a remoção de 'Resp'
+      if (url.searchParams.toString() === '') {
+        // Se não houver mais parâmetros, substitua a URL apenas pelo pathname
+        window.history.replaceState(null, null, url.pathname);
+      } else {
+        // Caso contrário, substitua a URL com os parâmetros restantes
+        window.history.replaceState(null, null, url);
+      }
+    }
+  };
+</script>
 <!--#include file="footer.asp"-->
