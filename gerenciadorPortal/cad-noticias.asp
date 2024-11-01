@@ -1,12 +1,70 @@
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
+<%
+    id_noticia = Request("id_noticia")
 
+    'response.write "Id: "& id_noticia
+    'response.end
+    if id_noticia <> "" then
+
+        call abreConexao
+        ' Verifica se existe um registro
+        sql = "SELECT COUNT(*) as total FROM cam_noticias"
+        set rs_count = conn.execute(sql)
+        existeRegistro = rs_count("total") > 0
+
+        if existeRegistro then
+            ' Se existir, carrega as informações do registro
+            sql = "SELECT * FROM cam_noticias ORDER BY id_noticia"
+            set rs_noticia = conn.execute(sql)
+
+            id_noticia = rs_noticia("id_noticia")
+            titulo = rs_noticia("titulo")
+            subtitulo = rs_noticia("subtitulo")
+            conteudo = rs_noticia("conteudo")
+            anexo_noticia = rs_noticia("anexo_noticia")
+            autor = rs_noticia("autor")
+            destaque = rs_noticia("destaque")
+
+            ' Define uma operação de edição
+            operacao = 2
+        else
+            ' Se não existir, inicializa as variáveis
+            id_noticia = ""
+            titulo = ""
+            subtitulo = ""
+            conteudo = ""
+            anexo_noticia = ""
+            autor = ""
+            destaque = ""
+
+            ' Define uma operação de inserção
+            operacao = 1
+        end if
+    else
+        call abreConexao
+            ' Se existir, carrega as informações do registro
+        sql = "SELECT * FROM cam_noticias where id_noticia = '"&id_noticia&"' ORDER BY id_noticia"
+        'response.write sql
+        'response.end
+        set rs_noticia = conn.execute(sql)
+        if not rs_noticia.eof then
+        id_noticia = rs_noticia("id_noticia")
+        titulo = rs_noticia("titulo")
+        subtitulo = rs_noticia("subtitulo")
+        conteudo = rs_noticia("conteudo")
+        anexo_noticia = rs_noticia("anexo_noticia")
+        autor = rs_noticia("autor")
+        destaque = rs_noticia("destaque")
+        end if
+    end if
+%>
   <script>
     function cadastrar(){  
 
-    var form = document.forms["frmDiario"];
+    var form = document.forms["frmNoticia"];
     form.Operacao.value = "2";
-    form.enctype = "multipart/form-data";
-    form.action = "crud-diario.asp";
+    form.action = "crud-noticias.asp";
     form.submit();
     }
 
@@ -48,24 +106,26 @@
             <div class="box box-primary">
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form">
+                <form role="form" name="frmNoticia" method="post">
+                  <input type="hidden" name="Operacao" id="Operacao">
+                  <input type="hidden" name="id_noticia" id="id_noticia" value="<%=id_noticia%>">
                     <div class="box-body">
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="anoFundacao">
+                                    <label for="titulo">
                                         Título
                                         <span class="text-red">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="anoFundacao" placeholder="Digite o ano de fundação">
+                                    <input type="text" class="form-control" id="titulo" name="titulo" >
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-12">
-                                    <label for="populacao">Subtitulo</label>
-                                    <input type="text" class="form-control" id="populacao" placeholder="Digite a população">
+                                    <label for="subtitulo">Subtitulo</label>
+                                    <input type="text" class="form-control" id="subtitulo" name="subtitulo">
                                 </div>
                             </div>
                         </div>
@@ -77,8 +137,8 @@
                                         <span class="text-red">*</span>
                                     </label>
                                     <div class="box-body pad">
-                                        <textarea id="editor1" name="editor1" rows="10" class="form-control" placeholder="Insira o conteúdo aqui">
-                                            This is my textarea to be replaced with CKEditor.
+                                        <textarea id="editor1" name="editor1" rows="10" class="form-control" >
+                                            
                                         </textarea>
                                     </div>
                                 </div>
@@ -86,14 +146,34 @@
                         </div>
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label for="populacao">Autor</label>
-                                    <input type="text" class="form-control" id="populacao" placeholder="Digite a população">
+                                <div class="col-md-8"> <!-- Ajuste a largura conforme necessário -->
+                                    <label for="autor">Autor</label>
+                                    <input type="text" class="form-control" id="autor" name="autor">
+                                </div>
+                                <div class="col-md-4"> <!-- Ajuste a largura conforme necessário -->
+                                    <label for="destaque">
+                                        Destaque
+                                        <span class="text-red-light" style="color: red;">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-star"></i>
+                                        </span>
+                                        <select class="form-control" id="destaque" name="destaque" required="">
+                                            <option value="">-- Selecione --</option>
+                                            <option disabled=""></option>
+                                            <option value="1">Sim</option>
+                                            <option value="2">Não</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="box-footer">
+                            <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
+                            <button type="submit" onClick="return cadastrar()" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existeRegistro then%>Alterar<%else%>Cadastrar<%end if%></button>
+                        </div> 
                     </div>
-
                 </form>
             </div>
             <!-- /.box -->
@@ -107,11 +187,11 @@
             <!-- Primeira Imagem -->
             <div class="box box-primary">
                 <div class="box-header with-border text-black-light">
-                    <div class="box-title">Foto da Cidade</div>
+                    <div class="box-title">Capa da Notícia</div>
                 </div>
                 <div class="box-body">
-                    <% If UpCidade <> "" Then %>
-                    <img class="profile-user-img img-responsive" src=".\<%= UpCidade %>" style="height: 200px; width: 200px;">
+                    <% If id_noticia <> "" Then %>
+                    <img class="profile-user-img img-responsive" src=".\<%= anexo_noticia %>" style="height: 200px; width: 200px;">
                     <% Else %>
                     <img class="profile-user-img img-responsive" src="images/image.jpg" style="height: 200px; width: 200px;">
                     <% End If %>
@@ -135,7 +215,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form id="uploadPhotoForm1" action="upFotoNoticia.asp?id_historia=<%=id_historia%>&Operacao=4" method="post" enctype="multipart/form-data">
+                        <form id="uploadPhotoForm1" action="upFotoNoticia.asp?id_noticia=<%=id_noticia%>&Operacao=4" method="post" enctype="multipart/form-data">
                             <div class="form-group">
                                 <label for="fileInput">Escolha uma imagem:</label>
                                 <input type="file" class="form-control" id="upNoticia" name="upNoticia" accept="image/*" required>
@@ -148,43 +228,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-
-        <div class="col-md-4" style="padding-left: 15px; padding-right: 15px; margin-top: 20px;">
-            <!-- Profile Image -->
-            <div class="box box-primary" style="padding: 15px;">
-                <div class="form-group">
-                    <label for="for_posts_fixed">
-                        Destaque
-                        <span class="text-red-light" style="color: red;">*</span>
-                    </label>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                        <i class="fa fa-star"></i>
-                        </span>
-                        <select class="form-control" id="for_posts_fixed" name="posts_fixed" required="">
-                        <option value="">-- Selecione --</option>
-                        <option disabled=""></option>
-                        <option value="1">Sim</option>
-                        <option value="2">Não</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label for="data">Data da Publicação</label>
-                            <input type="date" class="form-control" id="data" placeholder="Digite a Data">
-                        </div>
-                    </div>
-                </div>
-                <div class="box-footer">
-                    <a href="#" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                    <button type="submit" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> Cadastrar</button>
-                </div>        
-            </div>
-        <!-- /.box -->
         </div>
 
       </div>
