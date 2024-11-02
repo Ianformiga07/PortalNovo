@@ -19,7 +19,7 @@ set rs_noticia = conn.execute(sql)
 function admin(id_noticia) {
     var form = document.forms["frmNoticia"];
     form.id_noticia.value = id_noticia;
-    form.action = "cad-noticias.asp";
+    form.action = "cad-noticias.asp?no=1";
     form.submit();
 }
 

@@ -4,6 +4,8 @@
     ' Variáveis para carregar dados da notícia
     Dim id_noticia, titulo, subtitulo, conteudo, anexo_noticia, autor, destaque, operacao
     id_noticia = Request("id_noticia")
+    no = Request("no")
+
 
     ' Abrindo conexão
     call abreConexao
@@ -39,8 +41,91 @@
     call fechaConexao
 %>
   <script>
-    function cadastrar(){  
+function validarCampos() {
+    let imagemCapa = document.getElementById("upNoticia").value; // Verifica o campo da imagem de capa primeiro
 
+    if (!imagemCapa) { // Verifica se o campo de imagem de capa está vazio
+        Swal.fire({
+            icon: 'warning',
+            title: 'Imagem de capa obrigatória',
+            text: 'Por favor, selecione uma imagem de capa antes de continuar.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("upNoticia").focus();
+        });
+        return false;
+    }
+
+    // Após validar a imagem, verifica os demais campos
+    let titulo = document.getElementById("titulo").value.trim();
+    let subtitulo = document.getElementById("subtitulo").value.trim();
+    let conteudo = document.getElementById("editor1").value.trim();
+    let autor = document.getElementById("autor").value.trim();
+    let destaque = document.getElementById("destaque").value.trim();
+
+    if (!titulo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, preencha o campo "Título".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("titulo").focus();
+        });
+        return false;
+    }
+    if (!subtitulo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, preencha o campo "Sub-Título".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("subtitulo").focus();
+        });
+        return false;
+    }
+    if (!conteudo) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, preencha o campo "Conteúdo".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("editor1").focus();
+        });
+        return false;
+    }
+    if (!autor) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, preencha o campo "Autor".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("autor").focus();
+        });
+        return false;
+    }
+    if (!destaque) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, selecione o campo "Destaque".',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            document.getElementById("destaque").focus();
+        });
+        return false;
+    }
+
+    return true;
+}
+
+    function cadastrar(){  
+    if (validarCampos() == false) {
+        return false;
+    } 
     var form = document.forms["frmNoticia"];
     form.Operacao.value = "2";
     form.action = "crud-noticias.asp";
@@ -138,7 +223,7 @@
                                         Título
                                         <span class="text-red">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="titulo" name="titulo" value="<%=titulo%>">
+                                    <input type="text" class="form-control" id="titulo" name="titulo" value="<%=titulo%>" <%if id_noticia = "" then%>disabled<%end if%>>
                                 </div>
                             </div>
                         </div>
@@ -146,7 +231,7 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="subtitulo">Subtitulo</label>
-                                    <input type="text" class="form-control" id="subtitulo" name="subtitulo" value="<%=subtitulo%>">
+                                    <input type="text" class="form-control" id="subtitulo" name="subtitulo" value="<%=subtitulo%>" <%if id_noticia = "" then%>disabled<%end if%>>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +243,7 @@
                                         <span class="text-red">*</span>
                                     </label>
                                     <div class="box-body pad">
-                                        <textarea id="editor1" name="editor1" rows="10" class="form-control" >
+                                        <textarea id="editor1" name="editor1" rows="10" class="form-control" <%if id_noticia = "" then%>disabled<%end if%>>
                                         <%=conteudo%>
                                         </textarea>
                                     </div>
@@ -169,7 +254,7 @@
                             <div class="row">
                                 <div class="col-md-8"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="autor">Autor</label>
-                                    <input type="text" class="form-control" id="autor" name="autor" value="<%=autor%>">
+                                    <input type="text" class="form-control" id="autor" name="autor" value="<%=autor%>" <%if id_noticia = "" then%>disabled<%end if%>>
                                 </div>
                                 <div class="col-md-4"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="destaque">
@@ -180,7 +265,7 @@
                                         <span class="input-group-addon">
                                             <i class="fa fa-star"></i>
                                         </span>
-                                        <select class="form-control" id="destaque" name="destaque" required="">
+                                        <select class="form-control" id="destaque" name="destaque" required="" <%if id_noticia = "" then%>disabled<%end if%>>
                                             <option value="">-- Selecione --</option>
                                             <option disabled=""></option>
                                             <option value="true" <% If destaque = true Then %> selected <% End If %>>Sim</option>
@@ -192,7 +277,7 @@
                         </div>
                         <div class="box-footer">
                             <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                            <button type="submit" onClick=" <%if existe = 1 then%>return alterar()<%else%>return cadastrar()<%end if%>" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                            <button type="submit" onClick=" <%if no = 1 then%>return alterar()<%else%>return cadastrar()<%end if%>" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if no = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
                         </div> 
                     </div>
                 </form>
@@ -209,5 +294,38 @@
     <!-- /.content -->
 
   </div>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
 
+<!-- SweetAlert e script para limpar URL -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function() {
+    var resp = document.getElementById('hiddenResp').value;
+
+    if (resp == "2") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Notícia Alterado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }
+
+    // Limpar a URL removendo o parâmetro 'Resp'
+    if (resp) {
+      const url = new URL(window.location);
+      url.searchParams.delete('Resp');
+
+      if (url.searchParams.toString() === '') {
+        window.history.replaceState(null, null, url.pathname);
+      } else {
+        window.history.replaceState(null, null, url);
+      }
+    }
+  };
+</script>
 <!--#include file="footer.asp"-->
