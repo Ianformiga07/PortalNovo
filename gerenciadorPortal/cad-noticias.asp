@@ -31,7 +31,7 @@
             anexo_noticia = rs_noticia("anexo_noticia")
             autor = rs_noticia("autor")
             destaque = rs_noticia("destaque")
-            operacao = "alterar"
+            existe = 1
         End If
         rs_noticia.Close
     End If
@@ -48,14 +48,10 @@
     }
 
     function alterar(){  
-    if (validarCampos() == false) {
-        return false;
-    } 
 
-    var form = document.forms["frmDiario"];
+    var form = document.forms["frmNoticia"];
     form.Operacao.value = "3";
-    form.enctype = "multipart/form-data";
-    form.action = "crud-diario.asp";
+    form.action = "crud-noticias.asp";
     form.submit();
     }
 
@@ -196,7 +192,7 @@
                         </div>
                         <div class="box-footer">
                             <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                            <button type="submit" onClick="return cadastrar()" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existeRegistro then%>Alterar<%else%>Cadastrar<%end if%></button>
+                            <button type="submit" onClick=" <%if existe = 1 then%>return alterar()<%else%>return cadastrar()<%end if%>" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
                         </div> 
                     </div>
                 </form>
