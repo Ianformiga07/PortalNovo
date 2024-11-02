@@ -68,9 +68,14 @@ If Form.State = 0 Then
             conn.Execute(sql)
         End If
     End If
-
+        ' Recupera o último ID inserido
+        Set rs = conn.Execute("SELECT SCOPE_IDENTITY() AS newID")
+        Dim newID
+        newID = rs("newID")
+        rs.Close
+        Set rs = Nothing
     ' Redirecionar após a operação
-    Response.Redirect("cad-noticias.asp?Resp=3&id_noticia=" & id_noticia)
+    Response.Redirect("cad-noticias.asp?Resp=3&id_noticia=" & newID)
     
     Call fechaConexao
 End If
