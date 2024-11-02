@@ -118,5 +118,58 @@ function confirmarExclusao(id_diario) {
     </section>
 
   </div>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
 
+<!-- SweetAlert e script para limpar URL -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function() {
+    var resp = document.getElementById('hiddenResp').value;
+
+    if (resp == "1") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Notícia Cadastrado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    } else if (resp == "2") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Notícia Alterado com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    } else if (resp == "3") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Notícia Excluído com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }
+
+    // Limpar a URL removendo o parâmetro 'Resp'
+    if (resp) {
+      const url = new URL(window.location);
+      url.searchParams.delete('Resp');
+
+      if (url.searchParams.toString() === '') {
+        window.history.replaceState(null, null, url.pathname);
+      } else {
+        window.history.replaceState(null, null, url);
+      }
+    }
+  };
+</script>
 <!--#include file="footer.asp"-->

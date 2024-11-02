@@ -33,7 +33,7 @@ If rs("Total") = 0 Then
         newID = rs("newID")
         rs.Close
         Set rs = Nothing
-    response.Redirect("cad-historia.asp?Resp=1&id_noticia=" & newID) 
+    response.Redirect("list-historia.asp?Resp=1") 
 Else
     ' Se já existir, faz o UPDATE
     sql = "UPDATE cam_noticias SET titulo = '" & titulo & "', subtitulo = '" & subtitulo & "', conteudo = '" & editor1 & "', autor = '" & autor & "', destaque = '" & destaque & "', dataCad = GETDATE(), idUsu_Cad = '" & session("idUsu") & "' WHERE id_noticia = '"&id_noticia&"'"
