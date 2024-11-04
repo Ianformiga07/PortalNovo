@@ -3,16 +3,29 @@
 call abreConexao
 
 ' Excluir registro se o ID for passado e a ação for exclusão
-'If Request.Form("acao") = "excluir" And Not IsEmpty(Request.Form("rs_noticia")) Then
-    'Dim rs_noticia
-    'rs_noticia = Request.Form("rs_noticia")
-    'sql = "DELETE FROM cam_diarioOfi WHERE rs_noticia = " & rs_noticia
-    'conn.Execute(sql)
-    'response.Redirect "list-diario.asp?Resp=3"
-'End If
+If Request.Form("acao") = "excluir" And Not IsEmpty(Request.Form("id_noticia")) Then
+    Dim id_noticia
+    id_noticia = Request.Form("id_noticia")
+    sql = "DELETE FROM cam_noticias WHERE id_noticia = " & id_noticia
+    conn.Execute(sql)
+    response.Redirect "list-noticias.asp?Resp=3"
+End If
 
 sql = "SELECT * FROM cam_noticias ORDER BY id_noticia DESC"
 set rs_noticia = conn.execute(sql)
+
+  If Not rs_noticia.EOF Then
+      id_noticia = rs_noticia("id_noticia")
+      titulo = rs_noticia("titulo")
+      subtitulo = rs_noticia("subtitulo")
+      conteudo = rs_noticia("conteudo")
+      anexo_noticia = rs_noticia("anexo_noticia")
+      autor = rs_noticia("autor")
+      destaque = rs_noticia("destaque")
+      statusNoticia = rs_noticia("statusNoticia")
+      existe = 1
+  End If
+
 %>
 
 <script>
@@ -23,7 +36,7 @@ function admin(id_noticia) {
     form.submit();
 }
 
-function confirmarExclusao(id_diario) {
+function confirmarExclusao(id_noticia) {
     Swal.fire({
         title: 'Tem certeza?',
         text: "Essa ação não poderá ser desfeita!",
@@ -35,8 +48,8 @@ function confirmarExclusao(id_diario) {
         cancelButtonText: 'Cancelar'
     }).then((result) => {
         if (result.isConfirmed) {
-            var form = document.forms["frmDiario"];
-            form.id_diario.value = id_diario;
+            var form = document.forms["frmNoticia"];
+            form.id_noticia.value = id_noticia;
             form.acao.value = "excluir";
             form.submit();
         }
@@ -90,14 +103,13 @@ function confirmarExclusao(id_diario) {
                   <tbody>
                 <%do while not rs_noticia.eof %>
                   <tr>
-                    <td><div class="img-thumbnail" style="text-align: center;"><img src=".\<%= anexo_noticia %>" alt="" style="height: 40px; width: 70px;"></div></td>
+                    <td><div class="img-thumbnail" style="text-align: center;"><img src="<%=rs_noticia("anexo_noticia")%>" alt="" style="height: 40px; width: 70px;"></div></td>
                     <td><%=rs_noticia("titulo")%></td>
                     <td><%=rs_noticia("dataCad")%></td>
                     <td><%if rs_noticia("statusNoticia") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                     <td>
-                    <a href="#" data-skin="skin-blue" class="btn btn-primary btn-xs"><i class="fa fa-star"></i></a>
                     <a href="#" onClick="admin('<%=rs_noticia("id_noticia")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
-                    <button type="button" onClick="confirmarExclusao('<%'=rs_diario("id_diario")%>');" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                    <button type="button" onClick="confirmarExclusao('<%=rs_noticia("id_noticia")%>');" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                     </td>
                   </tr>
                 <% rs_noticia.movenext 

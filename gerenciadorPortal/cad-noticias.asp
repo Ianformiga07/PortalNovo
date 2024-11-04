@@ -17,6 +17,7 @@
     anexo_noticia = "images/image.jpg" ' Caminho padrão caso não tenha imagem
     autor = ""
     destaque = ""
+    statusNoticia = ""
     operacao = "inserir"
 
     ' Verificando se há um ID da notícia para editar
@@ -33,6 +34,7 @@
             anexo_noticia = rs_noticia("anexo_noticia")
             autor = rs_noticia("autor")
             destaque = rs_noticia("destaque")
+            statusNoticia = rs_noticia("statusNoticia")
             existe = 1
         End If
         rs_noticia.Close
@@ -42,9 +44,10 @@
 %>
   <script>
 function validarCampos() {
+    let id_noticia = document.getElementById("id_noticia").value; // Verifica o campo da imagem de capa primeiro
     let imagemCapa = document.getElementById("upNoticia").value; // Verifica o campo da imagem de capa primeiro
 
-    if (!imagemCapa) { // Verifica se o campo de imagem de capa está vazio
+    if (!id_noticia) { // Verifica se o campo de imagem de capa está vazio
         Swal.fire({
             icon: 'warning',
             title: 'Imagem de capa obrigatória',
@@ -59,7 +62,7 @@ function validarCampos() {
     // Após validar a imagem, verifica os demais campos
     let titulo = document.getElementById("titulo").value.trim();
     let subtitulo = document.getElementById("subtitulo").value.trim();
-    let conteudo = document.getElementById("editor1").value.trim();
+    const conteudo = CKEDITOR.instances.editor1.getData().trim();
     let autor = document.getElementById("autor").value.trim();
     let destaque = document.getElementById("destaque").value.trim();
 
@@ -92,7 +95,7 @@ function validarCampos() {
             text: 'Por favor, preencha o campo "Conteúdo".',
             confirmButtonText: 'OK'
         }).then(() => {
-            document.getElementById("editor1").focus();
+            CKEDITOR.instances.editor1.focus(); // Coloca o foco no editor CKEditor
         });
         return false;
     }
@@ -252,18 +255,36 @@ function validarCampos() {
                         </div>
                         <div class="form-group">
                             <div class="row">
-                                <div class="col-md-8"> <!-- Ajuste a largura conforme necessário -->
+                                <div class="col-md-6"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="autor">Autor</label>
                                     <input type="text" class="form-control" id="autor" name="autor" value="<%=autor%>" <%if id_noticia = "" then%>disabled<%end if%>>
                                 </div>
-                                <div class="col-md-4"> <!-- Ajuste a largura conforme necessário -->
+                                <%if id_noticia <> "" AND no = "1" then%>
+                                <div class="col-md-3"> <!-- Ajuste a largura conforme necessário -->
+                                    <label for="statusNoticia">
+                                        Status Notícia
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-circle" <% If statusNoticia = true Then %> style="color: #28a745;" <% else %>style="color: #dc3545;"<% End If %>></i>
+                                        </span>
+                                        <select class="form-control" id="statusNoticia" name="statusNoticia" required="" <%if id_noticia = "" then%>disabled<%end if%>>
+                                            <option value="">-- Selecione --</option>
+                                            <option disabled=""></option>
+                                            <option value="true" <% If statusNoticia = true Then %> selected <% End If %>>Ativo</option>
+                                            <option value="false" <% If statusNoticia = false Then %> selected <% End If %>>Inativo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <%end if%>
+                                <div class="col-md-3"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="destaque">
                                         Destaque
                                         <span class="text-red-light" style="color: red;">*</span>
                                     </label>
                                     <div class="input-group">
                                         <span class="input-group-addon">
-                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star" <% If destaque = true Then %> style="color: #ffc107;"<% End If %>></i>
                                         </span>
                                         <select class="form-control" id="destaque" name="destaque" required="" <%if id_noticia = "" then%>disabled<%end if%>>
                                             <option value="">-- Selecione --</option>
@@ -295,7 +316,7 @@ function validarCampos() {
 
   </div>
 <!-- Campo hidden para o valor de Resp -->
-<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
+<input type="hidden" id="hiddenResp" name="hiddenResp" value="<%= Request("Resp") %>">
 
 <!-- SweetAlert e script para limpar URL -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
