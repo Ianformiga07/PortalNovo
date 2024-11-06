@@ -57,12 +57,15 @@
 
 
 function validarCampos() {
+    let id_historia = document.getElementById("id_historia").value; // Verifica o campo da imagem de capa primeiro
     let anoFundacao = document.getElementById("anoFundacao").value.trim();
     let diaAniversario = document.getElementById("diaAniversario").value.trim();
     let mesAniversario = document.getElementById("mesAniversario").value.trim();
     let populacao = document.getElementById("populacao").value.trim();
     let area = document.getElementById("area").value.trim();
-    let conteudo = document.getElementById("editor1").value.trim();
+    const conteudo = CKEDITOR.instances.editor1.getData().trim();
+
+
 
     if (!anoFundacao) {
         Swal.fire({
@@ -131,7 +134,7 @@ function validarCampos() {
             text: 'Por favor, preencha o campo "Conteúdo".',
             confirmButtonText: 'OK'
         }).then(() => {
-            document.getElementById("editor1").focus();
+            CKEDITOR.instances.editor1.focus(); // Coloca o foco no editor CKEditor
         });
         return false;
     }
@@ -139,16 +142,16 @@ function validarCampos() {
     return true;
 }
 
-      function cadastrar(){
-
+      function cadastrar(){      
         if (validarCampos() == false) {
             return false;
-        }        
+        }  
+      var form = document.forms["frmHistoria"];
+      form.Operacao.value = "2";
+      form.enctype = "multipart/form-data";
+      form.action = "crud-historia.asp";
+      form.submit();
 
-          var form = document.forms["frmHistoria"];
-          form.Operacao.value = 2;
-          form.action = "crud-historia.asp";
-          form.submit();
       }
 
     </script>
@@ -168,20 +171,63 @@ function validarCampos() {
     <!-- Main content -->
     <section class="content">
       <div class="row">
-
+    <form role="form" name="frmHistoria" method="post">
+        <input type="hidden" name="Operacao" id="Operacao">
+        <input type="hidden" name="id_historia" id="id_historia" value="<%=id_historia%>">
+        <div class="col-md-3">
+            <!-- Primeira Imagem -->
+            <div class="box box-primary">
+                <div class="box-header with-border text-black-light">
+                    <div class="box-title">Foto da Cidade</div>
+                </div>
+                <div class="box-body">
+                    <% If UpCidade <> "" Then %>
+                    <img class="img-center img-thumbnail preview-upCidade" src="upHistoria/<%= UpCidade %>" style="height: 200px; width: 200px;">
+                    <% Else %>
+                    <img class="img-center img-thumbnail preview-upCidade" src="images/image.jpg" style="height: 200px; width: 200px;">
+                    <% End If %>
+                </div>
+                <div class="box-footer">
+                    <div class="box-header with-border">
+                        <button type="button" class="btn-file btn btn-action-default btn-success pull-right" id="upCidade"><span class="fa fa-camera"></span> Foto</button>
+                        <input type="file" class="upCidade" name="upCidade" id="upCidade" accept="image/*" style="display: none" />
+                    </div>
+                </div>
+            </div>
+            <!-- Segunda Imagem -->
+            <div class="box box-primary">
+                <div class="box-header with-border text-black-light">
+                    <div class="box-title">Foto do Brasão</div>
+                </div>
+                <div class="box-body">
+                    <% If UpBrasao <> "" Then %>
+                    <img class="img-center img-thumbnail preview-posts-image" src="upHistoria/<%= UpBrasao %>" style="height: 200px; width: 200px;">
+                    <% Else %>
+                    <img class="img-center img-thumbnail preview-posts-image" src="images/image.jpg" style="height: 200px; width: 200px;">
+                    <% End If %>
+                </div>
+                <div class="box-footer">
+                    <div class="box-header with-border">
+                        <button type="button" class="btn-file btn btn-action-default btn-success pull-right" id="posts-image"><span class="fa fa-camera"></span> Foto</button>
+                        <input type="file" class="posts-image" name="upBrasao" id="upBrasao" accept="image/*" style="display: none" />
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- /.col -->
         <div class="col-md-9">
           <div class="nav-tabs-custom">
+        <!-- Coluna da Imagem -->
+
             <!-- general form elements -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                   <h3 class="box-title">Dados Pessoais</h3>
                 </div>
                 <!-- /.box-header -->
+
                 <!-- form start -->
-                <form role="form" name="frmHistoria" method="post">
-                  <input type="hidden" name="Operacao" id="Operacao">
-                  <input type="hidden" name="id_historia" id="id_historia" value="<%=id_historia%>">
+
                 <div class="box-body">
                     <div class="form-group">
                         <div class="row">
@@ -253,105 +299,14 @@ function validarCampos() {
                     <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
                     <button type="submit" onClick="return cadastrar()" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existeRegistro then%>Alterar<%else%>Cadastrar<%end if%></button>
                 </div>
-                </form>
+                
             </div>
             <!-- /.box -->
 
           </div>
           <!-- /.nav-tabs-custom -->
         </div>
-
-        <!-- Coluna da Imagem -->
-        <div class="col-md-3">
-            <!-- Primeira Imagem -->
-            <div class="box box-primary">
-                <div class="box-header with-border text-black-light">
-                    <div class="box-title">Foto da Cidade</div>
-                </div>
-                <div class="box-body">
-                    <% If UpCidade <> "" Then %>
-                    <img class="profile-user-img img-responsive" src=".\<%= UpCidade %>" style="height: 200px; width: 200px;">
-                    <% Else %>
-                    <img class="profile-user-img img-responsive" src="images/image.jpg" style="height: 200px; width: 200px;">
-                    <% End If %>
-                </div>
-                <div class="box-footer">
-                    <button class="btn-file btn btn-success pull-right" id="users-image" data-toggle="modal" data-target="#uploadPhotoModal1">
-                        <span class="fa fa-camera"></span> Foto
-                    </button>
-                </div>
-            </div>
-
-            <!-- Segunda Imagem -->
-            <div class="box box-primary">
-                <div class="box-header with-border text-black-light">
-                    <div class="box-title">Foto do Brasão</div>
-                </div>
-                <div class="box-body">
-                    <% If UpBrasao <> "" Then %>
-                    <img class="profile-user-img img-responsive" src=".\<%= UpBrasao %>" style="height: 200px; width: 200px;">
-                    <% Else %>
-                    <img class="profile-user-img img-responsive" src="images/image.jpg" style="height: 200px; width: 200px;">
-                    <% End If %>
-                </div>
-                <div class="box-footer">
-                    <button class="btn-file btn btn-success pull-right" id="users-image" data-toggle="modal" data-target="#uploadPhotoModal2">
-                        <span class="fa fa-camera"></span> Foto
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modais para as Imagens -->
-        <div class="modal fade" id="uploadPhotoModal1" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadPhotoModalLabel1">Carregar Foto da Cidade</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="uploadPhotoForm1" action="upFotoCidade.asp?id_historia=<%=id_historia%>&Operacao=4" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="fileInput">Escolha uma imagem:</label>
-                                <input type="file" class="form-control" id="upCidade" name="upCidade" accept="image/*" required>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" form="uploadPhotoForm1" class="btn btn-primary">Carregar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="uploadPhotoModal2" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel2" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadPhotoModalLabel2">Carregar Foto do Brasão</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="uploadPhotoForm2" action="upBrasao.asp?id_historia=<%= id_historia %>&Operacao=4" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="fileInput">Escolha uma imagem:</label>
-                                <input type="file" class="form-control" id="upBrasao" name="upBrasao" accept="image/*" required>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" form="uploadPhotoForm2" class="btn btn-primary">Carregar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </form>
     </section>
   </div>
 <!-- Campo hidden para o valor de Resp -->
