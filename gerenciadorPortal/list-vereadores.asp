@@ -2,19 +2,22 @@
   <%
 call abreConexao
 
-' Excluir registro se o ID for passado e a ação for exclusão
-If Request.Form("acao") = "excluir" And Not IsEmpty(Request.Form("id_noticia")) Then
-    Dim id_noticia
-    id_noticia = Request.Form("id_noticia")
-    sql = "DELETE FROM cam_noticias WHERE id_noticia = " & id_noticia
-    conn.Execute(sql)
-    response.Redirect "list-noticias.asp?Resp=3"
-End If
-
-sql = "SELECT  * FROM cam_servidores WHERE (id_Cargo = '15')"
+sql = "SELECT cam_servidores.id_servidor, cam_servidores.CPF, cam_servidores.NomeCompleto, statusServidor, cam_servidores.DataNascimento, cam_servidores.Celular " &_
+      "FROM cam_servidores WHERE (id_Cargo = '15')"
 set rs_Vereador = conn.execute(sql)
 
 %>
+
+<script>
+function admin(id_servidor, nomeVereador) {
+    var form = document.forms["frmCadVereador"];
+    form.id_servidor.value = id_servidor;
+    form.nomeVereador.value = nomeVereador;
+    form.action = "mandatosLeg.asp";
+    form.submit();
+}
+
+</script>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
   <!--- Content Header--->
@@ -34,21 +37,14 @@ set rs_Vereador = conn.execute(sql)
         <div class="col-xs-12">
           <div class="box box-primary">
               <div class="box-footer">
-                <a href="cad-vereador.asp" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Novo Cadastro</a>
+                <a href="javascript:history.back()" class="btn btn-primary"><i class="fa fa-reply"></i> Voltar</a>
               </div>
             <!-- /.box-header -->
-            <form method="post" name="frmNoticia">
-              <input type="hidden" name="id_noticia" id="id_noticia">
-              <input type="hidden" name="acao" id="acao">
+            <form method="post" name="frmCadVereador">
+              <input type="hidden" name="id_servidor" id="id_servidor">
+              <input type="hidden" name="nomeVereador" id="nomeVereador">
               <div class="box-body">
                 <table id="example1" class="table table-bordered table-striped">
-                  <%if rs_Vereador.eof then%>
-                      <div class="alert alert-danger alert-dismissible" style="background-color: rgba(220, 53, 69, 0.1);">
-                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                          <h4><i class="icon fa fa-ban"></i> Nenhum Registro Encontrado!</h4>
-                          Não há diários cadastrados na base de dados.
-                      </div>
-                  <%Else%> 
                   <thead>
                   <tr>
                     <th></th>
@@ -62,20 +58,20 @@ set rs_Vereador = conn.execute(sql)
                   <tbody>
                   <%do while not rs_Vereador.eof %>
                   <tr>
-                    <td><div class="img-thumbnail"><%if rs_Vereador("FotoPerfil") <> "" then%><img src="<%=rs_Vereador("FotoPerfil")%>" alt="" style="height: 45px; width: 45px;"><%else%><img src="images/avatar.jpg" alt="" style="height: 45px; width: 45px;"><%end if%></div></td>
+                    <td><div class="img-thumbnail"><%'if rs_Vereador("fotoVereador") <> "" then%><img src="<%'=rs_Vereador("fotoVereador")%>" alt="" style="height: 45px; width: 45px;"><%'else%><img src="images/avatar.jpg" alt="" style="height: 45px; width: 45px;"><%'end if%></div></td>
                     <td><%=rs_Vereador("NomeCompleto")%></td>
                     <td><%=rs_Vereador("Celular")%></td>
                     <td><%=rs_Vereador("DataNascimento")%></td>
                     <td><%if rs_Vereador("statusServidor") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                     <td>
-                    <a href="#" onClick="admin('<%=rs_Vereador("id_servidor")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
+                    <a href="#" onClick="admin('<%=rs_Vereador("id_servidor")%>', '<%=rtrim(rs_Vereador("NomeCompleto"))%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                     <button type="button" onClick="confirmarExclusao('<%=rs_Vereador("id_servidor")%>');" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                     </td>
                   </tr>
                 <% rs_Vereador.movenext 
                   loop %>  
                   </tbody>
-                <%end if%>
+
                 <%call fechaConexao%>
                 </table>
               </div>
