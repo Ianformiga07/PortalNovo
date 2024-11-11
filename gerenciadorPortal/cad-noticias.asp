@@ -14,7 +14,7 @@
     titulo = ""
     subtitulo = ""
     conteudo = ""
-    anexo_noticia = "images/image.jpg" ' Caminho padrão caso não tenha imagem
+    anexo_noticia = "" ' Caminho padrão caso não tenha imagem
     autor = ""
     destaque = ""
     statusNoticia = ""
@@ -41,31 +41,21 @@
     End If
 
     call fechaConexao
+
+
 %>
   <script>
 function validarCampos() {
-    let id_noticia = document.getElementById("id_noticia").value; // Verifica o campo da imagem de capa primeiro
-    let imagemCapa = document.getElementById("upNoticia").value; // Verifica o campo da imagem de capa primeiro
 
-    if (!id_noticia) { // Verifica se o campo de imagem de capa está vazio
-        Swal.fire({
-            icon: 'warning',
-            title: 'Imagem de capa obrigatória',
-            text: 'Por favor, selecione uma imagem de capa antes de continuar.',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            document.getElementById("upNoticia").focus();
-        });
-        return false;
-    }
+    // Obtém o valor do ID da notícia para verificar se é um novo cadastro
 
-    // Após validar a imagem, verifica os demais campos
-    let titulo = document.getElementById("titulo").value.trim();
-    let subtitulo = document.getElementById("subtitulo").value.trim();
+    const titulo = document.getElementById("titulo").value.trim();
+    const subtitulo = document.getElementById("subtitulo").value.trim();
     const conteudo = CKEDITOR.instances.editor1.getData().trim();
-    let autor = document.getElementById("autor").value.trim();
-    let destaque = document.getElementById("destaque").value.trim();
+    const autor = document.getElementById("autor").value.trim();
 
+
+    
     if (!titulo) {
         Swal.fire({
             icon: 'warning',
@@ -110,18 +100,6 @@ function validarCampos() {
         });
         return false;
     }
-    if (!destaque) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Campo obrigatório',
-            text: 'Por favor, selecione o campo "Destaque".',
-            confirmButtonText: 'OK'
-        }).then(() => {
-            document.getElementById("destaque").focus();
-        });
-        return false;
-    }
-
     return true;
 }
 
@@ -131,14 +109,18 @@ function validarCampos() {
     } 
     var form = document.forms["frmNoticia"];
     form.Operacao.value = "2";
+    form.enctype = "multipart/form-data";
     form.action = "crud-noticias.asp";
     form.submit();
     }
 
     function alterar(){  
-
+    if (validarCampos() == false) {
+        return false;
+    } 
     var form = document.forms["frmNoticia"];
     form.Operacao.value = "3";
+    form.enctype = "multipart/form-data";
     form.action = "crud-noticias.asp";
     form.submit();
     }
@@ -160,54 +142,36 @@ function validarCampos() {
 
     <!-- Main content -->
     <section class="content">
-      <div class="row">
-        <div class="col-md-4">
-
-            <!-- Primeira Imagem -->
-            <div class="box box-primary">
-                <div class="box-header with-border text-black-light">
-                    <div class="box-title">Capa da Notícia</div>
-                </div>
-                <div class="box-body">
-                    <% If anexo_noticia <> "" Then %>
-                    <img class="profile-user-img img-responsive" src=".\<%= anexo_noticia %>" style="height: 200px; width: 200px;">
-                    <% Else %>
-                    <img class="profile-user-img img-responsive" src="images/image.jpg" style="height: 200px; width: 200px;">
-                    <% End If %>
-                </div>
-                <div class="box-footer">
-                    <button class="btn-file btn btn-success pull-right" id="users-image" data-toggle="modal" data-target="#uploadPhotoModal1">
-                        <span class="fa fa-camera"></span> Foto
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modais para as Imagens -->
-        <div class="modal fade" id="uploadPhotoModal1" tabindex="-1" role="dialog" aria-labelledby="uploadPhotoModalLabel1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="uploadPhotoModalLabel1">Carregar Foto da Notícia</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <div class="row">
+    <form role="form" name="frmNoticia" method="post">
+        <input type="hidden" name="Operacao" id="Operacao">
+        <input type="hidden" name="id_noticia" id="id_noticia" value="<%=id_noticia%>">
+        <%if existe = 1 then%>
+        <input type="hidden" name="anexo_noticia" id="anexo_noticia" value="<%=anexo_noticia%>">
+        <%end if%>
+        
+            <div class="col-md-4">
+                <!-- Primeira Imagem -->
+                <div class="box box-primary">
+                    <div class="box-header with-border text-black-light">
+                        <div class="box-title">Capa da Notícia</div>
                     </div>
-                    <div class="modal-body">
-                        <form id="uploadPhotoForm1" action="upFotoNoticia.asp?id_noticia=<%=id_noticia%>&Operacao=4" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="fileInput">Escolha uma imagem:</label>
-                                <input type="file" class="form-control" id="upNoticia" name="upNoticia" accept="image/*" required>
-                            </div>
-                        </form>
+                    <div class="box-body">
+                        <% If anexo_noticia <> "" Then %>
+                        <img class="profile-user-img img-responsive preview-upNoticia" src="upNoticia/<%= anexo_noticia %>" style="height: 200px; width: 200px;">
+                        <% Else %>
+                        <img class="profile-user-img img-responsive preview-upNoticia" src="images/image.jpg" style="height: 200px; width: 200px;">
+                        <% End If %>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-                        <button type="submit" form="uploadPhotoForm1" class="btn btn-primary">Carregar</button>
+                    <div class="box-footer">
+                        <div class="box-header with-border">
+                            <button type="button" class="btn-file btn btn-action-default btn-success pull-right" id="upNoticia"><span class="fa fa-camera"></span> Foto</button>
+                            <input type="file" class="upNoticia" name="upNoticiabt" id="upNoticiabt" accept="image/*" style="display: none" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+
         <!-- /.col -->
         <div class="col-md-8">
           <div class="nav-tabs-custom">
@@ -215,9 +179,7 @@ function validarCampos() {
             <div class="box box-primary">
                 <!-- /.box-header -->
                 <!-- form start -->
-                <form role="form" name="frmNoticia" method="post">
-                  <input type="hidden" name="Operacao" id="Operacao">
-                  <input type="hidden" name="id_noticia" id="id_noticia" value="<%=id_noticia%>">
+
                     <div class="box-body">
                         <div class="form-group">
                             <div class="row">
@@ -226,7 +188,7 @@ function validarCampos() {
                                         Título
                                         <span class="text-red">*</span>
                                     </label>
-                                    <input type="text" class="form-control" id="titulo" name="titulo" value="<%=titulo%>" <%if id_noticia = "" then%>disabled<%end if%>>
+                                    <input type="text" class="form-control" id="titulo" name="titulo" value="<%=titulo%>">
                                 </div>
                             </div>
                         </div>
@@ -234,7 +196,7 @@ function validarCampos() {
                             <div class="row">
                                 <div class="col-md-12">
                                     <label for="subtitulo">Subtitulo</label>
-                                    <input type="text" class="form-control" id="subtitulo" name="subtitulo" value="<%=subtitulo%>" <%if id_noticia = "" then%>disabled<%end if%>>
+                                    <input type="text" class="form-control" id="subtitulo" name="subtitulo" value="<%=subtitulo%>">
                                 </div>
                             </div>
                         </div>
@@ -246,7 +208,7 @@ function validarCampos() {
                                         <span class="text-red">*</span>
                                     </label>
                                     <div class="box-body pad">
-                                        <textarea id="editor1" name="editor1" rows="10" class="form-control" <%if id_noticia = "" then%>disabled<%end if%>>
+                                        <textarea id="editor1" name="editor1" rows="10" class="form-control">
                                         <%=conteudo%>
                                         </textarea>
                                     </div>
@@ -257,10 +219,10 @@ function validarCampos() {
                             <div class="row">
                                 <div class="col-md-6"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="autor">Autor</label>
-                                    <input type="text" class="form-control" id="autor" name="autor" value="<%=autor%>" <%if id_noticia = "" then%>disabled<%end if%>>
+                                    <input type="text" class="form-control" id="autor" name="autor" value="<%=autor%>">
                                 </div>
-                                <%if id_noticia <> "" AND no = "1" then%>
-                                <div class="col-md-3"> <!-- Ajuste a largura conforme necessário -->
+                                <%if existe = 1 then%>
+                                <div class="col-md-6"> <!-- Ajuste a largura conforme necessário -->
                                     <label for="statusNoticia">
                                         Status Notícia
                                     </label>
@@ -268,7 +230,7 @@ function validarCampos() {
                                         <span class="input-group-addon">
                                             <i class="fa fa-circle" <% If statusNoticia = true Then %> style="color: #28a745;" <% else %>style="color: #dc3545;"<% End If %>></i>
                                         </span>
-                                        <select class="form-control" id="statusNoticia" name="statusNoticia" required="" <%if id_noticia = "" then%>disabled<%end if%>>
+                                        <select class="form-control" id="statusNoticia" name="statusNoticia" required="">
                                             <option value="">-- Selecione --</option>
                                             <option disabled=""></option>
                                             <option value="true" <% If statusNoticia = true Then %> selected <% End If %>>Ativo</option>
@@ -277,38 +239,20 @@ function validarCampos() {
                                     </div>
                                 </div>
                                 <%end if%>
-                                <div class="col-md-3"> <!-- Ajuste a largura conforme necessário -->
-                                    <label for="destaque">
-                                        Destaque
-                                        <span class="text-red-light" style="color: red;">*</span>
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-star" <% If destaque = true Then %> style="color: #ffc107;"<% End If %>></i>
-                                        </span>
-                                        <select class="form-control" id="destaque" name="destaque" required="" <%if id_noticia = "" then%>disabled<%end if%>>
-                                            <option value="">-- Selecione --</option>
-                                            <option disabled=""></option>
-                                            <option value="true" <% If destaque = true Then %> selected <% End If %>>Sim</option>
-                                            <option value="false" <% If destaque = false Then %> selected <% End If %>>Não</option>
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <div class="box-footer">
                             <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                            <button type="submit" onClick=" <%if no = 1 then%>return alterar()<%else%>return cadastrar()<%end if%>" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if no = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                            <button type="submit" onClick="<%if existe = 1 then%>return alterar()<%else%>return cadastrar()<%end if%>" class="form-btn btn btn-primary pull-right"><i class="fa fa-fw fa-check"></i> <%if existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
                         </div> 
                     </div>
-                </form>
             </div>
             <!-- /.box -->
 
           </div>
           <!-- /.nav-tabs-custom -->
         </div>
-
+    </form>
       </div>
       <!-- /.row -->
     </section>
