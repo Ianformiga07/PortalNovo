@@ -158,7 +158,7 @@ function validarCampos() {
                     </div>
                     <div class="box-body">
                         <% If anexo_noticia <> "" Then %>
-                        <img class="profile-user-img img-responsive preview-upNoticia" src="upNoticia/<%= anexo_noticia %>" style="height: 200px; width: 200px;">
+                        <img class="profile-user-img img-responsive preview-upNoticia" src="upNoticias/<%= anexo_noticia %>" style="height: 200px; width: 200px;">
                         <% Else %>
                         <img class="profile-user-img img-responsive preview-upNoticia" src="images/image.jpg" style="height: 200px; width: 200px;">
                         <% End If %>

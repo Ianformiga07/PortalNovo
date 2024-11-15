@@ -3,7 +3,8 @@
 <%
 Operacao = REQUEST("Operacao")
 id_servidor = Request("id_servidor")
-idAlt = REQUEST("idAlt")
+idAlt = Request("idAlt")
+If idAlt = "" Then idAlt = 0
 nivelAcesso = Request("nivelAcesso") 
 nomeCompleto = Request("nomeCompleto") 
 dataNasc = Request("dataNasc") 
@@ -52,11 +53,12 @@ IF Operacao = 2 THEN 'CADASTRO
         conn.Execute(sql2)
     Next
 
-    if idAlt <> 1 then
+
+    if idAlt = 1 then
     ' Redireciona para a página de administração após o processo de inserção e exclusão
-    response.Redirect("cad-administrador.asp?Resp=1&idServidor=" & id_servidor)	
-    else
     response.Redirect("cad-administrador.asp?Resp=2&idAlt=1&idServidor=" & id_servidor) 
+    else
+    response.Redirect("cad-administrador.asp?Resp=1&idServidor=" & id_servidor)	
     end if	
     call fechaConexao
 END IF

@@ -103,7 +103,7 @@ function confirmarExclusao(id_noticia) {
                   <tbody>
                 <%do while not rs_noticia.eof %>
                   <tr>
-                    <td><div class="img-thumbnail" style="text-align: center;"><img src="<%=rs_noticia("anexo_noticia")%>" alt="" style="height: 40px; width: 70px;"></div></td>
+                    <td><div class="img-thumbnail" style="text-align: center;"><img src="upNoticias/<%=rs_noticia("anexo_noticia")%>" alt="" style="height: 40px; width: 70px;"></div></td>
                     <td><%=rs_noticia("titulo")%></td>
                     <td><%=rs_noticia("dataCad")%></td>
                     <td><%if rs_noticia("statusNoticia") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>

@@ -24,26 +24,23 @@
             <div class="box-body">
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-2">
-                            <label for="titulo">Nº Processo</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
-                        </div>
-                        <div class="col-md-2">
-                            <label for="titulo">Nº Instrumento</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
+                        <div class="col-md-3">
+                            <label for="NumProcesso">Nº Processo</label>
+                            <input type="text" class="form-control" id="NumProcesso" name="NumProcesso" required>
                         </div>
                         <div class="col-md-3">
-                            <label for="status">Procedimento</label>
-                            <select class="form-control" id="status" name="status" required>
+                            <label for="Procedimento">Procedimento</label>
+                            <select class="form-control" id="Procedimento" name="Procedimento" required>
                                 <option value="">-- Selecionar --</option>
                                 <option value="1">LICITAÇÃO</option>
                                 <option value="2">CONTRATAÇÃO DIRETA</option>
                                 <option value="3">ADESÃO À ATA DE REGISTRO DE PREÇO</option>
+                                <option value="0">NÃO INFORMADO</option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="status">Modalidade</label>
-                            <select class="form-control" id="status" name="status" required>
+                            <label for="Modalidade">Modalidade</label>
+                            <select class="form-control" id="Modalidade" name="Modalidade" required>
                                 <option value="">-- Selecionar --</option>
                                 <option value="1">CONTRATAÇÃO DIRETA</option>
                                 <option value="2">TOMADA DE PREÇO</option>
@@ -58,9 +55,9 @@
                                 <option value="11">INEXIGIBILIDADE</option>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label for="status">Tipo</label>
-                            <select class="form-control" id="status" name="status" required>
+                        <div class="col-md-3">
+                            <label for="TipoLici">Tipo</label>
+                            <select class="form-control" id="TipoLici" name="TipoLici" required>
                                 <option value="">-- Selecionar --</option>
                                 <option value="1">MENOR PREÇO</option>
                                 <option value="2">CONTRATAÇÃO DIRETA</option>
@@ -75,12 +72,12 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-2">
-                            <label for="titulo">Data de Abertura</label>
-                            <input type="date" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
+                            <label for="dataAbertura">Data de Abertura</label>
+                            <input type="text" class="form-control" id="dataAbertura" name="dataAbertura" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
                         <div class="col-md-3">
-                            <label for="status">Finalidade</label>
-                            <select class="form-control" id="status" name="status" required>
+                            <label for="Finalidade">Finalidade</label>
+                            <select class="form-control" id="Finalidade" name="Finalidade" required>
                                 <option value="">-- Selecionar --</option>
                                 <option value="1">AQUISIÇÃO DE SERVIÇOS</option>
                                 <option value="2">AQUISIÇÃO DE BENS</option>
@@ -104,28 +101,28 @@
                             </select>
                         </div>
                         <div class="col-md-2">
-                            <label for="titulo">Valor da Dotação</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
+                            <label for="ValorEstimado">Valor Estimado</label>
+                            <input type="text" class="form-control" id="ValorEstimado" name="ValorEstimado" placeholder="Digite o título" required>
                         </div>
                         <div class="col-md-2">
-                            <label for="titulo">Valor Despesa</label>
-                            <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título" required>
+                            <label for="ValorDespesa">Valor Despesa</label>
+                            <input type="text" class="form-control" id="ValorDespesa" name="ValorDespesa" placeholder="Digite o título" required>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-4">
-                            <label for="dataPublicacao">Data de Abertura</label>
-                            <input type="date" class="form-control" id="dataPublicacao" name="dataPublicacao" required>
+                            <label for="dataPublicacao">Data da Publicação</label>
+                            <input type="text" class="form-control" id="dataPublicacao" name="dataPublicacao"  data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
                         <div class="col-md-4">
-                            <label for="dataPublicacao">Data de Homologação</label>
-                            <input type="date" class="form-control" id="dataPublicacao" name="dataPublicacao" required>
+                            <label for="dataHomologa">Data de Homologação</label>
+                            <input type="text" class="form-control" id="dataHomologa" name="dataHomologa"  data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
                         <div class="col-md-4">
-                            <label for="status">Status</label>
-                            <select class="form-control" id="status" name="status" required>
+                            <label for="situacao">Situação</label>
+                            <select class="form-control" id="situacao" name="situacao" required>
                                 <option value="">-- Selecionar --</option>
                                 <option value="1">EM ANDAMENTO</option>
                                 <option value="2">ADJUDICADA E HOMOLOGADA</option>
@@ -140,9 +137,28 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
+                        <div class="col-md-6">
+                            <label for="orgao">Orgão</label>
+                            <select class="form-control" id="orgao" name="orgao" required>
+                                <option value="">-- Selecionar --</option>
+                                <option value="1">Câmara Mul. de Ananás</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="autoridade">Autoridade Responsável</label>
+                            <select class="form-control" id="autoridade" name="autoridade" required>
+                                <option value="">-- Selecionar --</option>
+                                <option value="1">João Pereira</option>
+                                <option value="1">Chikungunya</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
                         <div class="col-md-12">
-                            <label for="description">Objeto</label>
-                            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Digite uma descrição para o Objeto"></textarea>
+                            <label for="objeto">Objeto</label>
+                            <textarea class="form-control" id="objeto" name="objeto" rows="4" placeholder="Digite uma descrição para o Objeto"></textarea>
                         </div>
                     </div>
                 </div>

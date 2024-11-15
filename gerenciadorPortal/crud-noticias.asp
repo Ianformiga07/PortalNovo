@@ -28,15 +28,16 @@ If IsObject(Form) Then
 
         Next
         ' Tratamento do arquivo enviado para Foto da Cidade
-        upNoticia = 0
+        upNoticiabt = 0
         For Each Field in Form.Files.Items
-            If Field.Name = "upNoticia" Then
+            If Field.Name = "upNoticiabt" Then
                 NomeArquivoNoticia = "Noticia_" & Year(Date) & Month(Date) & Day(Date) & Hour(Now) & Minute(Now) & Second(Now) & "." & Split(Field.FileName, ".")(UBound(Split(Field.FileName, ".")))
-                Field.SaveAs Server.MapPath("upNoticia") & "\" & NomeArquivoNoticia
-                upNoticia = 1
+                Field.SaveAs Server.MapPath("upNoticias") & "\" & NomeArquivoNoticia
+                upNoticiabt = 1
             End If  
         Next
     End If
+
 
     ' Verifica se já existe um registro com o id_regimento informado
     Call abreConexao
@@ -46,6 +47,7 @@ If IsObject(Form) Then
     If IsEmpty(id_noticia) Or Not IsNumeric(id_noticia) Then
         id_noticia = 0 ' Define para 0 se vazio ou inválido
     End If
+
 
 
     ' Insere ou atualiza o registro no banco de dados
@@ -74,8 +76,8 @@ If IsObject(Form) Then
             "statusNoticia = '" & statusNoticia & "', dataAlt = GETDATE(), idUsu_Alt = " & Session("idUsu")
         
         ' Apenas atualiza o arquivo de "Foto da Cidade" se houver um novo upload
-        If upNoticia = 1 Then
-            sql = sql & ", upNoticia = '" & NomeArquivoNoticia & "'"
+        If upNoticiabt = 1 Then
+            sql = sql & ", anexo_noticia = '" & NomeArquivoNoticia & "'"
         End If
         
         sql = sql & " WHERE id_noticia = " & id_noticia
