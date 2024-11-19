@@ -5,7 +5,7 @@ id_LiciAnexo = Request("id_LiciAnexo")
 
 if id_LiciAnexo <> "" then
     call abreConexao
-    sql = "SELECT * FROM cam_anexosLicitacao WHERE id_LiciAnexo = '" & id_LiciAnexo & "'"
+    sql = "SELECT * FROM cam_anexosLicitacao WHERE id_licitacao = '" & id_licitacao & "'"
     
     set rs_AnexosLici = conn.execute(sql)
     if not rs_AnexosLici.eof then
@@ -23,7 +23,6 @@ end if
 <script>
 function admin(id_LiciAnexo, id_licitacao) {
 
-    alert(id_licitacao);
     // Atualiza o campo hidden com o ID
     document.getElementById("id_LiciAnexo").value = id_LiciAnexo;
     document.getElementById("id_licitacao").value = id_licitacao;
@@ -42,13 +41,13 @@ function cadastrar(){
     form.submit();
 }
 
-function alterar(id_LiciAnexo)
+function alterar(id_LiciAnexo, id_licitacao)
 {
     //
     var form = document.forms["frmAnexosLici"];
     form.Operacao.value = 3;
     form.enctype = "multipart/form-data";
-    form.action = "crud-licitacao.asp?id_LiciAnexo="+id_LiciAnexo;
+    form.action = "crud_liciAnexo.asp?id_LiciAnexo="+id_LiciAnexo+ "&id="+id_licitacao;
     form.submit();
     
 }
@@ -85,7 +84,7 @@ function alterar(id_LiciAnexo)
           <form role="form" name="frmAnexosLici" method="post" enctype="multipart/form-data">
             <input type="hidden" name="Operacao" id="Operacao">
             <input type="hidden" name="id_LiciAnexo" id="id_LiciAnexo" value="<%=id_LiciAnexo%>">
-            <input type="hidden" name="id_licitacao" id="id_licitacao" >
+            <input type="hidden" name="id_licitacao" id="id_licitacao" value="<%=id_licitacao%>">
             <div class="box-body">
                 <div class="form-group">
                     <div class="row">
@@ -126,12 +125,12 @@ function alterar(id_LiciAnexo)
 
             <div class="box-footer">
                 <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%=id_LiciAnexo%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%=id_LiciAnexo%>', '<%=id_licitacao%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
             </div>
 
 <%
 call abreConexao
-  sql = "SELECT  * FROM cam_anexosLicitacao"
+  sql = "SELECT  * FROM cam_anexosLicitacao WHERE id_licitacao = '" & id_licitacao & "'"
   set rs_Anexos = conn.execute(sql)
 %>
             <div class="box-body">

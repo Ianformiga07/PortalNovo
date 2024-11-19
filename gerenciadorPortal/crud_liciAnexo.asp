@@ -21,6 +21,7 @@ If IsObject(Form) Then
                 Case "titulo": titulo = Form.Texts.Item(Key)
                 Case "statusAnexos": statusAnexos = Form.Texts.Item(Key)
                 Case "id_licitacao": id_licitacao = Form.Texts.Item(Key) ' Captura o ID para alteração
+                Case "id_LiciAnexo": id_LiciAnexo = Form.Texts.Item(Key) ' Captura o ID para alteração
             End Select
         Next
 
@@ -45,8 +46,8 @@ If IsObject(Form) Then
 
     End If
 
-        response.write Operacao
-        response.end
+        'response.write Operacao
+        'response.end
 
     Call abreConexao
     Dim rs_exist
@@ -68,7 +69,7 @@ If IsObject(Form) Then
         response.Redirect "cad-liciAnexo.asp?Resp=1&id=" & id_licitacao
     ElseIf Operacao = 3 Then
         ' Atualização
-        sql = "UPDATE cam_licitacao SET id_Licitacao = '" & id_Licitacao & "', titulo = '" & titulo & "', " & _
+        sql = "UPDATE cam_anexosLicitacao SET id_Licitacao = '" & id_Licitacao & "', titulo = '" & titulo & "', " & _
               "statusAnexos = '" & statusAnexos & "', dataAlt = GETDATE(), id_UsuAlt = " & Session("idUsu")
 
         ' Apenas atualiza o arquivo se houver um novo upload
@@ -77,8 +78,8 @@ If IsObject(Form) Then
         End If
         
         sql = sql & " WHERE id_LiciAnexo = " & id_LiciAnexo
-        response.write sql
-        response.end
+        'response.write sql
+        'response.end
         conn.Execute(sql)
         
         ' Redireciona com mensagem de sucesso
