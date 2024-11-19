@@ -75,7 +75,7 @@ function alterar(CPF)
 }
 
 function verificar_cadastro()
-{   alert("oiii")
+{   //alert("oiii")
     document.frmServidor.Operacao.value = 1;
 	document.frmServidor.action = "cad-servidores.asp";
 	document.frmServidor.submit();

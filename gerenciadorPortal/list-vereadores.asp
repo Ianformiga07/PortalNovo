@@ -1,11 +1,9 @@
   <!--#include file="base.asp"-->
   <%
 call abreConexao
-
 sql = "SELECT cam_servidores.id_servidor, cam_servidores.CPF, cam_servidores.NomeCompleto, statusServidor, cam_servidores.DataNascimento, cam_servidores.Celular " &_
       "FROM cam_servidores WHERE (id_Cargo = '15')"
 set rs_Vereador = conn.execute(sql)
-
 %>
 
 <script>
@@ -71,7 +69,6 @@ function admin(id_servidor, nomeVereador) {
                 <% rs_Vereador.movenext 
                   loop %>  
                   </tbody>
-
                 <%call fechaConexao%>
                 </table>
               </div>
