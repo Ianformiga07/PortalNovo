@@ -275,16 +275,9 @@ function alterar(id_licitacao)
                         <div class="col-md-6">
                             <label for="arquivo">Arquivo PDF</label>
                             <input type="file" class="form-control" id="arquivo" name="arquivo" accept=".pdf" >
-                            <% 
-                            ' Verifica se existe um anexo e exibe o link para o PDF
-                            if anexo_Lici <> "" then 
-                            %>
-                              <p>
-                                <a href="upLicitacoes/<%= anexo_Lici %>" target="_blank"><%= anexo_Lici %></a>
-                              </p>
-                            <% 
-                            end if 
-                            %>
+                            <%if anexo_Lici <> "" then%>
+                              <p><a href="upLicitacoes/<%= anexo_Lici %>" target="_blank"><%= anexo_Lici %></a></p>
+                            <%end if%>
                         </div>
                         <%if existe = 1 then%>
                         <div class="col-md-6">

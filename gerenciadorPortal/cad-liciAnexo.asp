@@ -5,13 +5,13 @@ id_LiciAnexo = Request("id_LiciAnexo")
 
 if id_LiciAnexo <> "" then
     call abreConexao
-    sql = "SELECT * FROM cam_anexosLicitacao WHERE id_licitacao = '" & id_licitacao & "'"
+    sql = "SELECT * FROM cam_anexosLicitacao WHERE id_LiciAnexo = '" & id_LiciAnexo & "' and id_licitacao = '" & id_licitacao & "'"
     
     set rs_AnexosLici = conn.execute(sql)
     if not rs_AnexosLici.eof then
         titulo = rs_AnexosLici("titulo")
         LiciAnexos = rs_AnexosLici("LiciAnexos")
-        statusAnexos = rs_AnexosLici("statusAnexos")
+        status_Anexos = rs_AnexosLici("statusAnexos")
         existe = 1
     end if
     call fechaConexao
@@ -113,8 +113,8 @@ function alterar(id_LiciAnexo, id_licitacao)
                         <div class="col-md-6">
                             <label for="statusAnexos">Status</label>
                             <select class="form-control" id="statusAnexos" name="statusAnexos" >
-                                <option value="1" <%IF statusAnexos  = 1 THEN%> selected <%END IF%>>Ativo</option>
-                                <option value="2" <%IF statusAnexos  = 2 THEN%> selected <%END IF%>>Inativo</option>
+                              <option value="true" <% If status_Anexos = true Then %> selected <% End If %>>Ativo</option>
+                              <option value="false" <% If status_Anexos = false Then %> selected <% End If %>>Inativo</option>
                             </select>
                         </div>
                         <%end if%>
@@ -140,6 +140,7 @@ call abreConexao
                   <th>Titulo</th>
                   <th>Arquivo</th>
                   <th>Data</th>
+                  <th>Status</th>
                   <th>Ação</th>
                 </tr>
                 </thead>
@@ -149,6 +150,7 @@ call abreConexao
                   <td><%=rs_Anexos("titulo")%></td>
                   <td><%=rs_Anexos("LiciAnexos")%></td>
                   <td><%=rs_Anexos("dataCad")%></td>
+                  <td><%if rs_Anexos("statusAnexos") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                   <td>
                   <a href="#" onClick="admin('<%=rs_Anexos("id_LiciAnexo")%>', '<%=rs_Anexos("id_licitacao")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>
                   <button type="button" onClick="confirmarExclusao('<%=rs_Anexos("id_LiciAnexo")%>');" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>

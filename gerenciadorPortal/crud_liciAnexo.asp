@@ -46,7 +46,7 @@ If IsObject(Form) Then
 
     End If
 
-        'response.write Operacao
+        'response.write id_licitacao
         'response.end
 
     Call abreConexao
@@ -83,7 +83,7 @@ If IsObject(Form) Then
         conn.Execute(sql)
         
         ' Redireciona com mensagem de sucesso
-        response.Redirect("cad-liciAnexo.asp?Resp=2&id_LiciAnexo=" & id_LiciAnexo &"&id="&id_LiciAnexo)
+        response.Redirect("cad-liciAnexo.asp?Resp=2&id_LiciAnexo=" & id_LiciAnexo &"&id="&id_licitacao)
     End If
 
     Call fechaConexao
