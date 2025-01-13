@@ -5,12 +5,13 @@
   call abreConexao
   if id_contrato <> "" then
       sql = "SELECT * from cam_contratos where id_contrato = '"&id_contrato&"'"
-      response.write sql
-      response.end
+      'response.write sql
+      'response.end
       set rs_contrato = conn.execute(sql)
       if not rs_contrato.eof then
       licitacao = rs_contrato("id_licitacao")
-      numContrato = rs_contrato("id_numContrato")
+      tipoContratacao = rs_contrato("id_tipoContratacao")
+      numContrato = rs_contrato("numContrato")
       inicioVigencia = rs_contrato("inicioVigencia")
       fimVigencia = rs_contrato("fimVigencia")
       valorEstimado = rs_contrato("valorEstimado")
@@ -34,13 +35,13 @@ function cadastrar(){
     form.submit();
 }
 
-function alterar(id_licitacao)
+function alterar(id_contrato)
 {
-    //alert(id_licitacao)
+    //alert(id_contrato)
     var form = document.forms["frmContrato"];
     form.Operacao.value = 3;
     form.enctype = "multipart/form-data";
-    form.action = "crud-licitacao.asp?id_licitacao="+id_licitacao;
+    form.action = "crud-contratos.asp?id_contrato="+id_contrato;
     form.submit();
     
 }
@@ -75,10 +76,28 @@ function alterar(id_licitacao)
                     <div class="row">
                     <%
                     call abreConexao 
+                    sql = "SELECT * FROM cam_tipoContratacao ORDER BY id_tipoContratacao"
+                    set rs_tipoContratacao = conn.execute(sql) 
+                    %>    
+                        <div class="col-md-4">
+                        <label for="tipoContratacao">Tipo de Contratação</label>
+                        <select class="form-control" id="tipoContratacao" name="tipoContratacao" required>
+                            <option value="0" <% If IsEmpty(tipoContratacao) Or tipoContratacao = "" Then response.write("selected") End If %>>-- Selecionar --</option>
+                            <option value="" disabled></option>
+                    <%do while not rs_tipoContratacao.eof%>
+                            <option <%if  rtrim(tipoContratacao) = rtrim(rs_tipoContratacao("id_tipoContratacao")) then response.write("selected") end if%> value="<%=rs_tipoContratacao("id_tipoContratacao")%>"><%=rs_tipoContratacao("descTipo")%></option>
+                    <% rs_tipoContratacao.movenext 
+                    loop 
+                    call fechaConexao
+                    %>
+                        </select>
+                        </div>
+                    <%
+                    call abreConexao 
                     sql = "SELECT * FROM cam_licitacao WHERE statusLicitacao = 1 ORDER BY id_licitacao"
                     set rs_licitacao = conn.execute(sql) 
                     %>                         
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="select-licitacao">
                             Nº Edital de Licitação
                             <span class="text-red">*</span>
@@ -93,28 +112,52 @@ function alterar(id_licitacao)
                     call fechaConexao
                     %>
                             </select>
-                        </div>                  
-                        <div class="col-md-3">
+                        </div>   
+                        <div class="col-md-4">
                             <label for="numContrato">Nº Contrato</label>
                             <input type="text" class="form-control" id="numContrato" name="numContrato" value="<%=numContrato%>">
                         </div>
-                        <div class="col-md-3">
+
+                    </div>
+                </div>
+<script>
+    function controlarCampos() {
+        var tipoContratacao = document.getElementById("tipoContratacao").value;
+        var licitacaoDiv = document.getElementById("licitacao").closest(".col-md-4"); // Ajuste da classe correta
+        
+        // Exibe o campo apenas se o Tipo de Contratação for Licitação (valor 1)
+        if (tipoContratacao === "1") {
+            licitacaoDiv.style.display = "block"; // Exibe
+        } else {
+            licitacaoDiv.style.display = "none"; // Oculta
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        controlarCampos(); // Executa a função ao carregar a página
+        document.getElementById("tipoContratacao").addEventListener("change", controlarCampos); // Adiciona o evento ao campo
+    });
+</script>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label for="valorEstimado">Valor Estimado</label>
+                            <input type="text" class="form-control" id="valorEstimado" name="valorEstimado" value="<%=valorEstimado%>">
+                        </div>
+                        <div class="col-md-4">
                             <label for="inicioVigencia">Inicio da Vigência</label>
                             <input type="text" class="form-control" id="inicioVigencia" name="inicioVigencia" value="<%=inicioVigencia%>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <label for="fimVigencia">Fim da Vigência</label>
                             <input type="text" class="form-control" id="fimVigencia" name="fimVigencia" value="<%=fimVigencia%>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-3">
-                            <label for="valorEstimado">Valor Estimado</label>
-                            <input type="text" class="form-control" id="valorEstimado" name="valorEstimado" value="<%=valorEstimado%>">
-                        </div>
-                        <div class="col-md-5">
+                        <div class="col-md-6">
                             <label for="fornecedor">Fornecedor</label>
                             <select class="form-control" id="fornecedor" name="fornecedor" required>
                                 <option value="">-- Selecionar --</option>
@@ -128,7 +171,7 @@ function alterar(id_licitacao)
                             "FROM cam_servidores WHERE id_Cargo IN (1, 2, 5, 6, 7, 8, 11, 12, 13, 16)"
                         set rs_Servidor = conn.execute(sql)
                         %>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label for="fiscal">Fiscal de Contrato</label>
                             <select class="form-control" id="fiscal" name="fiscal" >
                                 <option value="">-- Selecionar --</option>
@@ -147,7 +190,7 @@ function alterar(id_licitacao)
                     <div class="row">
                         <div class="col-md-12">
                             <label for="DescContrato">Descrição</label>
-                            <textarea class="form-control" id="DescContrato" name="DescContrato" rows="4">value="<%=descricao%>"</textarea>
+                            <textarea class="form-control" id="DescContrato" name="DescContrato" rows="4"><%=descricao%></textarea>
                         </div>
                     </div>
                 </div>
@@ -176,7 +219,7 @@ function alterar(id_licitacao)
 
             <div class="box-footer">
                 <a href="javascript:history.back()" class="btn btn-primary "><i class="fa fa-reply"></i> Voltar</a>
-                <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%=id_licitacao%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
+                <button type="submit" class="form-btn btn btn-primary pull-right" onClick="<%IF existe = 1 THEN%>return alterar('<%=id_contrato%>')<%ELSE%>return cadastrar()<%END IF%>"><i class="fa fa-fw fa-check"></i> <%if Existe = 1 then%>Alterar<%else%>Cadastrar<%end if%></button>
             </div>
           </form>
         </div>

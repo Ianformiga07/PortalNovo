@@ -1,6 +1,6 @@
 <!--#include file="lib/Conexao.asp"-->
 <!--#include file="upload.lib.asp"-->
-
+<% Response.CodePage = 65001 %>
 <%
 ' Certifique-se de inicializar o objeto ASPForm corretamente
 Dim Form, Operacao, title, description, UpRegimento, NomeArquivo1, id_regimento
@@ -22,18 +22,17 @@ If IsObject(Form) Then
                 Case "apelido": apelido = Form.Texts.Item(Key)
                 Case "partido": partido = Form.Texts.Item(Key)
                 Case "ocupacao": ocupacao = Form.Texts.Item(Key) ' Captura o ID para alteração
-                Case "mesaDiretora": mesaDiretora = Form.Texts.Item(Key) ' Captura o ID para alteração
-                Case "comissoes": comissoes = Form.Texts.Item(Key) ' Captura o ID para alteração
-                Case "mandatosAnteriores": mandatosAnteriores = Form.Texts.Item(Key) ' Captura o ID para alteração
+                Case "statusVereador": statusVereador = Form.Texts.Item(Key) ' Captura o ID para alteração
+                Case "IdVereador": IdVereador = Form.Texts.Item(Key) ' Captura o ID para alteração
             End Select
         Next
         ' Tratamento do arquivo enviado para Foto da Cidade
-        upVereador = 0
+        upVereadorbt = 0
         For Each Field in Form.Files.Items
-            If Field.Name = "upVereador" Then
-                NomeArquivoCidade = "vereador" & Year(Date) & Month(Date) & Day(Date) & Hour(Now) & Minute(Now) & Second(Now) & "." & Split(Field.FileName, ".")(UBound(Split(Field.FileName, ".")))
-                Field.SaveAs Server.MapPath("upVereador") & "\" & NomeArquivoCidade
-                upVereador = 1
+            If Field.Name = "upVereadorbt" Then
+                NomeArquivoVereador = "vereador" & Year(Date) & Month(Date) & Day(Date) & Hour(Now) & Minute(Now) & Second(Now) & "." & Split(Field.FileName, ".")(UBound(Split(Field.FileName, ".")))
+                Field.SaveAs Server.MapPath("upVereador") & "\" & NomeArquivoVereador
+                upVereadorbt = 1
             End If  
         Next
 
@@ -48,7 +47,7 @@ If IsObject(Form) Then
         id_historia = 0 ' Define para 0 se vazio ou inválido
     End If
 
-    sql = "SELECT COUNT(*) AS total FROM cam_historia WHERE id_historia = " & id_historia
+    sql = "SELECT COUNT(*) AS total FROM cam_vereador WHERE Id_Vereador = " & IdVereador
     'response.write sql
     'response.end
     Set rs_exist = conn.Execute(sql)
@@ -63,46 +62,23 @@ If IsObject(Form) Then
     rs_exist.Close
     Set rs_exist = Nothing
 
-    ' Insere ou atualiza o registro no banco de dados
-    If Operacao = 2 Then
-        ' Inserção
-        sql = "INSERT INTO cam_historia (anoFundacao, populacao, area, conteudo, UpCidade, UpBrasao, diaAniversario, mesAniversario, idUsu_Cad, dataCad) " & _
-              "VALUES (" & anoFundacao & ", " & populacao & ", " & area & ", '" & editor1 & "', '" & NomeArquivoCidade & "', '" & NomeArquivoBrasao & "', " & diaAniversario & ", '" & mesAniversario & "', '" & session("idUsu") & "', GETDATE())"
-        'response.write sql
-        'response.end
-        
-        conn.Execute(sql)
-
-        ' Recupera o último ID inserido
-        Set rs = conn.Execute("SELECT SCOPE_IDENTITY() AS newID")
-        Dim newID
-        newID = rs("newID")
-        rs.Close
-        Set rs = Nothing
-        
-        ' Redireciona passando o ID na URL
-        response.Redirect("cad-historia.asp?Resp=1&id_historia=" & newID)
-    ElseIf Operacao = 3 Then
+    If Operacao = 3 Then
         ' Atualização
-        sql = "UPDATE cam_historia SET anoFundacao = " & anoFundacao & ", populacao = " & populacao & ", " & _
-            "area = " & area & ", conteudo = '" & editor1 & "', diaAniversario = " & diaAniversario & ", " & _
-            "mesAniversario = '" & mesAniversario & "', dataAlt = GETDATE(), idUsu_Alt = " & Session("idUsu")
+        sql = "UPDATE cam_vereador SET apelido = '" & apelido & "', partido = '" & partido & "', " & _
+            "ocupacao = '" & ocupacao & "', statusVereador = '"& statusVereador &"'"
         
         ' Apenas atualiza o arquivo de "Foto da Cidade" se houver um novo upload
-        If upCidade = 1 Then
-            sql = sql & ", UpCidade = '" & NomeArquivoCidade & "'"
+        If upVereadorbt = 1 Then
+            sql = sql & ", fotoVereador = '" & NomeArquivoVereador & "'"
         End If
-        
-        ' Apenas atualiza o arquivo de "Foto do Brasão" se houver um novo upload
-        If upBrasao = 1 Then
-            sql = sql & ", UpBrasao = '" & NomeArquivoBrasao & "'"
-        End If
-        
-        sql = sql & " WHERE id_historia = " & id_historia
+    
+        sql = sql & " WHERE Id_Vereador = " & IdVereador
+        'response.write sql
+        'response.end
         conn.Execute(sql)
         
         ' Redireciona com mensagem de sucesso
-        response.Redirect("cad-historia.asp?Resp=2&id_historia=" & id_historia)
+        response.Redirect("sel-mandatovereador.asp?Resp=2&cod=1&IdVereador="&IdVereador)
     End If
 
     Call fechaConexao

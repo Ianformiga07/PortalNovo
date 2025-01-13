@@ -5,7 +5,7 @@ id_legislacao = Request("id_legislacao")
 call abreConexao
 
 if id_legislacao <> "" then
-sql = "SELECT id_legislacao, id_categoriaLeg, descricao, anexo_legislacao, id_AutorVer, status_Leg, numeroDoc FROM cam_legislacao where id_legislacao = '"&id_legislacao&"'"
+sql = "SELECT id_legislacao, id_categoriaLeg, descricao, dataPublicacao, anexo_legislacao, id_AutorVer, status_Leg, numeroDoc FROM cam_legislacao where id_legislacao = '"&id_legislacao&"'"
 set rsReq = conn.Execute(sql)
 
     id_legislacao = rsReq("id_legislacao")
@@ -15,6 +15,7 @@ set rsReq = conn.Execute(sql)
     id_AutorVer = rsReq("id_AutorVer")
     status_Leg = rsReq("status_Leg")
     numeroDoc = rsReq("numeroDoc")
+    dataPublicacao = rsReq("dataPublicacao")
 
     existe = 1
 else
@@ -153,11 +154,11 @@ function validarCampos(isCadastro) {
                 <div class="form-group">
                     <%
                     call abreConexao 
-                    sql = "SELECT * FROM cam_categoriaLeg ORDER BY id_categoriaLeg"
+                    sql = "SELECT * FROM cam_categoriaLeg where id_categoriaLeg IN (1,2,3,4,5,6,7,8,9,10) ORDER BY id_categoriaLeg"
                     set rs_catLeg = conn.execute(sql) 
                     %> 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="CatLegislacao">Categoria</label>
                             <select class="form-control" id="CatLegislacao" name="CatLegislacao" required>
                                 <option value="">-- Selecionar --</option>
@@ -170,9 +171,13 @@ function validarCampos(isCadastro) {
                             %>
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label for="numeroDoc">Número Documento</label>
                             <input type="text" class="form-control" id="numeroDoc" name="numeroDoc" value="<%=numeroDoc%>" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="dataPublicacao">Data da Publicação</label>
+                            <input type="text" class="form-control" id="dataPublicacao" name="dataPublicacao" value="<%=dataPublicacao%>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                         </div>
                     </div>
                 </div>
@@ -223,8 +228,8 @@ function validarCampos(isCadastro) {
                             <label for="statusLeg">Status</label>
                             <select class="form-control" id="statusLeg" name="statusLeg" required>
                                 <option disabled=""></option>
-                                <option value="true" <% If status_Leg = true Then %> selected <% End If %>>Sim</option>
-                                <option value="false" <% If status_Leg = false Then %> selected <% End If %>>Não</option>
+                                <option value="true" <% If status_Leg = true Then %> selected <% End If %>>Ativo</option>
+                                <option value="false" <% If status_Leg = false Then %> selected <% End If %>>Inativo</option>
                             </select>
                         </div>
                         <%end if%>

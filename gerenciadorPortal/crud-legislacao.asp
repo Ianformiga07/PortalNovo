@@ -20,6 +20,7 @@ If IsObject(Form) Then
                 Case "Operacao": Operacao = Form.Texts.Item(Key)
                 Case "CatLegislacao": CatLegislacao = Form.Texts.Item(Key)
                 Case "numeroDoc": numeroDoc = Form.Texts.Item(Key)
+                Case "dataPublicacao": dataPublicacao = Form.Texts.Item(Key)
                 Case "descricao": descricao = Form.Texts.Item(Key)
                 Case "verAutor": verAutor = Form.Texts.Item(Key) ' Captura o ID para alteração
                 Case "statusLeg": statusLeg = Form.Texts.Item(Key) ' Captura o ID para alteração
@@ -51,8 +52,8 @@ If IsObject(Form) Then
     ' Insere ou atualiza o registro no banco de dados
     If Operacao = 2 Then
         ' Inserção
-        sql = "INSERT INTO cam_legislacao (id_categoriaLeg, numeroDoc, descricao, anexo_legislacao, id_AutorVer, status_Leg, dataCad, idUsu_Cad) " & _
-              "VALUES ('" & CatLegislacao & "', '" & numeroDoc & "', '" & descricao & "', '" & NomeArquivo1 & "', '" & verAutor & "', 1, GETDATE(), " & Session("idUsu") & ")"
+        sql = "INSERT INTO cam_legislacao (id_categoriaLeg, numeroDoc, dataPublicacao, descricao, anexo_legislacao, id_AutorVer, status_Leg, dataCad, idUsu_Cad) " & _
+              "VALUES ('" & CatLegislacao & "', '" & numeroDoc & "', '" & dataPublicacao & "', '" & descricao & "', '" & NomeArquivo1 & "', '" & verAutor & "', 1, GETDATE(), " & Session("idUsu") & ")"
               'response.write sql
               'response.end
         conn.Execute(sql)
@@ -61,7 +62,7 @@ If IsObject(Form) Then
         response.Redirect("list-legislacao.asp?Resp=1")
     ElseIf Operacao = 3 Then
         ' Atualização
-        sql = "UPDATE cam_legislacao SET id_categoriaLeg = '" & CatLegislacao & "', numeroDoc = '" & numeroDoc & "', descricao = '" & descricao & "', id_AutorVer = '" & verAutor & "', status_Leg = '" & statusLeg & "', " & _
+        sql = "UPDATE cam_legislacao SET id_categoriaLeg = '" & CatLegislacao & "', numeroDoc = '" & numeroDoc & "', dataPublicacao = '" & dataPublicacao & "', descricao = '" & descricao & "', id_AutorVer = '" & verAutor & "', status_Leg = '" & statusLeg & "', " & _
               "dataAlt = GETDATE(), idUsu_Alt = " & Session("idUsu")
         
         ' Apenas atualiza o arquivo se houver um novo upload

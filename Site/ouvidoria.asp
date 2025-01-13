@@ -2,6 +2,10 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
+  <style>
+
+</style>
 <main class="main">
   <!-- Page Title -->
   <div class="page-title" data-aos="fade">
@@ -21,389 +25,135 @@
     <section id="ouvidoria" class="ouvidoria section">
       <div class="container" data-aos="fade-up" data-aos-delay="100">
         <!-- Quadrados -->
-        <div class="ouvidoria-grid">
-        <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#denunciaModal">
-            <i class="fa fa-exclamation-circle"></i>
-            <h3>Denúncia</h3>
-        </a>
-        <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#duvidaModal">
-            <i class="fa fa-question-circle"></i>
-            <h3>Dúvida</h3>
-        </a>
-        <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#elogioModal">
-            <i class="fa fa-thumbs-up"></i>
-            <h3>Elogio</h3>
-        </a>
-        <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#reclamacaoModal">
-            <i class="fa fa-frown"></i>
-            <h3>Reclamação</h3>
-        </a>
-        <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#sugestaoModal">
-            <i class="fa fa-lightbulb"></i>
-            <h3>Sugestão</h3>
-        </a>
-        </div>
+<%
+call abreConexao
+    sql = "SELECT id_tipoManifestacao, descManifestacao, icone FROM cam_tipoManifestacao"
+    Set rs = conn.Execute(sql)
+%>
+
+
+<div class="ouvidoria-grid">
+<% 
+    Do While Not rs.EOF
+%>
+    <a href="#" class="ouvidoria-item" data-toggle="modal" data-target="#<%= rs("id_tipoManifestacao") & "ModalManifestacao" %>">
+        <i class="fa <%= rs("icone") %>"></i>
+        <h3><%= rs("descManifestacao") %></h3>
+    </a>
+<%
+        rs.MoveNext
+    Loop
+%>
+</div>
+
+
 <!-- Script de Validação e Manipulação de Campos -->
 <script>
-  // Função para alternar a visibilidade dos campos
-  function toggleFields(modalId) {
-    var anonimoSelect = document.getElementById('anonimo' + modalId);
-    var emailField = document.getElementById('email' + modalId);
-    var cpfField = document.getElementById('cpf' + modalId);
-    var nomeField = document.getElementById('nome' + modalId);
-    var telefoneField = document.getElementById('telefone' + modalId);
-    var recebimentoField = document.getElementById('recebimento' + modalId);
+function toggleFields(modalId) {
+    const fields = ['email', 'cpf', 'nome', 'telefone', 'recebimento'];
+    const isDisabled = document.getElementById('anonimo' + modalId).value === "1";
 
-    if (anonimoSelect.value === "Sim") {
-      emailField.disabled = true;
-      cpfField.disabled = true;
-      nomeField.disabled = true;
-      telefoneField.disabled = true;
-      recebimentoField.disabled = true;
-    } else {
-      emailField.disabled = false;
-      cpfField.disabled = false;
-      nomeField.disabled = false;
-      telefoneField.disabled = false;
-      recebimentoField.disabled = false;
-    }
-  }
+    fields.forEach(field => {
+        const element = document.getElementById(field + modalId);
+        if (element) element.disabled = isDisabled;
+    });
+}
 
-  // Inicializa o estado dos campos com base na seleção inicial
-  document.addEventListener('DOMContentLoaded', function() {
-    toggleFields('Denuncia');
-    toggleFields('Duvida');
-    toggleFields('Elogio');
-    toggleFields('Reclamacao');
-    toggleFields('Sugestao');
-  });
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('[id="anonimo"]').forEach(select => {
+        const modalId = select.id.replace('anonimo', '');
+        toggleFields(modalId);
+        select.addEventListener('change', () => toggleFields(modalId));
+    });
+});
+</script>
+<script>
+function cadastrar(){
+
+  var form = document.forms["frmModalOuvidoria"];
+    form.Operacao.value = 2;
+    form.enctype = "multipart/form-data";
+    form.action = "crud-ouvidoria.asp";
+    form.submit();
+}
+
 </script>
 
-<!-- Modal for Denúncia -->
-<div class="modal fade" id="denunciaModal" tabindex="-1" role="dialog" aria-labelledby="denunciaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="denunciaModalLabel">Denúncia</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="anonimoDenuncia">Anônimo</label>
-              <select class="form-select" id="anonimoDenuncia" onchange="toggleFields('Denuncia')">
-                <option value="default">Selecionar...</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="recebimentoDenuncia">Forma de Recebimento</label>
-              <select class="form-select" id="recebimentoDenuncia">
-                <option value="default">Selecionar...</option>
-                <option value="email">E-mail</option>
-                <option value="pessoalmente">Pessoalmente</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="emailDenuncia">E-mail</label>
-              <input type="email" class="form-control" id="emailDenuncia" placeholder="Digite seu e-mail">
-            </div>
+<%
+    rs.MoveFirst
+    Do While Not rs.EOF
+%>
+
+    <div class="modal fade" id="<%= rs("id_tipoManifestacao") & "ModalManifestacao" %>" tabindex="-1" role="dialog" aria-labelledby="<%= rs("descManifestacao") & "ModalLabel" %>" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="<%= rs("id_tipoManifestacao") & "ModalManifestacao" %>"><%= rs("descManifestacao") %></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="cpfDenuncia">CPF</label>
-              <input type="text" class="form-control" id="cpfDenuncia" placeholder="Digite seu CPF">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="nomeDenuncia">Nome</label>
-              <input type="text" class="form-control" id="nomeDenuncia" placeholder="Digite seu nome">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="telefoneDenuncia">Telefone</label>
-              <input type="text" class="form-control" id="telefoneDenuncia" placeholder="Digite seu telefone">
-            </div>
+          <div class="modal-body">
+            <form name="frmModalOuvidoria" method="post">
+            <input type="hidden" name="Operacao" id="Operacao">
+            <input type="hidden" name="id_tipoManifestacao" id="id_tipoManifestacao" value="<%=rs("id_tipoManifestacao")%>"> 
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="anonimo">Anônimo</label>
+                  <select class="form-select" id="anonimo<%= rs("descManifestacao") %>" name="anonimo" onchange="toggleFields('<%= rs("descManifestacao") %>')">
+                    <option value="default">Selecionar...</option>
+                    <option value="1">Sim</option>
+                    <option value="0">Não</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="recebimento<%= rs("descManifestacao") %>">Forma de Recebimento</label>
+                  <select class="form-select" id="recebimento<%= rs("descManifestacao") %>" name="recebimento">
+                    <option value="default">Selecionar...</option>
+                    <option value="email">E-mail</option>
+                    <option value="pessoalmente">Pessoalmente</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="email<%= rs("descManifestacao") %>">E-mail</label>
+                  <input type="email" class="form-control" id="email<%= rs("descManifestacao") %>" name="email" placeholder="Digite seu e-mail">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="cpf<%= rs("descManifestacao") %>">CPF</label>
+                  <input type="text" class="form-control" id="cpf<%= rs("descManifestacao") %>" name="cpf" placeholder="Digite seu CPF">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="nome<%= rs("descManifestacao") %>">Nome</label>
+                  <input type="text" class="form-control" id="nome<%= rs("descManifestacao") %>" name="nome" placeholder="Digite seu nome">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="telefone<%= rs("descManifestacao") %>">Telefone</label>
+                  <input type="text" class="form-control" id="telefone<%= rs("descManifestacao") %>" name="telefone" placeholder="Digite seu telefone">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="anexo<%= rs("descManifestacao") %>">Anexo</label>
+                <input type="file" class="form-control-file" id="anexo<%= rs("descManifestacao") %>" name="anexo">
+              </div>
+              <div class="form-group">
+                <label for="manifestacao<%= rs("descManifestacao") %>">Descreva sua manifestação</label>
+                <textarea class="form-control" id="manifestacao<%= rs("descManifestacao") %>" name="manifestacao" rows="4" placeholder="Digite sua manifestação"></textarea>
+              </div>
+              <button type="submit" class="form-btn btn btn-custom pull-right" onClick="return cadastrar()"><i class="fa fa-paper-plane"></i> Enviar</button>
+            </form>
           </div>
-          <div class="form-group">
-            <label for="anexoDenuncia">Anexo</label>
-            <input type="file" class="form-control-file" id="anexoDenuncia">
-          </div>
-          <div class="form-group">
-            <label for="manifestacaoDenuncia">Descreva sua manifestação</label>
-            <textarea class="form-control" id="manifestacaoDenuncia" rows="4" placeholder="Digite sua manifestação"></textarea>
-          </div>
-          <button type="submit" class="btn btn-custom">
-            <i class="fa fa-paper-plane"></i> Enviar
-          </button>
-        </form>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-
-<!-- Modal for Dúvida -->
-<div class="modal fade" id="duvidaModal" tabindex="-1" role="dialog" aria-labelledby="duvidaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="duvidaModalLabel">Dúvida</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="anonimoDuvida">Anônimo</label>
-              <select class="form-select" id="anonimoDuvida" onchange="toggleFields('Duvida')">
-                <option value="default">Selecionar...</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="recebimentoDuvida">Forma de Recebimento</label>
-              <select class="form-select" id="recebimentoDuvida">
-                <option value="default">Selecionar...</option>
-                <option value="email">E-mail</option>
-                <option value="pessoalmente">Pessoalmente</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="emailDuvida">E-mail</label>
-              <input type="email" class="form-control" id="emailDuvida" placeholder="Digite seu e-mail">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="cpfDuvida">CPF</label>
-              <input type="text" class="form-control" id="cpfDuvida" placeholder="Digite seu CPF">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="nomeDuvida">Nome</label>
-              <input type="text" class="form-control" id="nomeDuvida" placeholder="Digite seu nome">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="telefoneDuvida">Telefone</label>
-              <input type="text" class="form-control" id="telefoneDuvida" placeholder="Digite seu telefone">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="anexoDuvida">Anexo</label>
-            <input type="file" class="form-control-file" id="anexoDuvida">
-          </div>
-          <div class="form-group">
-            <label for="manifestacaoDuvida">Descreva sua manifestação</label>
-            <textarea class="form-control" id="manifestacaoDuvida" rows="4" placeholder="Digite sua manifestação"></textarea>
-          </div>
-          <button type="submit" class="btn btn-custom">
-            <i class="fa fa-paper-plane"></i> Enviar
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Elogio -->
-<div class="modal fade" id="elogioModal" tabindex="-1" role="dialog" aria-labelledby="elogioModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="elogioModalLabel">Elogio</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="anonimoElogio">Anônimo</label>
-              <select class="form-select" id="anonimoElogio" onchange="toggleFields('Elogio')">
-                <option value="default">Selecionar...</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="recebimentoElogio">Forma de Recebimento</label>
-              <select class="form-select" id="recebimentoElogio">
-                <option value="default">Selecionar...</option>
-                <option value="email">E-mail</option>
-                <option value="pessoalmente">Pessoalmente</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="emailElogio">E-mail</label>
-              <input type="email" class="form-control" id="emailElogio" placeholder="Digite seu e-mail">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="cpfElogio">CPF</label>
-              <input type="text" class="form-control" id="cpfElogio" placeholder="Digite seu CPF">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="nomeElogio">Nome</label>
-              <input type="text" class="form-control" id="nomeElogio" placeholder="Digite seu nome">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="telefoneElogio">Telefone</label>
-              <input type="text" class="form-control" id="telefoneElogio" placeholder="Digite seu telefone">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="anexoElogio">Anexo</label>
-            <input type="file" class="form-control-file" id="anexoElogio">
-          </div>
-          <div class="form-group">
-            <label for="manifestacaoElogio">Descreva sua manifestação</label>
-            <textarea class="form-control" id="manifestacaoElogio" rows="4" placeholder="Digite sua manifestação"></textarea>
-          </div>
-          <button type="submit" class="btn btn-custom">
-            <i class="fa fa-paper-plane"></i> Enviar
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Reclamação -->
-<div class="modal fade" id="reclamacaoModal" tabindex="-1" role="dialog" aria-labelledby="reclamacaoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="reclamacaoModalLabel">Reclamação</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="anonimoReclamacao">Anônimo</label>
-              <select class="form-select" id="anonimoReclamacao" onchange="toggleFields('Reclamacao')">
-                <option value="default">Selecionar...</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="recebimentoReclamacao">Forma de Recebimento</label>
-              <select class="form-select" id="recebimentoReclamacao">
-                <option value="default">Selecionar...</option>
-                <option value="email">E-mail</option>
-                <option value="pessoalmente">Pessoalmente</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="emailReclamacao">E-mail</label>
-              <input type="email" class="form-control" id="emailReclamacao" placeholder="Digite seu e-mail">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="cpfReclamacao">CPF</label>
-              <input type="text" class="form-control" id="cpfReclamacao" placeholder="Digite seu CPF">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="nomeReclamacao">Nome</label>
-              <input type="text" class="form-control" id="nomeReclamacao" placeholder="Digite seu nome">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="telefoneReclamacao">Telefone</label>
-              <input type="text" class="form-control" id="telefoneReclamacao" placeholder="Digite seu telefone">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="anexoReclamacao">Anexo</label>
-            <input type="file" class="form-control-file" id="anexoReclamacao">
-          </div>
-          <div class="form-group">
-            <label for="manifestacaoReclamacao">Descreva sua manifestação</label>
-            <textarea class="form-control" id="manifestacaoReclamacao" rows="4" placeholder="Digite sua manifestação"></textarea>
-          </div>
-          <button type="submit" class="btn btn-custom">
-            <i class="fa fa-paper-plane"></i> Enviar
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal for Sugestão -->
-<div class="modal fade" id="sugestaoModal" tabindex="-1" role="dialog" aria-labelledby="sugestaoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="sugestaoModalLabel">Sugestão</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="anonimoSugestao">Anônimo</label>
-              <select class="form-select" id="anonimoSugestao" onchange="toggleFields('Sugestao')">
-                <option value="default">Selecionar...</option>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="recebimentoSugestao">Forma de Recebimento</label>
-              <select class="form-select" id="recebimentoSugestao">
-                <option value="default">Selecionar...</option>
-                <option value="email">E-mail</option>
-                <option value="pessoalmente">Pessoalmente</option>
-              </select>
-            </div>
-            <div class="form-group col-md-4">
-              <label for="emailSugestao">E-mail</label>
-              <input type="email" class="form-control" id="emailSugestao" placeholder="Digite seu e-mail">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group col-md-4">
-              <label for="cpfSugestao">CPF</label>
-              <input type="text" class="form-control" id="cpfSugestao" placeholder="Digite seu CPF">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="nomeSugestao">Nome</label>
-              <input type="text" class="form-control" id="nomeSugestao" placeholder="Digite seu nome">
-            </div>
-            <div class="form-group col-md-4">
-              <label for="telefoneSugestao">Telefone</label>
-              <input type="text" class="form-control" id="telefoneSugestao" placeholder="Digite seu telefone">
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="anexoSugestao">Anexo</label>
-            <input type="file" class="form-control-file" id="anexoSugestao">
-          </div>
-          <div class="form-group">
-            <label for="manifestacaoSugestao">Descreva sua manifestação</label>
-            <textarea class="form-control" id="manifestacaoSugestao" rows="4" placeholder="Digite sua manifestação"></textarea>
-          </div>
-          <button type="submit" class="btn btn-custom">
-            <i class="fa fa-paper-plane"></i> Enviar
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
+<%
+    rs.MoveNext
+    Loop
+%>
+<%
+call fechaConexao
+%>
         <!-- Informações da Ouvidoria e Consultar Manifestação -->
         <div class="ouvidoria-details">
           <!-- Informações da Ouvidoria -->
@@ -431,18 +181,94 @@
             </div>
           </div>
 
-          <!-- Consultar Manifestação -->
-          <div class="consultar-manifestacao">
-            <h2>Consultar Manifestação</h2>
-            <p>Insira o número do protocolo e consulte o andamento da sua manifestação</p>
-            <form>
-              <label for="protocolo">Número de Protocolo</label>
-              <input type="text" id="protocolo" name="protocolo" placeholder="Digite o número do protocolo">
-              <button type="submit">Consultar</button>
-            </form>
-          </div>
+<%
+call abreConexao
+cons_protocolo = Request.Form("cons_protocolo")
+If cons_protocolo <> "" Then
+    ' Consulta SQL para buscar o protocolo no banco de dados
+    sql = "SELECT * FROM cam_manifestacao inner join cam_tipoManifestacao on cam_tipoManifestacao.id_tipoManifestacao = cam_manifestacao.id_tipoManifestacao WHERE protocolo = '" & Replace(protocolo, "'", "''") & "'"
+    Set rs_resposta = conn.Execute(sql)
+
+    If Not rs_resposta.EOF Then
+        cons_protocolo = rs_resposta("protocolo")
+        anonimo = rs_resposta("anonimo")
+        resposta = rs_resposta("resposta")
+        respondida = rs_resposta("respondida")
+        descManifestacao = rs_resposta("descManifestacao")
+        dataResposta = rs_resposta("dataResposta")
+        dataEnvio = rs_resposta("dataEnvio")
+    Else
+        cons_protocolo = "Não encontrado"
+    End If
+End If
+%>
+
+<!-- Consultar Manifestação -->
+    <div class="consultar-manifestacao">
+        <h2>Consultar Manifestação</h2>
+        <p>Insira o número do protocolo e consulte o andamento da sua manifestação</p>
+        <form method="post">
+            <label for="cons_protocolo">Número de Protocolo</label>
+            <input type="text" id="cons_protocolo" name="cons_protocolo" class="form-control" placeholder="Digite o número do protocolo">
+            <button type="submit" class="btn btn-primary mt-3">Consultar</button>
+        </form>
+    </div>
         </div>
 
+<% If cons_protocolo <> "" Then %>
+    <!-- Modal Personalizada para Exibir as Informações -->
+    <div class="modal-nova">
+        <div class="modal-overlay-nova" onclick="fecharModal()"></div>
+        <div class="modal-conteudo-novo">
+            <div class="modal-cabecalho">
+                <h5 class="modal-titulo-novo">Detalhes da Manifestação</h5>
+                <!-- Botão de Fechar -->
+                <button type="button" class="fechar-btn" onclick="fecharModal()">×</button>
+            </div>
+            <div class="modal-corpo">
+                <div class="modal-item-novo">
+                    <p><strong>Número do Protocolo:</strong> <%= cons_protocolo %></p>
+                </div>
+                <div class="modal-item-novo">
+                    <p><strong>Data de Envio:</strong> <%= dataEnvio %></p>
+                </div>
+                <div class="modal-item-novo">
+                    <p><strong>Status (Respondida):</strong> <%= respondida %></p>
+                </div>
+
+                <% If anonimo = 1 Then %>
+                    <!-- Caso seja anônimo, exibe apenas o protocolo, data de envio e o status de respondida -->
+                    <div class="modal-item-novo">
+                        <p><strong>Resposta:</strong><% If respondida = 1 Then Response.Write(resposta) Else Response.Write("Não respondida") End If %> </p>
+                    </div>
+                <% Else %>
+                    <!-- Caso não seja anônimo, exibe todos os dados preenchidos -->
+                    <div class="modal-item-novo">
+                        <p><strong>Resposta:</strong> <%= resposta %></p>
+                    </div>
+                    <div class="modal-item-novo">
+                        <p><strong>Descrição da Manifestação:</strong> <%= descManifestacao %></p>
+                    </div>
+                    <div class="modal-item-novo">
+                        <p><strong>Data da Resposta:</strong> <%= dataResposta %></p>
+                    </div>
+                <% End If %>
+            </div>
+            <div class="modal-rodape">
+                <!-- Botão de Fechar -->
+                <button type="button" class="btn-fechar-modal" onclick="fecharModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+<% End If %>
+
+<!-- Scripts para Fechar Modal -->
+<script>
+    function fecharModal() {
+        var modal = document.querySelector('.modal-nova');
+        modal.style.visibility = 'hidden';
+    }
+</script>
         <!-- Prazos e Orientações -->
         <div class="ouvidoria-details">
           <div class="info-section">
@@ -481,6 +307,55 @@
   </div><!-- End Ouvidoria Wrapper -->
 
 </main>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
+<input type="hidden" id="protocolo" name="protocolo" value="<%= Request("protocolo") %>">
+
+<!-- SweetAlert e script para limpar URL -->
+ 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function () {
+    var resp = document.getElementById('hiddenResp').value;
+    var protocolo = document.getElementById('protocolo').value;
+
+    if (resp == "1") {
+      Swal.fire({
+        icon: "success",
+        title: "Mensagem enviada com sucesso!",
+        html: `
+          <p>Seu protocolo de envio é:</p>
+          <h3 style="color: #218838; font-weight: bold;">${protocolo}</h3>
+          <p>Guarde este número para consultas futuras.</p>
+        `,
+        footer: '<a href="#">Clique aqui para saber mais sobre consultas</a>'
+      }).then(() => {
+        // Recarrega a página sem cache
+        window.location.reload(true);
+      });
+    }
+
+    // Limpar a URL removendo os parâmetros 'Resp' e 'protocolo'
+    const url = new URL(window.location);
+
+    // Remove 'Resp' se existir
+    if (url.searchParams.has('Resp')) {
+      url.searchParams.delete('Resp');
+    }
+
+    // Remove 'protocolo' se existir
+    if (url.searchParams.has('protocolo')) {
+      url.searchParams.delete('protocolo');
+    }
+
+    // Atualiza a URL sem os parâmetros removidos
+    if (url.searchParams.toString() === '') {
+      window.history.replaceState(null, null, url.pathname);
+    } else {
+      window.history.replaceState(null, null, url); 
+    }
+  };
+</script>
 <script>
   const ctx = document.getElementById('manifestacoesChart').getContext('2d');
   const manifestacoesChart = new Chart(ctx, {

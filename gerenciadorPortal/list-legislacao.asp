@@ -11,7 +11,7 @@ If Request.Form("acao") = "excluir" And Not IsEmpty(Request.Form("id_legislacao"
     response.Redirect "list-legislacao.asp?Resp=3"
 End If
 
-sql = "SELECT cam_legislacao.id_legislacao, cam_legislacao.id_categoriaLeg, cam_legislacao.descricao, cam_legislacao.id_AutorVer, cam_legislacao.status_Leg, cam_legislacao.dataCad, cam_legislacao.numeroDoc,  cam_categoriaLeg.descricao AS Categoria FROM cam_legislacao INNER JOIN cam_categoriaLeg ON cam_categoriaLeg.id_categoriaLeg = cam_legislacao.id_categoriaLeg"
+sql = "SELECT cam_legislacao.id_legislacao, cam_legislacao.id_categoriaLeg, cam_legislacao.dataPublicacao, cam_legislacao.descricao, cam_legislacao.id_AutorVer, cam_legislacao.status_Leg, cam_legislacao.dataCad, cam_legislacao.numeroDoc,  cam_categoriaLeg.descricao AS Categoria FROM cam_legislacao INNER JOIN cam_categoriaLeg ON cam_categoriaLeg.id_categoriaLeg = cam_legislacao.id_categoriaLeg"
 set rs_leg = conn.execute(sql)
 %>
 
@@ -84,7 +84,7 @@ function confirmarExclusao(id_legislacao) {
                     <th>Categoria</th>
                     <th>Numero Documento</th>
                     <th>Descrição</th>
-                    <th>Data</th>
+                    <th>Data Publicação</th>
                     <th>Status</th>
                     <th>Ações</th>
                   </tr>
@@ -95,7 +95,7 @@ function confirmarExclusao(id_legislacao) {
                     <td><%=rs_leg("Categoria")%></td>
                     <td><%=rs_leg("numeroDoc")%></td>
                     <td><%=rs_leg("descricao")%></td>
-                    <td><%=rs_leg("dataCad")%></td>
+                    <td><%=rs_leg("dataPublicacao")%></td>
                     <td><%if rs_leg("status_Leg") = true then%><span class="label center bg-green">Ativo</span><%else%><span class="label center bg-red">Inativo</span><%end if%></td>
                     <td>
                     <a href="#" onClick="admin('<%=rs_leg("id_legislacao")%>');" class="btn btn-primary btn-xs"><i class="fa fa-pencil"></i></a>

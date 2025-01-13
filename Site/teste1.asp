@@ -1,132 +1,60 @@
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/2.1.5/css/dataTables.dataTables.css" rel="stylesheet">
+<!--#include file ="lib/Conexao.asp"-->
+<%
+call abreConexao
+protocolo = Request.Form("protocolo")
+If protocolo <> "" Then
+    ' Consulta SQL para buscar o protocolo no banco de dados
+    sql = "SELECT protocolo FROM cam_manifestacao WHERE protocolo = '" & Replace(protocolo, "'", "''") & "'"
+    Set rs_resposta = conn.Execute(sql)
 
+    If Not rs_resposta.EOF Then
+        protocolo = rs_resposta("protocolo")
+    Else
+        protocolo = "Não encontrado"
+    End If
+End If
+call fechaConexao
+%>
 
-<!--#include file="base.asp"-->
-
-<main class="main">
-
-  <!-- Page Title -->
-  <div class="page-title" data-aos="fade">
-    <div class="container">
-      <nav class="breadcrumbs">
-        <ol>
-          <li><a href="index.asp">Inicio</a></li>
-          <li class="current">Ofícios</li>
-        </ol>
-      </nav>
-      <h1>Ofícios</h1>
-    <!-- Ícone de Voltar -->
-    <a href="transparencia.asp" class="icon-voltar">
-      <i class="fa fa-reply-all"></i> Voltar
-    </a>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultar Manifestação</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <h2>Consultar Manifestação</h2>
+        <p>Insira o número do protocolo e consulte o andamento da sua manifestação</p>
+        <form method="post">
+            <label for="protocolo">Número de Protocolo</label>
+            <input type="text" id="protocolo" name="protocolo" class="form-control" placeholder="Digite o número do protocolo">
+            <button type="submit" class="btn btn-primary mt-3">Consultar</button>
+        </form>
     </div>
-  </div><!-- End Page Title -->
 
-  <!-- Search and Table Section -->
-  <section id="search-table" class="search-table section">
-    <div class="container">
-
-      <!-- Search Section -->
-      <div class="search-wrapper">
-        <div class="search-field">
-          <label for="search-input">Buscar por Descrição:</label>
-          <input type="text" id="search-input" class="search-input" placeholder="Digite para buscar...">
+    <% If protocolo <> "" Then %>
+        <!-- Modal para exibir as informações -->
+        <div class="modal fade show" tabindex="-1" role="dialog" style="display: block;">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detalhes da Manifestação</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Número do Protocolo:</strong> <%= protocolo %></p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-secondary">Fechar</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="search-field">
-          <label for="search-date">Data:</label>
-          <input type="date" id="search-date" class="search-date">
-        </div>
-        <div class="search-field">
-          <label for="search-category">Autor:</label>
-          <select id="search-category" class="search-category">
-            <option value="">Selecione...</option>
-            <option value="categoria1">Categoria 1</option>
-            <option value="categoria2">Categoria 2</option>
-          </select>
-        </div>
-        <button class="search-button"><i class="fas fa-search"></i> Buscar</button>
-      </div><!-- /Search Section -->
+    <% End If %>
 
-      <!-- Linha de Separação -->
-      <hr class="separator">
-
-  <table id="minhaTabela" class="table table-striped">
-    <thead>
-      <tr>
-        <th>Categoria</th>
-        <th>Número</th>
-        <th>Descrição</th>
-        <th>Data</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Projeto de Lei</td>
-        <td>06/2024</td>
-        <td><P class="diario-content">Autoriza o Executivo Municipal a instalar semáforos de trânsito em cruzamentos e placas de identificação de órgãos públicos, no âmbito do município de Ananás e dá outras providências.</P></td>
-        <td>06/12/1997</td>
-        <td>
-          <a href="detalhe-doc.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#projeto-lei">
-            <i class="fas fa-eye fa-1x "></i>
-          </a>
-          <a href="#" class="btn-visualizar" title="Baixar Documento">
-            <i class="fas fa-download fa-1x"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>Projeto de Lei</td>
-        <td>06/2024</td>
-        <td><P class="diario-content">Autoriza o Executivo Municipal a instalar semáforos de trânsito em cruzamentos e placas de identificação de órgãos públicos, no âmbito do município de Ananás e dá outras providências.</P></td>
-        <td>06/12/1997</td>
-        <td>
-          <a href="detalhe-doc.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#projeto-lei">
-            <i class="fas fa-eye fa-1x "></i>
-          </a>
-          <a href="#" class="btn-visualizar" title="Baixar Documento">
-            <i class="fas fa-download fa-1x"></i>
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td>Projeto de Lei</td>
-        <td>06/2024</td>
-        <td><P class="diario-content">Autoriza o Executivo Municipal a instalar semáforos de trânsito em cruzamentos e placas de identificação de órgãos públicos, no âmbito do município de Ananás e dá outras providências.</P></td>
-        <td>06/12/1997</td>
-        <td>
-          <a href="detalhe-doc.asp" class="btn-visualizar" title="Visualizar Documento" data-toggle="modal" data-target="#projeto-lei">
-            <i class="fas fa-eye fa-1x "></i>
-          </a>
-          <a href="#" class="btn-visualizar" title="Baixar Documento">
-            <i class="fas fa-download fa-1x"></i>
-          </a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  
-  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-  <script src="https://cdn.datatables.net/2.1.5/js/dataTables.js"></script>
-
-
-  <script>
-  $(document).ready(function(){
-      $('#minhaTabela').DataTable({
-        	"language": {
-                "lengthMenu": "Mostrando _MENU_ registros por página",
-                "zeroRecords": "Nada encontrado",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "infoEmpty": "Nenhum registro disponível",
-                "infoFiltered": "(filtrado de _MAX_ registros no total)"
-            }
-        });
-  });
-  </script>
-
-    </div>
-  </section><!-- /Search and Table Section -->
-
-
-<!--#include file="footer.asp"-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

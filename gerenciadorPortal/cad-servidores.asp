@@ -1,5 +1,4 @@
  <!--#include file="base.asp"-->
- <% Response.CodePage = 65001 %>
 
   <%
   call abreConexao

@@ -19,6 +19,7 @@ If IsObject(Form) Then
             Select Case Key
                 Case "Operacao": Operacao = Form.Texts.Item(Key)
                 Case "licitacao": licitacao = Form.Texts.Item(Key)
+                Case "tipoContratacao": tipoContratacao = Form.Texts.Item(Key)
                 Case "numContrato": numContrato = Form.Texts.Item(Key)
                 Case "inicioVigencia": inicioVigencia = Form.Texts.Item(Key) 
                 Case "fimVigencia": fimVigencia = Form.Texts.Item(Key) 
@@ -48,8 +49,6 @@ If IsObject(Form) Then
 
     End If
 
-        'response.write tituloOriginalContrato
-        'response.end
 
     Call abreConexao
     Dim rs_exist
@@ -63,8 +62,8 @@ If IsObject(Form) Then
     ' Insere ou atualiza o registro no banco de dados
     If Operacao = 2 Then
         ' Inserção
-        sql = "INSERT INTO cam_contratos (id_licitacao, numContrato, inicioVigencia, fimVigencia, valorEstimado, id_forncedor, id_fiscal, descricao, anexoContrato, statusContrato, id_UsuCad, dataCad) " & _ 
-        "VALUES ('" & licitacao & "', '" & numContrato & "', '" & inicioVigencia & "', '" & fimVigencia & "', '" & valorEstimado & "', '" & fornecedor & "', '" & fiscal & "', '" & DescContrato & "', '" & tituloOriginalContrato & "', 1, " & Session("idUsu") & ", GETDATE())"
+        sql = "INSERT INTO cam_contratos (id_licitacao, id_tipoContratacao, numContrato, inicioVigencia, fimVigencia, valorEstimado, id_fornecedor, id_fiscal, descricao, anexoContrato, statusContrato, id_UsuCad, dataCad) " & _ 
+        "VALUES ('" & licitacao & "', '" & tipoContratacao & "', '" & numContrato & "', '" & inicioVigencia & "', '" & fimVigencia & "', '" & valorEstimado & "', '" & fornecedor & "', '" & fiscal & "', '" & DescContrato & "', '" & tituloOriginalContrato & "', 1, " & Session("idUsu") & ", GETDATE())"
         'response.write sql
         'response.end        
         conn.Execute(sql)
@@ -73,21 +72,20 @@ If IsObject(Form) Then
         response.Redirect "list-contratos.asp?Resp=1"
     ElseIf Operacao = 3 Then
         ' Atualização
-        sql = "UPDATE cam_contratos SET id_Licitacao = '" & id_Licitacao & "', titulo = '" & titulo & "', " & _
-              "statusAnexos = '" & statusAnexos & "', dataAlt = GETDATE(), id_UsuAlt = " & Session("idUsu")
-
+        sql = "UPDATE cam_contratos SET id_licitacao = '" & licitacao & "', id_tipoContratacao = '" & tipoContratacao & "', numContrato = '" & numContrato & "', inicioVigencia = '" & inicioVigencia & "', fimVigencia = '" & fimVigencia & "', valorEstimado = '" & valorEstimado & "', id_fornecedor = '" & fornecedor & "', id_fiscal = '" & fiscal & "', descricao = '" & DescContrato & "', statusContrato = 1, dataAlt = GETDATE(), id_UsuAlt = " & Session("idUsu")
+        
         ' Apenas atualiza o arquivo se houver um novo upload
-        If arquivoliciAnexos = 1 Then
-            sql = sql & ", LiciAnexos = '" & tituloOriginalArquivo & "'"
+        If arquivoContrato = 1 Then
+            sql = sql & ", anexoContrato = '" & tituloOriginalContrato & "'"
         End If
         
-        sql = sql & " WHERE id_LiciAnexo = " & id_LiciAnexo
+        sql = sql & " WHERE id_contrato = " & id_contrato
         'response.write sql
         'response.end
         conn.Execute(sql)
         
         ' Redireciona com mensagem de sucesso
-        response.Redirect("cad-liciAnexo.asp?Resp=2&id_LiciAnexo=" & id_LiciAnexo &"&id="&id_licitacao)
+        response.Redirect("cad-contratos.asp?Resp=2&id_contrato=" & id_contrato)
     End If
 
     Call fechaConexao

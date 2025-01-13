@@ -11,7 +11,11 @@ If Request.Form("acao") = "excluir" And Not IsEmpty(Request.Form("id_licitacao")
 End If
 
 
-sql = "SELECT cam_contratos.id_contrato, cam_licitacao.NumProceso, cam_contratos.numContrato, cam_contratos.descricao, cam_contratos.id_fornecedor FROM cam_contratos INNER JOIN cam_licitacao ON cam_contratos.id_licitacao = cam_licitacao.id_licitacao"
+sql = "SELECT cam_contratos.id_contrato, cam_licitacao.NumProceso, cam_contratos.numContrato, cam_contratos.descricao, cam_contratos.id_fornecedor " & _
+      "FROM cam_contratos " & _
+      "LEFT JOIN cam_licitacao ON cam_contratos.id_licitacao = cam_licitacao.id_licitacao"
+'response.write sql
+'response.end
 set rs_contrato = conn.execute(sql)
 
 %>
@@ -82,6 +86,7 @@ function confirmarExclusao(id_contrato) {
                 </tr>
                 </thead>
                 <tbody>
+              <%do while not rs_contrato.eof %>
                 <tr>
                   <td><%=rs_contrato("NumProceso")%></td>
                   <td><%=rs_contrato("numContrato")%></td>
@@ -92,7 +97,10 @@ function confirmarExclusao(id_contrato) {
                   <button type="button" onClick="confirmarExclusao('<%=rs_contrato("id_contrato")%>');" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                   </td>
                 </tr>
+              <% rs_contrato.movenext 
+                loop %>  
                 </tbody>
+              <%call fechaConexao%>
               </table>
             </div>
             <!-- /.box-body -->

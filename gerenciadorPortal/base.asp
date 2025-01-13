@@ -164,7 +164,7 @@ call fechaConexao
             </a>
             <ul class="treeview-menu">
               <li><a href="cad-historia.asp"><i class="fa fa-book"></i> História</a></li> <!-- Ícone representando um livro -->
-              <li><a href="list-vereadores.asp"><i class="fa fa-users"></i> Vereadores</a></li> <!-- Ícone representando um grupo de pessoas -->
+              <li><a href="sel-mandatovereador.asp"><i class="fa fa-users"></i> Vereadores</a></li> <!-- Ícone representando um grupo de pessoas -->
               <li><a href="regimento.asp"><i class="fa fa-gavel"></i> Regimento Interno</a></li> <!-- Ícone representando um martelo -->
             </ul>
           </li>
@@ -204,7 +204,7 @@ call fechaConexao
             </a>
             <ul class="treeview-menu">
               <li><a href="list-licitacao.asp"><i class="fa fa-legal"></i> <span>Licitação</span></a></li>
-              <li><a href="cad-licitantes.asp"><i class="fa fa-users"></i> <span>Licitantes</span></a></li>
+              <li><a href="list-licitantes.asp"><i class="fa fa-users"></i> <span>Licitantes</span></a></li>
               <li><a href="cad-fiscais.asp"><i class="fa fa-shield"></i> <span>Fiscais/Responsáveis</span></a></li>
               <li><a href="list-contratos.asp"><i class="fa fa-file-text-o"></i> <span>Contratos</span></a></li>
             </ul>
@@ -283,6 +283,20 @@ call fechaConexao
                 </ul>
               </li>
               <li><a href="list-tabelaDiarias.asp"><i class="fa fa-credit-card"></i> Valores de Diárias</a></li> <!-- Ícone representando um cartão de crédito -->
+            </ul>
+          </li>
+          <li class="treeview">
+            <a href="#">
+              <i class="fa fa-envelope"></i> <!-- Ícone representando contato ou mensagens -->
+              <span>Atendimento ao Cidadão</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            <ul class="treeview-menu">
+              <li><a href="list-contatos.asp"><i class="fa fa-address-book"></i> Contatos</a></li> <!-- Ícone representando uma agenda de contatos -->
+              <li><a href="list-ouvidoria.asp"><i class="fa fa-comment"></i> Ouvidoria</a></li> <!-- Ícone representando mensagens ou comentários -->
+              <li><a href="list-esic.asp"><i class="fa fa-file-text"></i> e-SIC</a></li> <!-- Ícone representando um documento ou formulário -->
             </ul>
           </li>
         <%if nivelAcesso = 1 or nivelAcesso = 2 then%>

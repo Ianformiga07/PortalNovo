@@ -1,3 +1,4 @@
+<!--#include file ="lib/Conexao.asp"-->
 <!DOCTYPE html>
 <html lang="PT-br">
 

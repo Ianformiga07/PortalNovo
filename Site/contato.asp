@@ -1,5 +1,28 @@
   <!--#include file="base.asp"-->
-
+  <%
+  call abreConexao
+    If Request("Operacao") = 2 Then
+        ' Inserção
+        sql = "INSERT INTO cam_contatoSite (nomeCompleto, email, assunto, mensagem, data_envio, visualizado) " & _ 
+      "VALUES ('" & Request.Form("nome") & "', '" & Request.Form("email") & "', '" & Request.Form("assunto") & "', '" & Request.Form("mensagem") & "', GETDATE(), 0)"
+        'response.write sql
+        'response.end
+        conn.Execute(sql)
+   
+        ' Redireciona passando o ID na URL
+        response.Redirect("contato.asp?Resp=1")
+    end if
+  call fechaConexao
+  %>
+<script>
+function cadastrar() {
+    // Aqui, você pode adicionar sua lógica de envio via backend (ASP)
+    var form = document.forms["frmContato"];
+    form.Operacao.value = 2;
+    form.action = "contato.asp";
+    form.submit();
+}
+</script>
   <main class="main">
 
     <!-- Page Title -->
@@ -56,11 +79,12 @@
           </div><!-- End Google Maps -->
 
           <div class="col-lg-6">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+            <form method="post" class="php-email-form" name="frmContato" data-aos="fade-up" data-aos-delay="400">
+              <input type="hidden" name="Operacao" id="Operacao"> 
               <div class="row gy-4">
 
                 <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Seu Nome" required="">
+                  <input type="text" name="nome" class="form-control" placeholder="Seu Nome" required="">
                 </div>
 
                 <div class="col-md-6 ">
@@ -68,19 +92,17 @@
                 </div>
 
                 <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Assunto" required="">
+                  <input type="text" class="form-control" name="assunto" placeholder="Assunto" required="">
                 </div>
 
                 <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Messagem" required=""></textarea>
+                  <textarea class="form-control" name="mensagem" rows="6" placeholder="Mensagem" required=""></textarea>
                 </div>
 
                 <div class="col-md-12 text-center">
                   <div class="loading">Loading</div>
-                  <div class="error-message"></div>
                   <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Enviar</button>
+                  <button type="submit" onClick="return cadastrar()">Enviar</button>
                 </div>
 
               </div>
@@ -94,5 +116,38 @@
     </section><!-- /Contact Section -->
 
   </main>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
 
+<!-- SweetAlert e script para limpar URL -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function() {
+    var resp = document.getElementById('hiddenResp').value;
+
+    if (resp == "1") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Mensagem enviada com sucesso!',
+        showConfirmButton: false,
+        timer: 3000,
+        position: 'top-end',
+        toast: false,
+        width: '30rem'
+      });
+    }
+
+    // Limpar a URL removendo o parâmetro 'Resp'
+    if (resp) {
+      const url = new URL(window.location);
+      url.searchParams.delete('Resp');
+
+      if (url.searchParams.toString() === '') {
+        window.history.replaceState(null, null, url.pathname);
+      } else {
+        window.history.replaceState(null, null, url);
+      }
+    }
+  };
+</script>
     <!--#include file="footer.asp"-->
