@@ -27,7 +27,7 @@
             <h3 class="box-title">Lista de Mensagens</h3>
           </div>
           <div class="box-body table-responsive">
-            <table class="table table-bordered table-striped">
+            <table id="example2" class="table table-bordered table-hover">
               <thead>
                 <tr>
                   <th>#</th>

@@ -45,8 +45,8 @@
               <i class="fas fa-map-marker-alt"></i> Solicitação Presencial
             </a>
             <!-- Botão para Solicitação por Email -->
-            <a href="mailto:esic@dominio.com" class="esic-button">
-              <i class="fas fa-envelope"></i> Solicitação por Email
+            <a href="frm-esicCorrespondecia.asp" class="esic-button">
+              <i class="fas fa-envelope"></i> Solicitação por Correspondencia
             </a>
           </div>
         </div>
@@ -79,5 +79,53 @@
   </section><!-- /e-SIC Information Section -->
 
 </main>
+<!-- Campo hidden para o valor de Resp -->
+<input type="hidden" id="hiddenResp" value="<%= Request("Resp") %>">
+<input type="hidden" id="protocolo" name="protocolo" value="<%= Request("protocolo") %>">
 
+<!-- SweetAlert e script para limpar URL -->
+ 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  window.onload = function () {
+    var resp = document.getElementById('hiddenResp').value;
+    var protocolo = document.getElementById('protocolo').value;
+
+    if (resp == "1") {
+      Swal.fire({
+        icon: "success",
+        title: "Mensagem enviada com sucesso!",
+        html: `
+          <p>Seu protocolo de envio é:</p>
+          <h3 style="color: #218838; font-weight: bold;">${protocolo}</h3>
+          <p>Guarde este número para consultas futuras.</p>
+        `,
+        footer: '<a href="#">Clique aqui para saber mais sobre consultas</a>'
+      }).then(() => {
+        // Recarrega a página sem cache
+        window.location.reload(true);
+      });
+    }
+
+    // Limpar a URL removendo os parâmetros 'Resp' e 'protocolo'
+    const url = new URL(window.location);
+
+    // Remove 'Resp' se existir
+    if (url.searchParams.has('Resp')) {
+      url.searchParams.delete('Resp');
+    }
+
+    // Remove 'protocolo' se existir
+    if (url.searchParams.has('protocolo')) {
+      url.searchParams.delete('protocolo');
+    }
+
+    // Atualiza a URL sem os parâmetros removidos
+    if (url.searchParams.toString() === '') {
+      window.history.replaceState(null, null, url.pathname);
+    } else {
+      window.history.replaceState(null, null, url); 
+    }
+  };
+</script>
 <!--#include file="footer.asp"-->
