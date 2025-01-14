@@ -8,12 +8,12 @@
 
   If Request.Form("acao") = "responder" Then
     mensagem = Request.Form("mensagem")
-    sql = "UPDATE cam_manifestacao SET resposta = '" & mensagem & "', respondida = 1, dataResposta = GETDATE() WHERE id_manifestcao = " & id_manifestcao
+    sql = "UPDATE cam_esic SET resposta = '" & mensagem & "', respondida = 1, dataResposta = GETDATE(), usu_Resp = " & Session("idUsu") & " WHERE id_esic = " & id_manifestcao
     conn.execute(sql)
-    Response.Redirect "list-ouvidoria.asp?Resp=2"
+    Response.Redirect "list-esic.asp?Resp=2"
   End If
 
-  sql = "SELECT cam_manifestacao.id_tipoManifestacao, descManifestacao, anonimo, formaRecebimento, email, cpf, nome, telefone, anexo, textoManifestacao, protocolo, dataCad, resposta FROM cam_manifestacao inner join cam_tipoManifestacao on cam_tipoManifestacao.id_tipoManifestacao = cam_manifestacao.id_tipoManifestacao WHERE id_manifestcao = " & id_manifestcao & " ORDER BY dataCad DESC"
+  sql = "SELECT * FROM cam_esic inner join cam_tipoEsic on cam_tipoEsic.id_tipoEsic = cam_esic.id_tipoEsic WHERE id_esic = " & id_manifestcao & " ORDER BY dataCad DESC"
   set rs_manifestacao = conn.execute(sql)
 %>
 
@@ -44,12 +44,12 @@
                 <div class="col-md-6">
                   <div class="form-group">
                     <label style="font-size: 1.1em; color: #3c8dbc;">Tipo de Manifestação:</label>
-                    <p class="form-control-static bg-light p-2" style="font-size: 1.1em;"><%= rs_manifestacao("descManifestacao") %></p>
+                    <p class="form-control-static bg-light p-2" style="font-size: 1.1em;"><%= rs_manifestacao("descTipo") %></p>
                   </div>
                   <div class="form-group">
                     <label style="font-size: 1.1em; color: #3c8dbc;">Manifestação Anônima:</label>
                     <p class="form-control-static bg-light p-2" style="font-size: 1.1em;"><%
-                      If rs_manifestacao("anonimo") = 1 Then
+                      If rs_manifestacao("anonimo") = true Then
                           Response.Write "Sim"
                       Else
                           Response.Write "Nao"
@@ -83,10 +83,10 @@
                   <div class="form-group">
                     <label style="font-size: 1.1em; color: #3c8dbc;">Anexo:</label>
                     <p class="form-control-static bg-light p-2" style="font-size: 1.1em;"><%
-                      If IsNull(rs_manifestacao("anexo")) Then
+                      If IsNull(rs_manifestacao("anexoEsic")) Then
                           Response.Write "Nenhum anexo"
                       Else
-                          Response.Write "<a href='../Site/upOuvidoria/" & rs_manifestacao("anexo") & "' download='" & rs_manifestacao("anexo") & "'>" & rs_manifestacao("anexo") & "</a>"
+                          Response.Write "<a href='../Site/upOuvidoria/" & rs_manifestacao("anexoEsic") & "' download='" & rs_manifestacao("anexoEsic") & "'>" & rs_manifestacao("anexoEsic") & "</a>"
                       End If
                     %></p>
                   </div>
@@ -96,7 +96,7 @@
                   </div>
                   <div class="form-group">
                     <label style="font-size: 1.1em; color: #3c8dbc;">Texto da Manifestação:</label>
-                    <p class="form-control-static bg-light p-2" style="font-size: 1.1em; word-wrap: break-word; word-break: break-word; max-width: 100%;"><%= rs_manifestacao("textoManifestacao") %></p>
+                    <p class="form-control-static bg-light p-2" style="font-size: 1.1em; word-wrap: break-word; word-break: break-word; max-width: 100%;"><%= rs_manifestacao("descricaoEsic") %></p>
                   </div>
                   <div class="form-group">
                     <label style="font-size: 1.1em; color: #3c8dbc;">Data da Manifestação:</label>

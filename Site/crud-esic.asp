@@ -55,7 +55,7 @@ If IsObject(Form) Then
 
     If Operacao = 2 Then
         sql = "INSERT INTO cam_esic ( id_tipoEsic, anonimo, nome, cpf, datanasc, sexo, id_escolaridade, telefone, formaRecebimento, email, descricaoEsic, anexoEsic, protocolo, dataCad) " & _ 
-              "VALUES ('" & tipoManifestacao & "', 0, '" & nome & "', '" & cpf & "', '" & dataNasc & "', '" & sexo & "', '" & Escolaridade & "', '" & telefone & "','" & formaRecebimento & "', '" & email & "', '" & descricao & "', '" & upEsic & "', '" & protocolo & "', GETDATE())"
+              "VALUES ('" & tipoManifestacao & "', 0, '" & nome & "', '" & cpf & "', '" & dataNasc & "', '" & sexo & "', '" & Escolaridade & "', '" & telefone & "','" & formaRecebimento & "', '" & email & "', '" & descricao & "', '" & novoNomeupEsic & "', '" & protocolo & "', GETDATE())"
         'response.write sql
         'response.end
         conn.Execute(sql)

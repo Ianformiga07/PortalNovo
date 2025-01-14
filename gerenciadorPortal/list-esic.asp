@@ -2,7 +2,9 @@
 <% Response.CodePage = 65001 %>
 <%
   call abreConexao
-  sql = "SELECT id_manifestcao, descManifestacao, anonimo, formaRecebimento, email, cpf, nome, telefone, anexo, textoManifestacao, protocolo, dataCad, respondida FROM cam_manifestacao inner join cam_tipoManifestacao on cam_tipoManifestacao.id_tipoManifestacao = cam_manifestacao.id_tipoManifestacao ORDER BY dataCad DESC"
+  sql = "SELECT * FROM cam_esic inner join cam_tipoEsic on cam_tipoEsic.id_tipoEsic = cam_esic.id_tipoEsic ORDER BY dataCad DESC"
+  'response.write sql
+  'response.end
   set rs_manifestacoes = conn.execute(sql)
 %>
 
@@ -62,7 +64,7 @@
                     %>
                 </td>
                 <td><%=rs_manifestacoes("telefone")%></td>
-                <td><%=rs_manifestacoes("descManifestacao")%></td>
+                <td><%=rs_manifestacoes("descTipo")%></td>
                 <td>
                     <%If rs_manifestacoes("respondida") = True Then %>
                         <span class="label label-success">SIM</span> 
@@ -71,7 +73,7 @@
                     <% End If %>
                 </td>
                 <td>
-                    <a href="resp-ouvidoria.asp?id=<%=rs_manifestacoes("id_manifestcao")%>" class="btn btn-primary btn-sm">
+                    <a href="resp-esic.asp?id=<%=rs_manifestacoes("id_esic")%>" class="btn btn-primary btn-sm">
                     <i class="fa fa-reply"></i> Responder
                     </a>
                 </td>
