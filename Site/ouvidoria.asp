@@ -186,7 +186,7 @@ call abreConexao
 cons_protocolo = Request.Form("cons_protocolo")
 If cons_protocolo <> "" Then
     ' Consulta SQL para buscar o protocolo no banco de dados
-    sql = "SELECT * FROM cam_manifestacao inner join cam_tipoManifestacao on cam_tipoManifestacao.id_tipoManifestacao = cam_manifestacao.id_tipoManifestacao WHERE protocolo = '" & Replace(protocolo, "'", "''") & "'"
+    sql = "SELECT * FROM cam_manifestacao inner join cam_tipoManifestacao on cam_tipoManifestacao.id_tipoManifestacao = cam_manifestacao.id_tipoManifestacao WHERE protocolo = '" & Replace(cons_protocolo, "'", "''") & "'"
     Set rs_resposta = conn.Execute(sql)
 
     If Not rs_resposta.EOF Then
@@ -196,7 +196,7 @@ If cons_protocolo <> "" Then
         respondida = rs_resposta("respondida")
         descManifestacao = rs_resposta("descManifestacao")
         dataResposta = rs_resposta("dataResposta")
-        dataEnvio = rs_resposta("dataEnvio")
+        dataEnvio = rs_resposta("dataCad")
     Else
         cons_protocolo = "Não encontrado"
     End If
@@ -230,28 +230,31 @@ End If
                     <p><strong>Número do Protocolo:</strong> <%= cons_protocolo %></p>
                 </div>
                 <div class="modal-item-novo">
+                    <p><strong>Descrição da Manifestação:</strong> <%= descManifestacao %></p>
+                </div>
+                <div class="modal-item-novo">
                     <p><strong>Data de Envio:</strong> <%= dataEnvio %></p>
                 </div>
                 <div class="modal-item-novo">
-                    <p><strong>Status (Respondida):</strong> <%= respondida %></p>
+                    <p><strong>Status (Respondida):</strong> <% If respondida = True Then Response.Write("Respondida") Else Response.Write("Não respondida") End If %> </p>
                 </div>
 
-                <% If anonimo = 1 Then %>
-                    <!-- Caso seja anônimo, exibe apenas o protocolo, data de envio e o status de respondida -->
-                    <div class="modal-item-novo">
-                        <p><strong>Resposta:</strong><% If respondida = 1 Then Response.Write(resposta) Else Response.Write("Não respondida") End If %> </p>
-                    </div>
-                <% Else %>
-                    <!-- Caso não seja anônimo, exibe todos os dados preenchidos -->
-                    <div class="modal-item-novo">
-                        <p><strong>Resposta:</strong> <%= resposta %></p>
-                    </div>
-                    <div class="modal-item-novo">
-                        <p><strong>Descrição da Manifestação:</strong> <%= descManifestacao %></p>
-                    </div>
-                    <div class="modal-item-novo">
-                        <p><strong>Data da Resposta:</strong> <%= dataResposta %></p>
-                    </div>
+                <% If respondida = True Then %>
+                    <% If anonimo = 1 Then %>
+                        <!-- Caso seja anônimo, exibe apenas o protocolo, data de envio e o status de respondida -->
+                        <div class="modal-item-novo">
+                            <p><strong>Resposta:</strong><% If respondida = 1 Then Response.Write(resposta) Else Response.Write("Não respondida") End If %> </p>
+                        </div>
+                    <% Else %>
+                        <!-- Caso não seja anônimo, exibe todos os dados preenchidos -->
+                        <div class="modal-item-novo">
+                            <p><strong>Resposta:</strong> <%= resposta %></p>
+                        </div>
+
+                        <div class="modal-item-novo">
+                            <p><strong>Data da Resposta:</strong> <%= dataResposta %></p>
+                        </div>
+                    <% End If %>
                 <% End If %>
             </div>
             <div class="modal-rodape">
