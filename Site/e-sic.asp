@@ -62,17 +62,99 @@
           </ul>
         </div><!-- /e-SIC Prazo e Orientações -->
 
+<%
+call abreConexao
+cons_protocolo = Request.Form("cons_protocolo")
+If cons_protocolo <> "" Then
+    ' Consulta SQL para buscar o protocolo no banco de dados
+    sql = "SELECT * FROM cam_esic inner join cam_tipoEsic on cam_tipoEsic.id_tipoEsic = cam_esic.id_tipoEsic WHERE protocolo = '" & Replace(cons_protocolo, "'", "''") & "'"
+    Set rs_resposta = conn.Execute(sql)
+
+    If Not rs_resposta.EOF Then
+        cons_protocolo = rs_resposta("protocolo")
+        anonimo = rs_resposta("anonimo")
+        resposta = rs_resposta("resposta")
+        respondida = rs_resposta("respondida")
+        descManifestacao = rs_resposta("descricaoEsic")
+        dataResposta = rs_resposta("dataResposta")
+        dataEnvio = rs_resposta("dataCad")
+    Else
+        cons_protocolo = "Nao encontrado"
+        Existe = 0
+    End If
+End If
+%>
         <!-- Consultar Manifestação -->
         <div class="esic-consulta" style="margin-top: 20px; padding-top: 10px; border-top: 1px solid #ddd;">
           <h3 class="title-green"><i class="fas fa-search"></i> Consultar Manifestação</h3>
           <p>Para consultar o status da sua manifestação, por favor, insira o número do protocolo no campo abaixo:</p>
-          <div class="consulta-form" style="display: flex; align-items: center; gap: 10px;">
-            <input type="text" placeholder="Número do Protocolo" style="padding: 10px; border-radius: 4px; border: 1px solid #ccc; width: 70%;">
-            <button class="consulta-button" style="padding: 10px 20px; background-color: #004c20; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease;">
-              Consultar
-            </button>
-          </div>
+          <form method="post">
+            <div class="consulta-form" style="display: flex; align-items: center; gap: 10px;">
+              <input type="text" id="cons_protocolo" name="cons_protocolo" placeholder="Número do Protocolo" style="padding: 10px; border-radius: 4px; border: 1px solid #ccc; width: 70%;">
+              <button type="submit" class="consulta-button" style="padding: 10px 20px; background-color: #004c20; color: white; border: none; border-radius: 4px; cursor: pointer; transition: background-color 0.3s ease;">
+                Consultar
+              </button>
+            </div>
+          </form>
         </div><!-- /Consultar Manifestação -->
+
+<% If cons_protocolo <> "" Then %>
+    <!-- Modal Personalizada para Exibir as Informações -->
+    <div class="modal-nova">
+        <div class="modal-overlay-nova" onclick="fecharModal()"></div>
+        <div class="modal-conteudo-novo">
+            <div class="modal-cabecalho">
+                <h5 class="modal-titulo-novo">Detalhes da Manifestação</h5>
+                <!-- Botão de Fechar -->
+                <button type="button" class="fechar-btn" onclick="fecharModal()">×</button>
+            </div>
+            <div class="modal-corpo">
+                <div class="modal-item-novo">
+                    <p><strong>Número do Protocolo:</strong> <%= cons_protocolo %></p>
+                </div>
+                <div class="modal-item-novo">
+                    <p><strong>Descrição da Manifestação:</strong> <%= descManifestacao %></p>
+                </div>
+                <div class="modal-item-novo">
+                    <p><strong>Data de Envio:</strong> <%= dataEnvio %></p>
+                </div>
+                <div class="modal-item-novo">
+                    <p><strong>Status (Respondida):</strong> <% If respondida = True Then Response.Write("Respondida") Else Response.Write("Não respondida") End If %> </p>
+                </div>
+
+                <% If respondida = True Then %>
+                    <% If anonimo = 1 Then %>
+                        <!-- Caso seja anônimo, exibe apenas o protocolo, data de envio e o status de respondida -->
+                        <div class="modal-item-novo">
+                            <p><strong>Resposta:</strong><% If respondida = 1 Then Response.Write(resposta) Else Response.Write("Não respondida") End If %> </p>
+                        </div>
+                    <% Else %>
+                        <!-- Caso não seja anônimo, exibe todos os dados preenchidos -->
+                        <div class="modal-item-novo">
+                            <p><strong>Resposta:</strong> <%= resposta %></p>
+                        </div>
+
+                        <div class="modal-item-novo">
+                            <p><strong>Data da Resposta:</strong> <%= dataResposta %></p>
+                        </div>
+                    <% End If %>
+                <% End If %>
+            </div>
+            <div class="modal-rodape">
+                <!-- Botão de Fechar -->
+                <button type="button" class="btn-fechar-modal" onclick="fecharModal()">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+<% End If %>
+<!-- Scripts para Fechar Modal -->
+<script>
+    function fecharModal() {
+        var modal = document.querySelector('.modal-nova');
+        modal.style.visibility = 'hidden';
+    }
+</script>
 
       </div><!-- /e-SIC Card -->
     </div>
