@@ -100,7 +100,21 @@
 .services-grid {
   display: grid;
   grid-template-columns: 1fr 1fr; /* 2 colunas, uma para cada seção */
-  gap: 20px; /* Espaço entre as colunas */
+  gap: 10px; /* Espaço entre as colunas */
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr; /* 1 coluna em telas menores */
+  }
+}
+
+/* Responsividade para telas grandes */
+@media (min-width: 1200px) {
+  .services-grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas para telas muito grandes */
+  }
 }
 
 .news, .quick-access {
@@ -211,8 +225,27 @@
     padding: 20px; /* Adiciona espaçamento interno ao conteúdo */
     border-radius: 10px; /* Bordas arredondadas para o conteúdo */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra leve para o conteúdo */
+    max-width: 1200px; /* Largura máxima para telas maiores */
+    width: 100%; /* Garante que ocupe toda a largura disponível em telas menores */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    box-sizing: border-box; /* Inclui o padding na largura total */
   }
 
+  /* Responsividade para tablets e telas médias */
+@media (max-width: 768px) {
+  #services .container {
+    padding: 15px; /* Ajusta o espaçamento interno para telas menores */
+    border-radius: 8px; /* Bordas ligeiramente menores */
+  }
+}
+
+/* Responsividade para smartphones */
+@media (max-width: 480px) {
+  #services .container {
+    padding: 10px; /* Reduz o espaçamento interno ainda mais */
+    border-radius: 5px; /* Bordas mais suaves para telas pequenas */
+  }
+}
 
 /* DIARIO OFICIAL */
 .diario {
@@ -224,6 +257,7 @@
   border-radius: 8px;
   border: 1px solid #d0d0d0; /* Borda fina ao redor de todos os documentos */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+
 }
 
 .listaDiario {
@@ -275,16 +309,11 @@
 
 .diario-content {
   font-size: 14px;
-  text-align: left;
-  color: #333;
-  overflow: hidden; /* Esconde o texto que extrapola a altura definida */
-  text-overflow: ellipsis; /* Adiciona "..." ao final do texto cortado */
-  display: -webkit-box; /* Necessário para limitar o número de linhas */
-  -webkit-line-clamp: 1; /* Limita o texto a 1 linha */
-  -webkit-box-orient: vertical; /* Orientação do box */
-  line-height: 1.5; /* Ajusta o espaçamento entre as linhas */
-  max-height: 1.5em; /* Altura máxima baseada em 1 linha de texto */
-  white-space: normal; /* Permite quebra de linha normal */
+  line-height: 1.5; /* Controla o espaçamento entre linhas */
+  max-width: 45ch; /* Define o tamanho exato do texto (40 caracteres aprox.) */
+  overflow: hidden; /* Esconde o texto excedente */
+  text-overflow: ellipsis; /* Adiciona "..." ao final do texto */
+  white-space: nowrap; /* Garante que o texto fique em uma única linha */
 }
 
 .diario-icons {
@@ -1121,15 +1150,15 @@
   padding: 8px 16px;
   margin: 0 2px;
   font-size: 14px;
-  color: #004c20;
-  border: 1px solid #004c20;
+  color: #000000;
+  border: 1px solid #000000;
   border-radius: 4px;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .page-link.active, .page-link:hover {
-  background-color: #004c20;
+  background-color: #000000;
   color: #fff;
 }
 
@@ -1304,7 +1333,7 @@
 }
 
 .page-item .page-link {
-  color: #007f00;
+  color: #000000;
   border-radius: 4px;
   padding: 8px 12px;
   transition: background-color 0.3s ease, color 0.3s ease;

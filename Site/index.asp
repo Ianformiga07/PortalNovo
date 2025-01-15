@@ -1,5 +1,5 @@
   <!--#include file="base.asp"-->
-  
+  <% Response.CodePage = 65001 %>
   <main class="main">
 
     <!-- Hero Section -->
@@ -136,97 +136,52 @@
   </div><!--/container-->
 </section><!-- /Blog Posts Section -->
 
-<!-- Services Section -->
-<section id="services" class="services section">
+
+      <%
+      call abreConexao
+          sql = "SELECT top(5)id_legislacao, cam_legislacao.descricao, cam_categoriaLeg.descricao as descTipoLeg, anexo_legislacao, dataPublicacao FROM cam_legislacao inner join cam_categoriaLeg on cam_categoriaLeg.id_categoriaLeg = cam_legislacao.id_categoriaLeg"
+          Set rs_DocRecentes = conn.Execute(sql)
+      %>
+      <!-- Services Section -->
+      <section id="services" class="services section">
 
   <div class="container">
     <div class="services-grid">
-<!-- Notícias Recentes -->
-<div class="news">
-  <div class="section-title">
-    <h2>Documentos Recentes</h2>
-    <div class="section-bar"></div>
-  </div>
-  <div class="diario">
-    <div class="listaDiario">
-      <div class="diario-item">
-        <div class="diario-header">
-          <h4 class="diario-subtitle">Ata de Sessão 28/2024</h4>
-          <p class="diario-date">30/08/2024</p>
-          <div class="diario-icons">
-            <a href="documento-details.html" class="diario-icon" title="Visualizar Detalhes">
-              <i class="bi bi-eye"></i>
-            </a>
-            <a href="documento.pdf" class="diario-icon" download title="Download">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
+      <!-- Notícias Recentes -->
+      <div class="news">
+        <div class="section-title">
+          <h2>Documentos Recentes</h2>
+          <div class="section-bar"></div>
         </div>
-        <p class="diario-content">Ata da 29ª Sessão Ordinária da Câmara Municipal de Ananás, Estado do Tocantins..</p>
-      </div>
-      <div class="diario-item">
-        <div class="diario-header">
-          <h4 class="diario-subtitle">Subtítulo 2</h4>
-          <p class="diario-date">Feb 1, 2022</p>
-          <div class="diario-icons">
-            <a href="documento-details.html" class="diario-icon" title="Visualizar Detalhes">
-              <i class="bi bi-eye"></i>
-            </a>
-            <a href="documento.pdf" class="diario-icon" download title="Download">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
+        <div class="diario">
+          <div class="listaDiario">
+      <% 
+          Do While Not rs_DocRecentes.EOF
+      %>      
+            <div class="diario-item">
+              <div class="diario-header">
+                <h4 class="diario-subtitle"><%=rs_DocRecentes("descTipoLeg")%></h4>
+                <p class="diario-date"><%=rs_DocRecentes("dataPublicacao")%></p>
+                <div class="diario-icons">
+                  <a href="../gerenciadorPortal/upAnexos/<%=rs_DocRecentes("anexo_legislacao")%>" class="diario-icon" target="_blank" title="Visualizar Detalhes">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                  <a href="../gerenciadorPortal/upAnexos/<%=rs_DocRecentes("anexo_legislacao")%>" download="<%=rs_DocRecentes("anexo_legislacao")%>">
+                    <i class="bi bi-download" style="color: #004c20;"></i>
+                  </a>
+                </div>
+              </div>
+              <p class="diario-content"><%=rs_DocRecentes("descricao")%></p>
+            </div>
+      <%
+              rs_DocRecentes.MoveNext
+          Loop
+          call fechaConexao
+      %>
+
+          </div>  
         </div>
-        <p class="diario-content">Assunto publicado no Diário Oficial relacionado ao subtítulo 2.</p>
       </div>
-      <div class="diario-item">
-        <div class="diario-header">
-          <h4 class="diario-subtitle">Subtítulo 3</h4>
-          <p class="diario-date">Mar 1, 2022</p>
-          <div class="diario-icons">
-            <a href="documento-details.html" class="diario-icon" title="Visualizar Detalhes">
-              <i class="bi bi-eye"></i>
-            </a>
-            <a href="documento.pdf" class="diario-icon" download title="Download">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
-        </div>
-        <p class="diario-content">Assunto publicado no Diário Oficial relacionado ao subtítulo 3.</p>
-      </div>
-      <div class="diario-item">
-        <div class="diario-header">
-          <h4 class="diario-subtitle">Subtítulo 3</h4>
-          <p class="diario-date">Mar 1, 2022</p>
-          <div class="diario-icons">
-            <a href="documento-details.html" class="diario-icon" title="Visualizar Detalhes">
-              <i class="bi bi-eye"></i>
-            </a>
-            <a href="documento.pdf" class="diario-icon" download title="Download">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
-        </div>
-        <p class="diario-content">Assunto publicado no Diário Oficial relacionado ao subtítulo 3.</p>
-      </div>
-      <div class="diario-item">
-        <div class="diario-header">
-          <h4 class="diario-subtitle">Subtítulo 3</h4>
-          <p class="diario-date">Mar 1, 2022</p>
-          <div class="diario-icons">
-            <a href="documento-details.html" class="diario-icon" title="Visualizar Detalhes">
-              <i class="bi bi-eye"></i>
-            </a>
-            <a href="documento.pdf" class="diario-icon" download title="Download">
-              <i class="bi bi-download"></i>
-            </a>
-          </div>
-        </div>
-        <p class="diario-content">Assunto publicado no Diário Oficial relacionado ao subtítulo 3.</p>
-      </div>
-    </div>  
-  </div>
-</div>
 
       <!-- Acesso Rápido -->
       <div class="quick-access">
