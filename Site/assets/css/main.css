@@ -1569,11 +1569,14 @@ section,
 }
 
 .team .team-member .pic {
-  overflow: hidden;
-  width: 150px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  border: 2px solid #004c20;
+  width: 150px; /* Tamanho fixo da largura */
+  height: 150px; /* Tamanho fixo da altura */
+  border-radius: 50%; /* Forma circular */
+  overflow: hidden; /* Garante que a imagem não ultrapasse os limites */
+  border: 2px solid #004c20; /* Borda ao redor */
+  display: flex; /* Centraliza o conteúdo */
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
 }
 
 .team .team-member .pic img {

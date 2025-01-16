@@ -11,7 +11,8 @@ IF REQUEST("Operacao") = 1 THEN  'CADASTRAR/ALTERAR'
    IF REQUEST.FORM("mesaDiretora") = 1 THEN 'EXISTE CARGO'
      id_funcoes = "'"&REQUEST.FORM("funcaoMesa")&"'"
    END IF 
-   SQL = "SELECT COUNT(*) AS EXISTE FROM cam_legislativo WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
+   SQL = "SELECT 1 AS EXISTE FROM cam_legislativo WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
+   
    SET RS = CONN.EXECUTE(SQL)
    
    IF RS.EOF THEN

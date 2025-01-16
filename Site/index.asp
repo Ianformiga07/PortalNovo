@@ -51,6 +51,26 @@
 <section id="blog-posts" class="blog-posts section">
   <div class="container">
     <div class="row gy-4">
+      <%
+      call abreConexao
+          ' Consulta para a notícia principal
+          sqlPrincipal = "SELECT TOP (1) * FROM cam_noticias ORDER BY id_noticia DESC;"
+          Set rs_Noticia = conn.Execute(sqlPrincipal)
+          
+          ' Armazena o ID da notícia em destaque
+          destaqueId = rs_Noticia("id_noticia")
+
+          ' Extrai o conteúdo
+          fullContent = rs_Noticia("conteudo")
+          
+          ' Extrai o primeiro parágrafo
+          firstParagraph = ""
+          If InStr(fullContent, vbCrLf) > 0 Then
+              firstParagraph = Split(fullContent, vbCrLf)(0)
+          Else
+              firstParagraph = fullContent ' Caso não tenha quebras, usa o conteúdo completo
+          End If
+      %>
       <!-- Notícia Principal -->
       <div class="section-title">
         <h2>Notícias Recentes</h2>
@@ -59,83 +79,60 @@
       <div class="col-lg-8">
         <article class="main-post">
           <div class="post-img">
-            <img src="https://ananas.to.leg.br/storage/noticias/2317272024042066247737adb89.jpeg" alt="" class="img-fluid">
+            <img src="../gerenciadorPortal/upNoticias/<%=rs_Noticia("anexo_noticia")%>" alt="" class="img-fluid">
           </div>
           <h2 class="title">
-            <a href="blog-details.html">13ª Sessão Ordinária da Câmara Municipal de Ananás/TO Destaca Discussões e Decisões Importantes</a>
+            <a href="#"><%=rs_Noticia("titulo")%></a>
           </h2>
           <div class="meta-top">
             <ul>
-              <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">José Lima</a></li>
-              <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2022-01-01">20/08/2024</time></a></li>
+              <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#"><%=rs_Noticia("autor")%></a></li>
+              <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time datetime="<%=rs_Noticia("dataCad")%>"><%=rs_Noticia("dataCad")%></time></a></li>
             </ul>
           </div>
           <div class="content">
             <p>
-              A Câmara Municipal de Ananás reuniu-se no último dia 9 de fevereiro para mais uma sessão ordinária que abordou temas de grande importância para a comunidade. Dentre os pontos de destaque, a disc...
+              <%=firstParagraph%>
             </p>
             <div class="read-more">
-              <a href="blog-details.html">Leia Mais..</a>
+              <a href="noticia-detalhe.asp?id=<%=rs_Noticia("id_noticia")%>">Leia Mais..</a>
             </div>
           </div>
         </article>
       </div>
+      <%call fechaConexao%>
 
+      <%
+      call abreConexao
+        ' Consulta para as notícias recentes, excluindo a principal
+        sqlRecentes = "SELECT TOP (5) * FROM cam_noticias WHERE id_noticia <> " & destaqueId & " ORDER BY id_noticia DESC;"
+        Set rs_NotiRecentes = conn.Execute(sqlRecentes)
+      %>
       <!-- Posts Recentes -->
       <div class="col-lg-4">
         <div class="recent-posts-widget widget-item">
           <h3 class="widget-title">Postagens Recentes</h3>
-
+      <% 
+        Do While Not rs_NotiRecentes.EOF
+      %> 
           <div class="post-item d-flex align-items-start">
-            <img src="assets/img/blog/blog-recent-1.jpg" alt="" class="flex-shrink-0">
+            <img src="../gerenciadorPortal/upNoticias/<%=rs_NotiRecentes("anexo_noticia")%>" alt="" class="flex-shrink-0">
             <div>
-              <h4><a href="blog-details.html">Nihil blanditiis at in nihil autem</a></h4>
-              <time datetime="2020-01-01">Jan 1, 2020</time>
-              <p class="post-text">Breve descrição do conteúdo da postagem recente para dar mais contexto.</p>
+              <h4><a href="noticia-detalhe.asp?id=<%=rs_NotiRecentes("id_noticia")%>"><%=rs_NotiRecentes("titulo")%></a></h4>
+              <time datetime="<%=rs_NotiRecentes("dataCad")%>"><%=rs_NotiRecentes("dataCad")%></time>
+              <p class="post-text"><%=rs_NotiRecentes("subtitulo")%></p>
             </div>
           </div><!-- End recent post item-->
-
-          <div class="post-item d-flex align-items-start">
-            <img src="assets/img/blog/blog-recent-2.jpg" alt="" class="flex-shrink-0">
-            <div>
-              <h4><a href="blog-details.html">Quidem autem et impedit</a></h4>
-              <time datetime="2020-01-01">Jan 1, 2020</time>
-              <p class="post-text">Breve descrição do conteúdo da postagem recente para dar mais contexto.</p>
-            </div>
-          </div><!-- End recent post item-->
-
-          <div class="post-item d-flex align-items-start">
-            <img src="assets/img/blog/blog-recent-3.jpg" alt="" class="flex-shrink-0">
-            <div>
-              <h4><a href="blog-details.html">Id quia et et ut maxime similique occaecati ut</a></h4>
-              <time datetime="2020-01-01">Jan 1, 2020</time>
-              <p class="post-text">Breve descrição do conteúdo da postagem recente para dar mais contexto.</p>
-            </div>
-          </div><!-- End recent post item-->
-
-          <div class="post-item d-flex align-items-start">
-            <img src="assets/img/blog/blog-recent-4.jpg" alt="" class="flex-shrink-0">
-            <div>
-              <h4><a href="blog-details.html">Laborum corporis quo dara net para</a></h4>
-              <time datetime="2020-01-01">Jan 1, 2020</time>
-              <p class="post-text">Breve descrição do conteúdo da postagem recente para dar mais contexto.</p>
-            </div>
-          </div><!-- End recent post item-->
-
-          <div class="post-item d-flex align-items-start">
-            <img src="assets/img/blog/blog-recent-5.jpg" alt="" class="flex-shrink-0">
-            <div>
-              <h4><a href="blog-details.html">Et dolores corrupti quae illo quod dolor</a></h4>
-              <time datetime="2020-01-01">Jan 1, 2020</time>
-              <p class="post-text">Breve descrição do conteúdo da postagem recente para dar mais contexto.</p>
-            </div>
-          </div><!-- End recent post item-->
+      <%
+            rs_NotiRecentes.MoveNext
+        Loop
+        call fechaConexao
+      %>
         </div><!--/Recent Posts Widget -->
       </div><!--/col-lg-4-->
     </div><!--/row-->
   </div><!--/container-->
 </section><!-- /Blog Posts Section -->
-
 
       <%
       call abreConexao
@@ -279,7 +276,12 @@
     <div class="section-title" data-aos="fade-up">
       <h2>Vereadores</h2>
     </div><!-- Fim do Título da Seção -->
-
+      <%
+      call abreConexao
+        ' Consulta para as notícias recentes, excluindo a principal
+        sqlRecentes = "SELECT Id_Vereador, id_servidor, apelido, partido, ocupacao, fotoVereador, IdMandato, statusVereador FROM cam_vereador WHERE IdMandato = 3"
+        Set rs_vereadores = conn.Execute(sqlRecentes)
+      %>
     <!-- Carrossel -->
     <div class="swiper init-swiper">
       <script type="application/json" class="swiper-config">
@@ -316,52 +318,20 @@
         }
       </script>
       <div class="swiper-wrapper align-items-center">
+      <% 
+          Do While Not rs_vereadores.EOF
+      %>       
         <!-- Exemplo de card de vereador -->
         <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 1">
-          <h3>CARLITO BACURI</h3>
+          <img src="../gerenciadorPortal/upVereador/<%=rs_vereadores("fotoVereador")%>" alt="Foto do Vereador 1">
+          <h3><%=rs_vereadores("apelido")%></h3>
           <h4>Vereador</h4>
         </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 2">
-          <h3>CICINHO DO SÃO JOÃO</h3>
-          <h4>Vereador</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 3">
-          <h3>ELZI</h3>
-          <h4>Presidente</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 4">
-          <h3>IEL DO POVO</h4>
-          <h4>Vice-Presidente</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 5">
-          <h3>IRMÃO LIVAN</h3>
-          <h4>Vereador</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 6">
-          <h3>JÚNIOR RESENDE</h3>
-          <h4>Vereador</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 7">
-          <h3>MANEL CABELEIREIRO</h3>
-          <h4>Vereador</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 8">
-          <h3>RONALDÃO GUERREIRO</h3>
-          <h4>Vereador</h4>
-        </div>
-        <div class="swiper-slide vereador-card green">
-          <img src="https://martinhocolpani.com.br/images/martinho-colpani.png" alt="Foto do Vereador 9">
-          <h3>ZÉ LÚ</h3>
-          <h4>Vereador</h4>
-        </div>
+      <%
+              rs_vereadores.MoveNext
+          Loop
+          call fechaConexao
+      %>
       </div><!-- Fim do swiper-wrapper -->
 
       <div class="swiper-pagination"></div>

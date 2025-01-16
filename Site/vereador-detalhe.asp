@@ -17,7 +17,12 @@
         </a>  
     </div>
   </div><!-- End Page Title -->
-
+    <%
+    call abreConexao
+      ' Consulta para as notícias recentes, excluindo a principal
+      sqlRecentes = "SELECT * FROM cam_servidores inner join cam_vereador on cam_vereador.id_servidor = cam_servidores.id_servidor inner join cam_escolaridade on cam_escolaridade.id_escolaridade = cam_servidores.id_Escolaridade WHERE (cam_vereador.Id_Vereador = 55)"
+      Set rs_vereadores = conn.Execute(sqlRecentes)
+    %>
   <!-- Document Details Section -->
   <section id="document-details" class="section">
     <div class="container">
@@ -26,24 +31,24 @@
         <!-- Vereador Image -->
         <div class="col-md-4">
           <div class="vereador-photo">
-            <img src="assets/img/team/team-4.jpg" alt="Foto do Vereador" class="img-fluid rounded">
+            <img src="../gerenciadorPortal/upVereador/<%=rs_vereadores("fotoVereador")%>" alt="Foto do Vereador" class="img-fluid rounded">
           </div>
         </div>
         <!-- Vereador Information -->
         <div class="col-md-4">
           <div class="vereador-info">
-            <h2 class="text-success">CARLITO DE SOUSA AMORIM</h2>
+            <h2 class="text-success"><%=rs_vereadores("NomeCompleto")%></h2>
             <hr> <!-- Linha embaixo do nome -->
-            <h4>Carlito Bacuri</h4>
-            <p><strong>Data de Nascimento:</strong> 01/01/1980</p>
-            <p><strong>Ocupação:</strong> Advogado</p>
-            <p><strong>Estado Civil:</strong> Casado</p>
-            <p><strong>Escolaridade:</strong> Superior Completo</p>
-            <p><strong>Naturalidade:</strong> Cidade, Estado</p>
-            <p><strong>Telefone:</strong> (XX) XXXX-XXXX</p>
-            <p><strong>Email:</strong> vereador@exemplo.com</p>
+            <h4><%=rs_vereadores("apelido")%></h4>
+            <p><strong>Data de Nascimento:</strong> <%=rs_vereadores("DataNascimento")%></p>
+            <p><strong>Ocupação:</strong> <%=rs_vereadores("ocupacao")%></p>
+            <p><strong>Estado Civil:</strong> <%=rs_vereadores("EstadoCivil")%></p>
+            <p><strong>Escolaridade:</strong> <%=rs_vereadores("desc_escolaridade")%></p>
+            <p><strong>Naturalidade:</strong> <%=rs_vereadores("Cidade")%>,<%=rs_vereadores("UF")%></p>
+            <p><strong>Telefone:</strong> <%=rs_vereadores("Celular")%></p>
+            <p><strong>Email:</strong> <%=rs_vereadores("Email")%></p>
             <div class="party-logo mt-3">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Logomarca_do_Partido_Solidariedade.png" alt="Logo do Partido" class="img-fluid" style="max-width: 150px;">
+              <h5><%=rs_vereadores("partido")%></h5>
             </div>
           </div>
         </div>

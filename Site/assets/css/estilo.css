@@ -353,9 +353,9 @@
   
   /* Ajusta o tamanho do texto e espaçamento do conteúdo */
   #blog-posts .main-post .content p {
-    font-size: 15px; /* Diminui o tamanho da fonte do parágrafo */
-    line-height: 1.5; /* Ajusta a altura da linha */
-    color: #333;
+    font-size: 15px; /* Tamanho da fonte do parágrafo */
+    line-height: 1.5; /* Altura da linha */
+    color: #333; /* Cor do texto */
   }
   
   /* Reduz o tamanho dos ícones de meta informações */
@@ -369,6 +369,12 @@
     font-size: 16px;
     line-height: 1.6;
     color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 4; /* Mostra até 4 linhas */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 6.4em; /* 4 linhas x 1.6 (line-height) */
   }
   
   /* Estilo para os itens das postagens recentes */
@@ -400,6 +406,12 @@
   #blog-posts .recent-posts-widget .post-item .post-text {
     font-size: 14px;
     color: #666;
+    display: -webkit-box; /* Para compatibilidade com navegadores WebKit */
+    -webkit-line-clamp: 2; /* Define o número de linhas visíveis */
+    -webkit-box-orient: vertical; /* Orientação da caixa flexível */
+    overflow: hidden; /* Esconde o texto excedente */
+    text-overflow: ellipsis; /* Adiciona os "..." no final */
+    max-height: 4.5em; /* Controla a altura máxima com base no número de linhas e no tamanho da fonte */
   }
 
   /* PORTAL DA TRANSPARENCIA */

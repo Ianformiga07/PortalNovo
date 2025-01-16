@@ -1,4 +1,15 @@
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
+<%
+      id_noticia = Request("id")
+
+      call abreConexao
+          ' Consulta para a notícia principal
+          sqlPrincipal = "SELECT * FROM cam_noticias where id_noticia = " & id_noticia
+          Set rs_Noticia = conn.Execute(sqlPrincipal)
+        
+
+%>
 <main class="main">
 
   <!-- Page Title -->
@@ -17,7 +28,7 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-lg-8">
+      <div class="col-lg-12">
 
         <!-- Blog Details Section -->
         <section id="blog-details" class="blog-details section">
@@ -26,81 +37,34 @@
             <article class="article">
 
               <div class="post-img">
-                <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
+                <img src="../gerenciadorPortal/upNoticias/<%=rs_Noticia("anexo_noticia")%>" alt="" class="img-fluid">
               </div>
 
-              <h2 class="title">Dolorum optio tempore voluptas dignissimos cumque fuga qui quibusdam quia</h2>
+              <h2 class="title"><%=rs_Noticia("titulo")%></h2>
 
               <div class="meta-top">
                 <ul>
-                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html">John Doe</a></li>
-                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="2020-01-01">Jan 1, 2022</time></a></li>
-                  <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="blog-details.html">12 Comments</a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="blog-details.html"><%=rs_Noticia("autor")%></a></li>
+                  <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="blog-details.html"><time datetime="<%=rs_Noticia("dataCad")%>"><%=rs_Noticia("dataCad")%></time></a></li>
                 </ul>
               </div><!-- End meta top -->
 
               <div class="content">
                 <p>
-                  Similique neque nam consequuntur ad non maxime aliquam quas. Quibusdam animi praesentium. Aliquam et laboriosam eius aut nostrum quidem aliquid dicta.
-                  Et eveniet enim. Qui velit est ea dolorem doloremque deleniti aperiam unde soluta. Est cum et quod quos aut ut et sit sunt. Voluptate porro consequatur assumenda perferendis dolore.
+                  <%=rs_Noticia("conteudo")%>
                 </p>
-
-                <p>
-                  Et vero doloremque tempore voluptatem ratione vel aut. Deleniti sunt animi aut. Aut eos aliquam doloribus minus autem quos.
-                </p>
-
-                <p>
-                  Alias quia non aliquid. Eos et ea velit. Voluptatem maxime enim omnis ipsa voluptas incidunt. Nulla sit eaque mollitia nisi asperiores est veniam.
-                </p>
-
 
               </div><!-- End post content -->
-
-              <div class="meta-bottom">
-                <i class="bi bi-folder"></i>
-                <ul class="cats">
-                  <li><a href="#">Business</a></li>
-                </ul>
-
-                <i class="bi bi-tags"></i>
-                <ul class="tags">
-                  <li><a href="#">Creative</a></li>
-                  <li><a href="#">Tips</a></li>
-                  <li><a href="#">Marketing</a></li>
-                </ul>
-              </div><!-- End meta bottom -->
 
             </article>
 
           </div>
         </section><!-- /Blog Details Section -->
-
+<%call fechaConexao%>
 
 
       </div>
 
-      <div class="col-lg-4 sidebar">
-
-        <div class="widgets-container">
-
-          <!-- Recent Posts Widget -->
-          <div class="recent-posts-widget widget-item">
-
-            <h3 class="widget-title">Ultimas Notícias</h3>
-
-            <div class="post-item">
-              <img src="assets/img/blog/blog-recent-1.jpg" alt="" class="flex-shrink-0">
-              <div>
-                <h4><a href="blog-details.html">Nihil blanditiis at in nihil autem</a></h4>
-                <time datetime="2020-01-01">Jan 1, 2020</time>
-              </div>
-            </div><!-- End recent post item-->
-
-          </div><!--/Recent Posts Widget -->
-
-        </div>
-
-      </div>
 
     <!-- Portfolio Section -->
     <section id="portfolio" class="portfolio section">

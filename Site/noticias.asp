@@ -1,4 +1,5 @@
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
 <%
 call abreConexao
 ' Parâmetros de paginação
@@ -15,7 +16,7 @@ inicio = (paginaAtual - 1) * noticiasPorPagina
 ' Consulta SQL com OFFSET-FETCH
 sql = "SELECT id_noticia, titulo, subtitulo, conteudo, anexo_noticia, autor, destaque, dataCad, idUsu_Cad, idUsu_Alt, dataAlt, statusNoticia " & _
       "FROM cam_noticias " & _
-      "ORDER BY dataCad DESC " & _
+      "ORDER BY id_noticia DESC " & _
       "OFFSET " & inicio & " ROWS FETCH NEXT " & noticiasPorPagina & " ROWS ONLY"
 
 Set rs = conn.Execute(sql)
