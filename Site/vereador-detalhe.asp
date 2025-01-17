@@ -1,5 +1,9 @@
 <!--#include file="base.asp"-->
+<% Response.CodePage = 65001 %>
+<%
+id_vereador = Request("id")
 
+%>
 <main class="main">
 
   <!-- Page Title -->
@@ -20,7 +24,7 @@
     <%
     call abreConexao
       ' Consulta para as notícias recentes, excluindo a principal
-      sqlRecentes = "SELECT * FROM cam_servidores inner join cam_vereador on cam_vereador.id_servidor = cam_servidores.id_servidor inner join cam_escolaridade on cam_escolaridade.id_escolaridade = cam_servidores.id_Escolaridade WHERE (cam_vereador.Id_Vereador = 55)"
+      sqlRecentes = "SELECT * FROM cam_servidores inner join cam_vereador on cam_vereador.id_servidor = cam_servidores.id_servidor inner join cam_escolaridade on cam_escolaridade.id_escolaridade = cam_servidores.id_Escolaridade WHERE (cam_vereador.Id_Vereador = '"&id_vereador&"')"
       Set rs_vereadores = conn.Execute(sqlRecentes)
     %>
   <!-- Document Details Section -->
@@ -31,7 +35,7 @@
         <!-- Vereador Image -->
         <div class="col-md-4">
           <div class="vereador-photo">
-            <img src="../gerenciadorPortal/upVereador/<%=rs_vereadores("fotoVereador")%>" alt="Foto do Vereador" class="img-fluid rounded">
+            <img src="../gerenciadorPortal/upVereador/<%=rs_vereadores("fotoVereador")%>" alt="Foto do Vereador" class="responsive-img">
           </div>
         </div>
         <!-- Vereador Information -->
@@ -40,40 +44,84 @@
             <h2 class="text-success"><%=rs_vereadores("NomeCompleto")%></h2>
             <hr> <!-- Linha embaixo do nome -->
             <h4><%=rs_vereadores("apelido")%></h4>
-            <p><strong>Data de Nascimento:</strong> <%=rs_vereadores("DataNascimento")%></p>
-            <p><strong>Ocupação:</strong> <%=rs_vereadores("ocupacao")%></p>
-            <p><strong>Estado Civil:</strong> <%=rs_vereadores("EstadoCivil")%></p>
-            <p><strong>Escolaridade:</strong> <%=rs_vereadores("desc_escolaridade")%></p>
-            <p><strong>Naturalidade:</strong> <%=rs_vereadores("Cidade")%>,<%=rs_vereadores("UF")%></p>
-            <p><strong>Telefone:</strong> <%=rs_vereadores("Celular")%></p>
-            <p><strong>Email:</strong> <%=rs_vereadores("Email")%></p>
-            <div class="party-logo mt-3">
-              <h5><%=rs_vereadores("partido")%></h5>
-            </div>
+            <ol style="list-style-type: none; padding: 0; margin: 0;">
+              <li><strong>Data de Nascimento:</strong> <%=FormatDateTime(rs_vereadores("DataNascimento"), 2)%></li>
+              <li><strong>Ocupação:</strong> <%=rs_vereadores("ocupacao")%></li>
+              <li><strong>Estado Civil:</strong> 
+                <%
+                  if rs_vereadores("EstadoCivil") = 1 then
+                    Response.write("Solteiro")
+                  elseif rs_vereadores("EstadoCivil") = 2 then
+                    Response.write("Casado")
+                  else
+                    Response.write("Divorciado")
+                  end if
+                %>
+              </li>
+              <li><strong>Escolaridade:</strong> <%=rs_vereadores("desc_escolaridade")%></li>
+              <li><strong>Naturalidade:</strong> <%=rs_vereadores("Cidade")%>, <%=rs_vereadores("UF")%></li>
+              <li><strong>Telefone:</strong> <%=rs_vereadores("Celular")%></li>
+              <li><strong>Email:</strong> <%=rs_vereadores("Email")%></li>
+              <li><strong>Partido:</strong> <%=rs_vereadores("partido")%></li>
+            </ol>
           </div>
         </div>
-
+        <% call fechaConexao %>
+        <%
+        call abreConexao
+        sql = "SELECT cam_categoriaLeg.descricao AS Categoria, COUNT(cam_legislacao.id_legislacao) AS Total " & _
+              "FROM cam_legislacao " & _
+              "INNER JOIN cam_categoriaLeg ON cam_categoriaLeg.id_categoriaLeg = cam_legislacao.id_categoriaLeg " & _
+              "WHERE cam_legislacao.id_AutorVer = " & id_vereador & " " & _
+              "GROUP BY cam_categoriaLeg.descricao"
+        Set rsCategorias = conn.Execute(sql)
+        %>
         <!-- Additional Information (Activities and Mandates) -->
         <div class="col-md-4">
           <!-- Legislative Activities Section -->
           <div class="legislative-activities">
             <h3 class="text-secondary">Atividades Legislativas</h3>
+        <% If Not rsCategorias.EOF Then %>
+          <% Do While Not rsCategorias.EOF %>
             <div class="d-flex align-items-center">
-              <i class="fas fa-clipboard-list fa-2x"></i> <!-- Ícone indicando atividades -->
-              <span class="ml-3"><strong> &nbsp Requerimentos:</strong> 15</span> <!-- Número de atividades -->
+              <i class="fas fa-clipboard-list"></i> <!-- Ícone indicando atividades -->
+              <span class="ml-3"><strong> &nbsp <%= rsCategorias("Categoria") %>:</strong><%= rsCategorias("Total") %></span> <!-- Número de atividades -->
             </div>
+          <% rsCategorias.MoveNext %>
+        <% Loop %>
+        <% Else %>
+          <p>O vereador não possui atividades legislativas registradas.</p>
+        <% End If %>
           </div>
+          <% call fechaConexao %>
+          <%
+          call abreConexao
+          sqlMandato = "SELECT id_mandatoAnt, id_vereador, id_mandatoleg, anoInicio, anoFim FROM cam_mandatoAnt WHERE id_vereador = " & id_vereador
+          Set rs_Mandato = conn.Execute(sqlMandato)
 
-          <!-- Mandate Section -->
+          contadorMandatos = 0
+          %>
           <div class="mandate-section mt-4">
             <h3 class="text-secondary">Mandatos</h3>
-            <p><strong>Total de Mandatos:</strong> 3</p>
-            <ul>
-              <li>Mandato 1: 2012 - 2016</li>
-              <li>Mandato 2: 2016 - 2020</li>
-              <li>Mandato 3: 2020 - 2024</li>
-            </ul>
+            <%
+            if not rs_Mandato.EOF then 
+              %><ul><%
+              do while not rs_Mandato.EOF
+                contadorMandatos = contadorMandatos + 1
+              %>
+                <li>Mandato <%=contadorMandatos%>: <%=rs_Mandato("anoInicio")%> - <%=rs_Mandato("anoFim")%></li>
+              <%
+                rs_Mandato.MoveNext
+              loop
+              %></ul>
+              <p><strong>Total de Mandatos:</strong> <%=contadorMandatos%></p>
+            <%
+            else
+              Response.Write("<p>Este vereador nao possui mandatos registrados.</p>")
+            end if
+            %>
           </div>
+          <% call fechaConexao%>
         </div>
       </div>
     </div>

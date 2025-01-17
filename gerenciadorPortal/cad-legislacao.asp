@@ -207,7 +207,7 @@ function validarCampos(isCadastro) {
                     <div class="row">
                     <%
                     call abreConexao 
-                    sql = "SELECT  id_servidor, CPF, NomeCompleto, id_Cargo FROM cam_servidores WHERE  (id_Cargo = 15)"
+                    sql = "select * from cam_vereador inner join cam_vereadorMandato on cam_vereadorMandato.IdMandato = cam_vereador.IdMandato WHERE cam_vereador.apelido IS NOT NULL ORDER BY cam_vereadorMandato.IdMandato DESC"
                     set rs_verAutor = conn.execute(sql) 
                     %> 
                         <div class="col-md-6">
@@ -216,7 +216,7 @@ function validarCampos(isCadastro) {
                                 <option value="">-- Selecionar --</option>
                                 <option value=""></option>
                             <%do while not rs_verAutor.eof%>
-                                <option <%if  rtrim(id_AutorVer) = rtrim(rs_verAutor("id_servidor")) then response.write("selected") end if%> value="<%=rs_verAutor("id_servidor")%>"><%=rs_verAutor("NomeCompleto")%></option>
+                                <option <%if  rtrim(id_AutorVer) = rtrim(rs_verAutor("Id_Vereador")) then response.write("selected") end if%> value="<%=rs_verAutor("Id_Vereador")%>"><%=rs_verAutor("apelido")%></option>
                             <% rs_verAutor.movenext 
                             loop 
                             call fechaConexao

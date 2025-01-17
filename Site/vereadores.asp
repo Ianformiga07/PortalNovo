@@ -1,5 +1,5 @@
 <!--#include file="base.asp"-->
-
+<% Response.CodePage = 65001 %>
   <main class="main">
 
     <!-- Page Title -->

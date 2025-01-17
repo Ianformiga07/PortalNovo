@@ -1424,6 +1424,7 @@
 
   /* DETALHES VEREADOR */
   
+
   .vereador-photo img {
     border: 3px solid #004c20; /* Verde escuro */
     border-radius: 50%; /* Imagem redonda */
@@ -3261,3 +3262,15 @@ textarea.form-control {
   .btn-consultar:hover {
       background-color: #0056b3;
   }
+
+  img.responsive-img {
+    width: 90%; /* Ajusta ao tamanho do contêiner */
+    max-width: 516px; /* Limita o tamanho máximo da largura */
+    height: auto; /* Mantém a proporção */
+    max-height: 516px; /* Limita o tamanho máximo da altura */
+    aspect-ratio: 1 / 1; /* Garante proporção quadrada (516x516) */
+    object-fit: cover; /* Ajusta o conteúdo sem distorcer */
+    border-radius: 10%; /* Torna a imagem redonda */
+    border: 2px solid #004c20; /* Adiciona uma borda ao redor */
+    overflow: hidden; /* Impede que elementos internos ultrapassem os limites */
+}

@@ -323,9 +323,11 @@
       %>       
         <!-- Exemplo de card de vereador -->
         <div class="swiper-slide vereador-card green">
+          <a href="vereador-detalhe.asp?id=<%=rs_vereadores("Id_Vereador")%>">
           <img src="../gerenciadorPortal/upVereador/<%=rs_vereadores("fotoVereador")%>" alt="Foto do Vereador 1">
           <h3><%=rs_vereadores("apelido")%></h3>
           <h4>Vereador</h4>
+          </a>
         </div>
       <%
               rs_vereadores.MoveNext
