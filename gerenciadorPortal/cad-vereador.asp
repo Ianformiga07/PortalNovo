@@ -3,56 +3,77 @@
 <%
 IdVereador = request("IdVereador")
 IdMandato = request("id_mandatoleg")
+erroValidacao = "" ' Variável para armazenar o erro
 
-IF REQUEST("Operacao") = 1 THEN  'CADASTRAR/ALTERAR'
+IF REQUEST("Operacao") = 1 THEN  ' CADASTRAR/ALTERAR
   call abreConexao
 
-     id_funcoes = "NULL"
-   IF REQUEST.FORM("mesaDiretora") = 1 THEN 'EXISTE CARGO'
-     id_funcoes = "'"&REQUEST.FORM("funcaoMesa")&"'"
-   END IF 
-   SQL = "SELECT 1 AS EXISTE FROM cam_legislativo WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
-   
-   SET RS = CONN.EXECUTE(SQL)
-   
-   IF RS.EOF THEN
-      SQL = "INSERT  INTO cam_legislativo(Id_Vereador, id_mandatoleg, MesaDiretora, id_funcoes,statusLeg) VALUES('"&REQUEST.FORM("IdVereador")&"','"&REQUEST.FORM("id_mandatoleg")&"', '"&REQUEST.FORM("mesaDiretora")&"', "&id_funcoes&",1)"
-   ELSE
-      SQL = "UPDATE cam_legislativo SET MesaDiretora = '"&REQUEST.FORM("mesaDiretora")&"', id_funcoes = "&id_funcoes&" WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
-   END IF 
-   CONN.EXECUTE(SQL)
-
-   'COMISSÃO'
-   SQL = "DELETE FROM cam_comissao WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
-   CONN.EXECUTE(SQL)
-
-   ARRAYLISACOMISSAO = SPLIT(REQUEST.FORM("listaComissoesLegislacao"), "<==>")
-   
-   FOR I = 0 TO UBOUND(ARRAYLISACOMISSAO)
-      ARRAYITEMCOMISSAO = SPLIT(ARRAYLISACOMISSAO(I),"-")
-      SQL = "INSERT INTO cam_comissao(Id_Vereador, id_funcoes, id_mandatoleg, id_tipoComissao, statusComissao) VALUES('"&REQUEST.FORM("IdVereador")&"', '"&ARRAYITEMCOMISSAO(1)&"', '"&REQUEST.FORM("id_mandatoleg")&"', '"&ARRAYITEMCOMISSAO(0)&"', 1)"
-      
-      CONN.EXECUTE(SQL)
-   NEXT
+  id_funcoes = "NULL"
   
-   
-
-   SQL = "DELETE FROM cam_mandatoAnt WHERE Id_Vereador = '"&REQUEST.FORM("IdVereador")&"' AND id_mandatoleg = '"&REQUEST.FORM("id_mandatoleg")&"'"
-   CONN.EXECUTE(SQL)
-
-
-   'ANOS ANTERIORES'
-   ARRAYLISTAMANDATOSANTERIORES= SPLIT(REQUEST.FORM("ListaMandatosAnteriores"), "<==>")
-   
-   FOR I = 0 TO UBOUND(ARRAYLISTAMANDATOSANTERIORES)
-     ARRAYITEMMANDATOSANTERIORES = SPLIT(ARRAYLISTAMANDATOSANTERIORES(I),"-")
-     SQL = "INSERT INTO cam_mandatoAnt(Id_Vereador, id_mandatoleg, anoInicio, anoFim) VALUES('"&REQUEST.FORM("IdVereador")&"','"&REQUEST.FORM("id_mandatoleg")&"','"&ARRAYITEMMANDATOSANTERIORES(0)&"', '"&ARRAYITEMMANDATOSANTERIORES(1)&"')"
-     CONN.EXECUTE(SQL)
-   NEXT
+  IF REQUEST.FORM("mesaDiretora") = 1 THEN ' EXISTE CARGO
+    id_funcoes = "'" & REQUEST.FORM("funcaoMesa") & "'"
     
-   ' response.Redirect("cad-vereador.asp?Atualizar=1&IdVereador="&Request.form("IdVereador")&"&id_mandatoleg="&REQUEST.FORM("id_mandatoleg")&"")
-END IF 
+    ' Verifica se já existe alguém com a mesma função na mesa diretora
+    sqlVerificaFuncao = "SELECT COUNT(*) AS qtd FROM cam_legislativo WHERE id_funcoes = " & id_funcoes & " AND mesaDiretora = 1"
+    set rs_Verifica = conn.execute(sqlVerificaFuncao)
 
+    if not rs_Verifica.EOF and rs_Verifica("qtd") > 0 then
+        ' Define a mensagem de erro para funções exclusivas
+        select case REQUEST.FORM("funcaoMesa")
+            case "1": erroValidacao = "Já existe um Presidente cadastrado na mesa diretora."
+            case "2": erroValidacao = "Já existe um Vice-Presidente cadastrado na mesa diretora."
+            case "3": erroValidacao = "Já existe um 1º Secretário cadastrado na mesa diretora."
+            case "4": erroValidacao = "Já existe um 2º Secretário cadastrado na mesa diretora."
+        end select
+    end if
+
+    rs_Verifica.Close
+  END IF 
+
+  IF erroValidacao <> "" THEN
+    ' Caso haja erro, exibe a mensagem e interrompe a operação
+    Response.Write("<script>alert('" & erroValidacao & "'); history.back();</script>")
+    Response.End
+  ELSE
+    ' Atualiza ou insere os dados na tabela cam_legislativo
+    SQL = "SELECT 1 AS EXISTE FROM cam_legislativo WHERE Id_Vereador = '" & REQUEST.FORM("IdVereador") & "' AND id_mandatoleg = '" & REQUEST.FORM("id_mandatoleg") & "'"
+    SET RS = CONN.EXECUTE(SQL)
+
+    IF RS.EOF THEN
+      SQL = "INSERT INTO cam_legislativo(Id_Vereador, id_mandatoleg, MesaDiretora, id_funcoes, statusLeg) VALUES('" & REQUEST.FORM("IdVereador") & "', '" & REQUEST.FORM("id_mandatoleg") & "', '" & REQUEST.FORM("mesaDiretora") & "', " & id_funcoes & ", 1)"
+    ELSE
+      SQL = "UPDATE cam_legislativo SET MesaDiretora = '" & REQUEST.FORM("mesaDiretora") & "', id_funcoes = " & id_funcoes & " WHERE Id_Vereador = '" & REQUEST.FORM("IdVereador") & "' AND id_mandatoleg = '" & REQUEST.FORM("id_mandatoleg") & "'"
+    END IF 
+
+
+    CONN.EXECUTE(SQL)
+
+    ' EXCLUIR COMISSÕES ANTERIORES E INSERIR NOVAS
+    SQL = "DELETE FROM cam_comissao WHERE Id_Vereador = '" & REQUEST.FORM("IdVereador") & "' AND id_mandatoleg = '" & REQUEST.FORM("id_mandatoleg") & "'"
+    CONN.EXECUTE(SQL)
+
+    ARRAYLISACOMISSAO = SPLIT(REQUEST.FORM("listaComissoesLegislacao"), "<==>")
+    
+    FOR I = 0 TO UBOUND(ARRAYLISACOMISSAO)
+      ARRAYITEMCOMISSAO = SPLIT(ARRAYLISACOMISSAO(I), "-")
+      SQL = "INSERT INTO cam_comissao(Id_Vereador, id_funcoes, id_mandatoleg, id_tipoComissao, statusComissao) VALUES('" & REQUEST.FORM("IdVereador") & "', '" & ARRAYITEMCOMISSAO(1) & "', '" & REQUEST.FORM("id_mandatoleg") & "', '" & ARRAYITEMCOMISSAO(0) & "', 1)"
+      CONN.EXECUTE(SQL)
+    NEXT
+
+    ' EXCLUIR ANOS ANTERIORES E INSERIR NOVOS
+    SQL = "DELETE FROM cam_mandatoAnt WHERE Id_Vereador = '" & REQUEST.FORM("IdVereador") & "' AND id_mandatoleg = '" & REQUEST.FORM("id_mandatoleg") & "'"
+    CONN.EXECUTE(SQL)
+
+    ARRAYLISTAMANDATOSANTERIORES = SPLIT(REQUEST.FORM("ListaMandatosAnteriores"), "<==>")
+    
+    FOR I = 0 TO UBOUND(ARRAYLISTAMANDATOSANTERIORES)
+      ARRAYITEMMANDATOSANTERIORES = SPLIT(ARRAYLISTAMANDATOSANTERIORES(I), "-")
+      SQL = "INSERT INTO cam_mandatoAnt(Id_Vereador, id_mandatoleg, anoInicio, anoFim) VALUES('" & REQUEST.FORM("IdVereador") & "', '" & REQUEST.FORM("id_mandatoleg") & "', '" & ARRAYITEMMANDATOSANTERIORES(0) & "', '" & ARRAYITEMMANDATOSANTERIORES(1) & "')"
+      CONN.EXECUTE(SQL)
+    NEXT
+
+  END IF
+END IF
 
 %>
 
